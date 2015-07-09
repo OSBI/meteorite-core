@@ -14,7 +14,33 @@
  * limitations under the License.
  */
 
-/**
- * Created by bugg on 03/07/15.
- */
 package bi.meteorite.core.api.objects;
+
+/**
+ * Created by bugg on 23/06/15.
+ */
+public interface MeteoriteUser {
+
+  String getUsername();
+
+  void setUsername(String username);
+
+  String getPassword();
+
+  void setPassword(String password);
+
+  String[] getRoles();
+
+  void setRoles(String[] roles);
+
+  String getEmail();
+
+  void setEmail(String email);
+
+  int getId();
+
+  void setId(int id);
+
+
+}
+

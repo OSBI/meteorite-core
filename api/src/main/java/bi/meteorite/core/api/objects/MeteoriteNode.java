@@ -14,7 +14,11 @@
  * limitations under the License.
  */
 
-/**
- * Created by bugg on 03/07/15.
- */
 package bi.meteorite.core.api.objects;
+
+/**
+ * Created by bugg on 23/06/15.
+ */
+public interface MeteoriteNode {
+}
+
