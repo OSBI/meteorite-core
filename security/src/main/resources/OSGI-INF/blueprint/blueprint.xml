@@ -30,8 +30,10 @@
         <jaxrs:serviceBeans>
             <ref component-id="taskServiceImpl" />
         </jaxrs:serviceBeans>
+
         <jaxrs:providers>
             <!-- Binding Providers -->
+            <ref component-id="authenticationFilter"/>
             <ref component-id="jsonProvider"/>
             <!-- Exception Mappers -->
         </jaxrs:providers>
@@ -51,4 +53,9 @@
             <entry key="servlet-name" value="bi.meteorite.core.api"/>
         </service-properties>
     </service>
+
+    <bean id="authenticationFilter" class="org.apache.cxf.jaxrs.security.JAASAuthenticationFilter">
+        <!-- Name of the JAAS Context -->
+        <property name="contextName" value="karaf"/>
+    </bean>
 </blueprint>
