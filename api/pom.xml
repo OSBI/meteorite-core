@@ -13,6 +13,7 @@
     <properties>
         <top.dir>../</top.dir>
     </properties>
+
     <build>
         <plugins>
             <plugin>
@@ -23,17 +24,27 @@
                 <configuration>
                     <instructions>
                         <Export-Package>
-                            bi.meteorite.core.api
+                            bi.meteorite.core.api.*
                         </Export-Package>
-                        <!--<Import-Package>
+                        <Import-Package>
                             *
                         </Import-Package>
-                        <Private-Package>
+                        <!--<Private-Package>
                         </Private-Package>-->
                     </instructions>
                 </configuration>
             </plugin>
         </plugins>
     </build>
-     
+        <dependencies>
+            <dependency>
+                <groupId>javax.ws.rs</groupId>
+                <artifactId>javax.ws.rs-api</artifactId>
+            </dependency>
+            <dependency>
+                <groupId>com.qmino</groupId>
+                <artifactId>miredot-annotations</artifactId>
+                <scope>compile</scope>
+            </dependency>
+        </dependencies>
 </project>
