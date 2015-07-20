@@ -15,9 +15,15 @@
 
   <!--  <bean id="taskStore" class="com.modio.blog.osgi.rest.server.TaskStore"/>-->
 
+    <bean id="adminLogin" class="bi.meteorite.core.security.ConfigAdminLoginProvider"/>
+    <bean id="tokenProvider" class="bi.meteorite.core.security.tokenprovider.TokenProviderImpl"/>
 
 <bean id="taskServiceImpl" class="bi.meteorite.core.security.rest.UserServiceImpl">
         <!--<property name="store" ref="taskStore"/>-->
+    </bean>
+    <bean id="userAuthenticationImpl" class="bi.meteorite.core.security.rest.UserAuthenticationImpl">
+        <property name="adminLoginService" ref="adminLogin"/>
+        <property name="tokenProvider" ref="tokenProvider"/>
     </bean>
 
     <!-- REST service -->
@@ -29,11 +35,12 @@
     <jaxrs:server id="taskService" address="/rest/core">
         <jaxrs:serviceBeans>
             <ref component-id="taskServiceImpl" />
+            <ref component-id="userAuthenticationImpl" />
         </jaxrs:serviceBeans>
 
         <jaxrs:providers>
             <!-- Binding Providers -->
-            <ref component-id="authenticationFilter"/>
+            <!--<ref component-id="authenticationFilter"/>-->
             <ref component-id="jsonProvider"/>
             <!-- Exception Mappers -->
         </jaxrs:providers>
@@ -46,6 +53,12 @@
     </jaxrs:server>
 
     <!-- Services -->
+    <service id="servletFilterService" interface="javax.servlet.Filter">
+        <service-properties>
+            <entry key="urlPatterns" value="/services/*"/>
+        </service-properties>
+        <bean class="bi.meteorite.core.security.SecurityFilter"/>
+    </service>
 
     <service interface="javax.servlet.http.HttpServlet" ref="cxfServlet">
         <service-properties>

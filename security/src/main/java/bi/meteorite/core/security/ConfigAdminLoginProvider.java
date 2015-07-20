@@ -1,11 +1,14 @@
 package bi.meteorite.core.security;
 
 import bi.meteorite.core.api.security.AdminLoginService;
+import bi.meteorite.core.api.security.rest.UserService;
 
 
+import org.ops4j.pax.cdi.api.OsgiServiceProvider;
 
 import java.util.Dictionary;
 
+@OsgiServiceProvider(classes = { AdminLoginService.class })
 public class ConfigAdminLoginProvider implements AdminLoginService {
 
   private volatile String username;
