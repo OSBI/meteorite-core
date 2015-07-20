@@ -1,3 +1,19 @@
+/*
+ * Copyright 2015 OSBI Ltd
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package bi.meteorite.core.security.tokenprovider;
 
 import bi.meteorite.core.api.security.tokenprovider.InvalidTokenException;
@@ -7,9 +23,6 @@ import bi.meteorite.core.api.security.tokenprovider.TokenProviderException;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.binary.StringUtils;
 import org.apache.commons.codec.digest.DigestUtils;
-/*import org.osgi.service.cm.ConfigurationException;
-import org.osgi.service.cm.ManagedService;
-import org.osgi.service.log.LogService;*/
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -23,16 +36,20 @@ import java.util.TreeMap;
 import javax.crypto.*;
 import javax.crypto.spec.SecretKeySpec;
 
+/*import org.osgi.service.cm.ConfigurationException;
+import org.osgi.service.cm.ManagedService;
+import org.osgi.service.log.LogService;*/
+
 /**
  * Created by bugg on 20/07/15.
  */
-public class TokenProviderImpl implements TokenProvider{
+public class TokenProviderImpl implements TokenProvider {
 
   public static final String AUTHORIZATION_HEADER_AMDATU = TokenUtil.AUTHORIZATION_HEADER_AMDATU;
 
   // Service dependencies
   //private volatile LogService m_logService;
-  private volatile TokenStorageProvider m_tokenStore;
+  private volatile TokenStorageProvider mtokenStore;
 
   // Encryption and decryption key and ciphers
   private static final String ENCRYPTION_METHOD = "AES";
@@ -42,19 +59,20 @@ public class TokenProviderImpl implements TokenProvider{
   private static final String RANDOM_KEY = "[randomkey]";
 
   // The secret key
-  private volatile SecretKey m_secretKey;
-  private volatile String m_privateKey;
-  private volatile Cipher m_encryptCipher;
-  private volatile Cipher m_decryptCipher;
+  private volatile SecretKey msecretKey;
+  private volatile String mprivateKey;
+  private volatile Cipher mencryptCipher;
+  private volatile Cipher mdecryptCipher;
 
   @SuppressWarnings("rawtypes")
   public void updated(final Dictionary properties) throws Exception {
-    if (properties == null){
-    		/*
-    		 * AMDATUSEC-7: TokenProviderImpl#updated throws NPE when properties null
-    		 *
-    		 * The Dependency Manager will take care of unregistering the service when the configuration is removed.
-    		 */
+    if (properties == null) {
+
+/**
+ * AMDATUSEC-7: TokenProviderImpl#updated throws NPE when properties null
+ *
+ * The Dependency Manager will take care of unregistering the service when the configuration is removed.
+ */
       return;
     }
 
@@ -65,33 +83,29 @@ public class TokenProviderImpl implements TokenProvider{
       try {
         KeyGenerator keyGen = KeyGenerator.getInstance(ENCRYPTION_METHOD);
         keyGen.init(ENCRYPTION_METHOD_BYTES * 8);
-        m_secretKey = keyGen.generateKey();
-        m_privateKey = new Base64(0).encodeToString(m_secretKey.getEncoded());
+        msecretKey = keyGen.generateKey();
+        mprivateKey = new Base64(0).encodeToString(msecretKey.getEncoded());
         startCiphers();
-      }
-      catch (NoSuchAlgorithmException e) {
+      } catch (NoSuchAlgorithmException e) {
         //throw new ConfigurationException(SECRET_KEY_PROPERTY, "Could not generate random key", e);
       }
-    }
-    else if (key != null && !key.toString().trim().isEmpty()
-             && key.toString().length() >= ENCRYPTION_METHOD_BYTES) {
+    } else if (key != null && !key.toString().trim().isEmpty()
+               && key.toString().length() >= ENCRYPTION_METHOD_BYTES) {
       byte[] bytes = new byte[ENCRYPTION_METHOD_BYTES];
       byte[] keyBytes = key.toString().getBytes();
       if (keyBytes.length == ENCRYPTION_METHOD_BYTES) {
         bytes = keyBytes;
-      }
-      else {
+      } else {
         // Chop off first ENCRYPTION_METHOD_BYTES bytes
         for (int i = 0; i < ENCRYPTION_METHOD_BYTES; i++) {
           bytes[i] = keyBytes[i];
         }
       }
 
-      m_secretKey = new SecretKeySpec(bytes, ENCRYPTION_METHOD);
-      m_privateKey = new Base64(0).encodeToString(m_secretKey.getEncoded());
+      msecretKey = new SecretKeySpec(bytes, ENCRYPTION_METHOD);
+      mprivateKey = new Base64(0).encodeToString(msecretKey.getEncoded());
       startCiphers();
-    }
-    else {
+    } else {
     /*  throw new ConfigurationException(SECRET_KEY_PROPERTY, "An invalid secret key has been entered "
                                                             + "in the configuration of '" + TokenProvider.PID
                                                             + "'. The secret key must either equal '[randomkey]' "
@@ -102,23 +116,21 @@ public class TokenProviderImpl implements TokenProvider{
 
   private void startCiphers() {
     try {
-      m_encryptCipher = Cipher.getInstance(ENCRYPTION_METHOD);
-      m_encryptCipher.init(Cipher.ENCRYPT_MODE, m_secretKey);
-      m_decryptCipher = Cipher.getInstance(ENCRYPTION_METHOD);
-      m_decryptCipher.init(Cipher.DECRYPT_MODE, m_secretKey);
-    }
-    catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException e) {
+      mencryptCipher = Cipher.getInstance(ENCRYPTION_METHOD);
+      mencryptCipher.init(Cipher.ENCRYPT_MODE, msecretKey);
+      mdecryptCipher = Cipher.getInstance(ENCRYPTION_METHOD);
+      mdecryptCipher.init(Cipher.DECRYPT_MODE, msecretKey);
+    } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException e) {
       throw new RuntimeException(e);
     }
   }
 
   private String generateSignature(final SortedMap<String, String> attributes) throws TokenProviderException {
-    String signvalue = m_privateKey;
+    String signvalue = mprivateKey;
     if (attributes != null && attributes.size() > 0) {
       try {
         signvalue += attributesToString(attributes);
-      }
-      catch (UnsupportedEncodingException e) {
+      } catch (UnsupportedEncodingException e) {
         throw new TokenProviderException(e);
       }
     }
@@ -197,7 +209,7 @@ public class TokenProviderImpl implements TokenProvider{
       byte[] utf8 = token.getBytes(DEFAULT_CHARSET);
 
       // Encrypt it
-      byte[] enc = m_encryptCipher.doFinal(utf8);
+      byte[] enc = mencryptCipher.doFinal(utf8);
 
       // Encode to base64
       String encryptedToken = StringUtils.newStringUtf8(Base64.encodeBase64(enc, false));
@@ -205,21 +217,16 @@ public class TokenProviderImpl implements TokenProvider{
       // Store the encrypted token
       // NB: our token secret is null, since there is no party with which we can share the
       // token secret
-      m_tokenStore.addToken(new Token(encryptedToken, null, System.currentTimeMillis()));
+      mtokenStore.addToken(new Token(encryptedToken, null, System.currentTimeMillis()));
 
       return encryptedToken;
-    }
-    catch (BadPaddingException e) {
-     // m_logService.log(LogService.LOG_ERROR, "Could not encrypt string", e);
-    }
-    catch (IllegalBlockSizeException e) {
+    } catch (BadPaddingException e) {
+      // m_logService.log(LogService.LOG_ERROR, "Could not encrypt string", e);
+    } catch (IllegalBlockSizeException e) {
       //m_logService.log(LogService.LOG_ERROR, "Could not encrypt string", e);
-    }
-    catch (UnsupportedEncodingException e) {
+    } catch (UnsupportedEncodingException e) {
       //m_logService.log(LogService.LOG_ERROR, "Could not encrypt string", e);
-    }
-
-    catch(Exception ex) {
+    } catch (Exception ex) {
       //m_logService.log(LogService.LOG_ERROR, "Error generating token", ex);
       throw new RuntimeException("Error generating token", ex);
     }
@@ -229,7 +236,7 @@ public class TokenProviderImpl implements TokenProvider{
   public SortedMap<String, String> verifyToken(final String encryptedToken) throws TokenProviderException {
     try {
       // First verify that this token was generated by us
-      if (!m_tokenStore.hasToken(encryptedToken)) {
+      if (!mtokenStore.hasToken(encryptedToken)) {
         //throw new InvalidTokenException("Token is invalid, token unknown");
         throw new TokenProviderException("Token is invalid, token unkown");
       }
@@ -238,7 +245,7 @@ public class TokenProviderImpl implements TokenProvider{
       byte[] dec = Base64.decodeBase64(encryptedToken);
 
       // Decrypt
-      byte[] utf8 = m_decryptCipher.doFinal(dec);
+      byte[] utf8 = mdecryptCipher.doFinal(dec);
 
       // Decode using UTF-8
       String token = new String(utf8, DEFAULT_CHARSET);
@@ -249,8 +256,7 @@ public class TokenProviderImpl implements TokenProvider{
       if (token.indexOf(" ") != -1) {
         signature = token.substring(0, token.indexOf(" "));
         attributes = stringToAttributes(token.substring(token.indexOf(" ") + 1));
-      }
-      else {
+      } else {
         signature = token;
       }
 
@@ -260,14 +266,11 @@ public class TokenProviderImpl implements TokenProvider{
         throw new TokenProviderException("Token is invalid, signature mismatch");
       }
       return attributes;
-    }
-    catch (BadPaddingException e) {
+    } catch (BadPaddingException e) {
       throw new TokenProviderException(e);
-    }
-    catch (IllegalBlockSizeException e) {
+    } catch (IllegalBlockSizeException e) {
       throw new TokenProviderException(e);
-    }
-    catch (UnsupportedEncodingException e) {
+    } catch (UnsupportedEncodingException e) {
       throw new TokenProviderException(e);
     }
   }
@@ -290,12 +293,11 @@ public class TokenProviderImpl implements TokenProvider{
   }
 
   public void invalidateToken(final String encryptedToken) {
-    if (m_tokenStore.hasToken(encryptedToken)) {
-      Token token = m_tokenStore.getToken(encryptedToken);
-      m_tokenStore.removeToken(token);
+    if (mtokenStore.hasToken(encryptedToken)) {
+      Token token = mtokenStore.getToken(encryptedToken);
+      mtokenStore.removeToken(token);
     }
   }
-
 
 
 }
