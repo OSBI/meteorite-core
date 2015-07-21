@@ -54,7 +54,7 @@ public class HazelcastCacheManagerService implements CacheManagerService {
     cfg = new Config();
     NetworkConfig network = cfg.getNetworkConfig();
     JoinConfig join = network.getJoin();
-    join.getMulticastConfig().setEnabled( false );
+    join.getMulticastConfig().setEnabled(false);
     join.getTcpIpConfig().setEnabled(false);
     CompositeClassLoader c = new CompositeClassLoader();
 
@@ -63,7 +63,7 @@ public class HazelcastCacheManagerService implements CacheManagerService {
 //      Thread.currentThread().setContextClassLoader(getClass().getClassLoader());
       cfg = cfg.setClassLoader(c);
 
-    /*
+    /**
      * Start threads, or establish connections, here, now
      */
     } finally {
@@ -81,10 +81,11 @@ public class HazelcastCacheManagerService implements CacheManagerService {
     return getInstance().getMap(name);
   }
 
-  public Map getCache(String name, ClassLoader c){
+  public Map getCache(String name, ClassLoader c) {
     addInvokerClassLoader(c);
     return getInstance().getMap(name);
   }
+
   protected ClassLoader getInvokerClassLoader() {
     return bcontext.getBundle().adapt(BundleWiring.class).getClassLoader();
   }

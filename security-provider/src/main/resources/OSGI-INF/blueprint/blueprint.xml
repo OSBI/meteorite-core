@@ -13,11 +13,11 @@
 
     <reference id="cacheservice" interface="bi.meteorite.core.api.cache.CacheManagerService"/>
 
-    <bean id="hazelTokenStore" class="bi.meteorite.core.security.tokenprovider.HazelcastTokenStore">
-        <property name="hazel" ref="cacheservice"/>
+    <bean id="cacheManagerTokenStore" class="bi.meteorite.core.security.tokenprovider.CacheManagerTokenStore">
+        <property name="cacheManager" ref="cacheservice"/>
     </bean>
     <bean id="tokenProvider" class="bi.meteorite.core.security.tokenprovider.TokenProviderImpl">
-        <property name="mtokenStore" ref="hazelTokenStore"/>
+        <property name="mtokenStore" ref="cacheManagerTokenStore"/>
     </bean>
 
     <bean id="loginService" class="bi.meteorite.core.security.jaas.JaasLoginManager">

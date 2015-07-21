@@ -338,7 +338,7 @@ public class TokenProviderImpl implements TokenProvider {
     this.mtokenStore = mtokenStore;
   }
 
-  public String getTokenFromRequest(final HttpServletRequest request){
+  public String getTokenFromRequest(final HttpServletRequest request) {
     return TokenUtil.getTokenFromRequest(request);
   }
 }
