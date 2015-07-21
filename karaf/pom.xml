@@ -32,6 +32,14 @@
             <scope>runtime</scope>
         </dependency>
         <dependency>
+            <groupId>org.apache.karaf.features</groupId>
+            <artifactId>enterprise</artifactId>
+            <classifier>features</classifier>
+            <version>4.0.0</version>
+            <type>xml</type>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
             <groupId>org.apache.cxf.karaf</groupId>
             <artifactId>apache-cxf</artifactId>
             <classifier>features</classifier>
@@ -137,6 +145,9 @@
                         <feature>aries-blueprint</feature>
                         <feature>http-whiteboard</feature>
                         <feature>cxf</feature>
+                        <!--<feature>transaction</feature>
+                        <feature>jndi</feature>
+                        <feature>jpa</feature>-->
                     </bootFeatures>
                     <installedFeatures>
                       <!--  <feature>wrapper</feature>

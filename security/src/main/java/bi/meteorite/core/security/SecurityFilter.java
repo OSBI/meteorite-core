@@ -20,7 +20,6 @@ package bi.meteorite.core.security;
 import bi.meteorite.core.api.security.AdminLoginService;
 import bi.meteorite.core.api.security.tokenprovider.TokenProvider;
 import bi.meteorite.core.api.security.tokenprovider.TokenProviderException;
-import bi.meteorite.core.security.tokenprovider.TokenUtil;
 
 import java.io.IOException;
 import java.util.SortedMap;
@@ -42,11 +41,12 @@ public class SecurityFilter implements Filter {
     HttpServletRequest servletRequest = (HttpServletRequest) request;
     HttpServletResponse servletResponse = (HttpServletResponse) response;
 
-    if (servletRequest.getPathInfo().startsWith("/admin/ui/") || servletRequest.getPathInfo().equals("/adminlogin")) {
+    if (servletRequest.getPathInfo().startsWith("/admin/ui/") || servletRequest.getPathInfo().equals
+      ("/rest/core/auth/login")) {
       chain.doFilter(request, response);
       return;
-    } else if (servletRequest.getPathInfo().startsWith("/admin")) {
-      String token = TokenUtil.getTokenFromRequest(servletRequest);
+    } else if (servletRequest.getPathInfo().startsWith("/rest/core/admin")) {
+      String token = tokenProvider.getTokenFromRequest(servletRequest);
       boolean isAdmin = false;
       try {
         SortedMap<String, String> userDetails = tokenProvider.verifyToken(token);
@@ -80,4 +80,11 @@ public class SecurityFilter implements Filter {
 
   }
 
+  public void setTokenProvider(TokenProvider tokenProvider) {
+    this.tokenProvider = tokenProvider;
+  }
+
+  public void setAdminLoginService(AdminLoginService adminLoginService) {
+    this.adminLoginService = adminLoginService;
+  }
 }

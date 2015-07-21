@@ -14,23 +14,18 @@
  * limitations under the License.
  */
 
-package bi.meteorite.core.api.security.rest;
 
-import bi.meteorite.core.api.security.Login;
-import bi.meteorite.core.api.security.tokenprovider.TokenProviderException;
+package bi.meteorite.core.api.cache;
 
-import javax.ws.rs.Consumes;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.core.Response;
+import java.util.Map;
 
 /**
  * Created by bugg on 20/07/15.
  */
-@Path("/auth/login")
-public interface UserAuthentication {
+public interface CacheManagerService {
 
-  @POST
-  @Consumes("application/json")
-  Response login(Login login) throws TokenProviderException;
+  Map getCache(String name);
+
+  Map getCache(String name, ClassLoader c);
 }
+

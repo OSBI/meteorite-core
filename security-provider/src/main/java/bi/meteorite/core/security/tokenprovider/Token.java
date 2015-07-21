@@ -16,6 +16,7 @@
 
 package bi.meteorite.core.security.tokenprovider;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,7 +25,7 @@ import java.util.Map;
  * (which is also a unique and randomly generated String). A timestamp is assigned to a token to facilitate token
  * expiration. Arbitrary String properties can be assigned to a token.
  */
-public class Token {
+public class Token implements Serializable {
   // The token
   private String mtoken;
 

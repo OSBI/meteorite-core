@@ -35,6 +35,7 @@ import java.util.TreeMap;
 
 import javax.crypto.*;
 import javax.crypto.spec.SecretKeySpec;
+import javax.servlet.http.HttpServletRequest;
 
 /*import org.osgi.service.cm.ConfigurationException;
 import org.osgi.service.cm.ManagedService;
@@ -181,6 +182,40 @@ public class TokenProviderImpl implements TokenProvider {
   }
 
   public String generateToken(final SortedMap<String, String> attributes) throws TokenProviderException {
+
+    Object key = "[randomkey]";
+    if (key != null && RANDOM_KEY.equals(key.toString())) {
+      // The value [randomkey] is intended for a single server setup. In this case we generate a
+      // random key.
+      try {
+        KeyGenerator keyGen = KeyGenerator.getInstance(ENCRYPTION_METHOD);
+        keyGen.init(ENCRYPTION_METHOD_BYTES * 8);
+        msecretKey = keyGen.generateKey();
+        mprivateKey = new Base64(0).encodeToString(msecretKey.getEncoded());
+        startCiphers();
+      } catch (NoSuchAlgorithmException e) {
+        //throw new ConfigurationException(SECRET_KEY_PROPERTY, "Could not generate random key", e);
+      }
+    } else if (key != null && !key.toString().trim().isEmpty()
+               && key.toString().length() >= ENCRYPTION_METHOD_BYTES) {
+      byte[] bytes = new byte[ENCRYPTION_METHOD_BYTES];
+      byte[] keyBytes = key.toString().getBytes();
+      if (keyBytes.length == ENCRYPTION_METHOD_BYTES) {
+        bytes = keyBytes;
+      } else {
+        // Chop off first ENCRYPTION_METHOD_BYTES bytes
+        for (int i = 0; i < ENCRYPTION_METHOD_BYTES; i++) {
+          bytes[i] = keyBytes[i];
+        }
+      }
+
+      msecretKey = new SecretKeySpec(bytes, ENCRYPTION_METHOD);
+      mprivateKey = new Base64(0).encodeToString(msecretKey.getEncoded());
+      startCiphers();
+
+    }
+
+
     try {
       if (attributes.containsKey(NONCE)) {
         throw new TokenProviderException("Invalid token attributes provided. Parameter '" + NONCE
@@ -299,5 +334,11 @@ public class TokenProviderImpl implements TokenProvider {
     }
   }
 
+  public void setMtokenStore(TokenStorageProvider mtokenStore) {
+    this.mtokenStore = mtokenStore;
+  }
 
+  public String getTokenFromRequest(final HttpServletRequest request){
+    return TokenUtil.getTokenFromRequest(request);
+  }
 }

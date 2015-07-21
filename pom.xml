@@ -15,7 +15,8 @@
 
     <modules>
         <module>api</module>
-	<module>security-provider</module>
+        <module>hazelcast</module>
+	    <module>security-provider</module>
         <module>security</module>
 	    <module>features</module>
         <module>karaf</module>

@@ -1,10 +1,10 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>security</artifactId>
+    <artifactId>security-provider</artifactId>
     <packaging>bundle</packaging>
     <version>1.0-SNAPSHOT</version>
-    <name>security</name>
+    <name>security-provider</name>
     <parent>
         <groupId>bi.meteorite</groupId>
         <artifactId>core</artifactId>
@@ -23,7 +23,7 @@
                 <configuration>
                     <instructions>
                         <Export-Package>
-                            bi.meteorite.core.security
+                            bi.meteorite.core.security.tokenprovider,bi.meteorite.core.security.jaas
                         </Export-Package>
                         <Import-Package>
                             *
@@ -40,37 +40,9 @@
              <version>1.0-SNAPSHOT</version>
          </dependency>
          <dependency>
-             <groupId>org.osgi</groupId>
-             <artifactId>org.osgi.core</artifactId>
+             <groupId>commons-codec</groupId>
+             <artifactId>commons-codec</artifactId>
+             <version>1.9</version>
          </dependency>
-         <dependency>
-             <groupId>org.ops4j.pax.cdi</groupId>
-             <artifactId>pax-cdi-api</artifactId>
-             <optional>true</optional>
-         </dependency>
-         <!--<dependency>
-             <groupId>javax.inject</groupId>
-             <artifactId>javax.inject</artifactId>
-             <optional>true</optional>
-         </dependency>-->
-         <dependency>
-             <groupId>org.glassfish.hk2.external</groupId>
-             <artifactId>javax.inject</artifactId>
-             <version>2.4.0-b25</version>
-         </dependency>
-         <dependency>
-             <groupId>com.fasterxml.jackson.core</groupId>
-             <artifactId>jackson-core</artifactId>
-         </dependency>
-         <!--<dependency>
-             <groupId>javax.servlet</groupId>
-             <artifactId>servlet-api</artifactId>
-             <version>2.5</version>
-         </dependency>-->
-         <dependency>
-             <groupId>javax.ws.rs</groupId>
-             <artifactId>javax.ws.rs-api</artifactId>
-         </dependency>
-
-     </dependencies>
+       </dependencies>
 </project>

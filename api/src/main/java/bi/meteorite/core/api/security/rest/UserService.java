@@ -27,7 +27,7 @@ import javax.ws.rs.core.Response;
 /**
  * Created by bugg on 03/07/15.
  */
-@Path("/core")
+@Path("/")
 public interface UserService {
 
   @POST

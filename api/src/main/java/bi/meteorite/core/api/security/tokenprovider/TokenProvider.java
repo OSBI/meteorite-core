@@ -18,6 +18,8 @@ package bi.meteorite.core.api.security.tokenprovider;
 
 import java.util.SortedMap;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * Created by bugg on 20/07/15.
  */
@@ -95,4 +97,5 @@ public interface TokenProvider {
    */
   void invalidateToken(String encryptedToken);
 
+  String getTokenFromRequest(final HttpServletRequest request);
 }
