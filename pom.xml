@@ -5,17 +5,38 @@
     <packaging>pom</packaging>
     <groupId>bi.meteorite</groupId>
     <version>1.0-SNAPSHOT</version>
+    <name>Meteorite Core</name>
+    <description>The core of the Saiku Analytics platform, Meteorite Core builds and maintains the server,
+    security and persistence layers for Saiku and others.</description>
+    <ciManagement>
+        <system>Bamboo</system>
+        <url>http://build.meteorite.bi</url>
+    </ciManagement>
+    <contributors>
+        <contributor>
+            <name>Tom Barber</name>
+            <email>tom@analytical-labs.com</email>
+            <organization>Meteorite BI</organization>
+        </contributor>
+        <contributor>
+            <name>Breno Polanski</name>
+            <email>breno.polanski@meteorite.bi</email>
+            <organization>Meteorite BI</organization>
+        </contributor>
+    </contributors>
+    <issueManagement>
+        <system>Jira</system>
+        <url>http://jira.meteorite.bi</url>
+    </issueManagement>
 
     <scm>
         <developerConnection>
             scm:git:git@github.com:OSBI/meteorite-core.git
         </developerConnection>
-        <tag>1.0-SNAPSHOT</tag>
     </scm>
 
     <modules>
         <module>api</module>
-        <module>hazelcast</module>
 	    <module>security-provider</module>
         <module>security</module>
 	    <module>features</module>
@@ -27,14 +48,50 @@
             <id>nexus-snapshots</id>
             <url>http://repo.meteorite.bi/content/repositories/alabs-snapshot-local/</url>
         </snapshotRepository>
+        <site>
+            <id>core.website</id>
+            <name>Meteorite Core</name>
+            <url>http://84.40.61.82/core_site</url>
+        </site>
     </distributionManagement>
 
     <properties>
         <top.dir>${project.basedir}</top.dir>
     </properties>
-
+<reporting>
+    <plugins>
+        <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>findbugs-maven-plugin</artifactId>
+            <version>3.0.2</version>
+        </plugin>
+        <plugin>
+            <groupId>com.atlassian.maven.plugins</groupId>
+            <artifactId>maven-clover2-plugin</artifactId>
+            <configuration>
+                <generatePdf>true</generatePdf>
+                <generateXml>true</generateXml>
+            </configuration>
+        </plugin>
+    </plugins>
+</reporting>
     <build>
         <plugins>
+            <plugin>
+                <groupId>com.atlassian.maven.plugins</groupId>
+                <artifactId>maven-clover2-plugin</artifactId>
+                <configuration>
+                    <targetPercentage>50%</targetPercentage>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <groupId>org.sonatype.plugins</groupId>
                 <artifactId>nexus-staging-maven-plugin</artifactId>
@@ -125,6 +182,7 @@
                     </execution>
                 </executions>
             </plugin>
+
         </plugins>
         <pluginManagement>
             <plugins>
