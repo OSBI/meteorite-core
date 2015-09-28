@@ -41,8 +41,14 @@ public class SecurityFilter implements Filter {
     HttpServletRequest servletRequest = (HttpServletRequest) request;
     HttpServletResponse servletResponse = (HttpServletResponse) response;
 
-    if (servletRequest.getPathInfo().startsWith("/admin/ui/") || servletRequest.getPathInfo().equals
-      ("/rest/core/auth/login")) {
+    String s = servletRequest.getPathInfo();
+    String s2 = servletRequest.getServletPath();
+    if (s != null && s2 != null) {
+      s = s2 + s;
+    } else if (s == null) {
+      s = s2;
+    }
+    if (s.startsWith("/admin/ui/") || s.equals("/rest/core/auth/login")) {
       chain.doFilter(request, response);
       return;
     } else if (servletRequest.getPathInfo().startsWith("/rest/core/admin")) {

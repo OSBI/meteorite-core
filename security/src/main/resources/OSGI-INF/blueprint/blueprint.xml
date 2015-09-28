@@ -31,7 +31,7 @@
 
     <bean id="cxfServlet" class="org.apache.cxf.transport.servlet.CXFServlet" />
 
-    <bean id="jsonProvider" class="com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider"/>
+<!--    <bean id="jsonProvider" class="com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider"/>-->
 
     <jaxrs:server id="taskService" address="/rest/core">
         <jaxrs:serviceBeans>
@@ -41,15 +41,15 @@
 
         <jaxrs:providers>
             <!-- Binding Providers -->
-            <ref component-id="jsonProvider"/>
+            <!--<ref component-id="jsonProvider"/>-->
             <!-- Exception Mappers -->
         </jaxrs:providers>
         <jaxrs:features>
             <cxf:logging />
         </jaxrs:features>
-        <jaxrs:extensionMappings>
+       <!-- <jaxrs:extensionMappings>
             <entry key="json" value="application/json" />
-        </jaxrs:extensionMappings>
+        </jaxrs:extensionMappings>-->
     </jaxrs:server>
 
     <!-- Services -->
@@ -57,6 +57,12 @@
         <service-properties>
             <entry key="urlPatterns" value="/services/*"/>
         </service-properties>
+        <bean class="bi.meteorite.core.security.SecurityFilter">
+            <property name="tokenProvider" ref="tokenProvider"/>
+            <property name="adminLoginService" ref="loginService"/>
+        </bean>
+    </service>
+    <service id="securityFilterExp" interface="javax.servlet.Filter">
         <bean class="bi.meteorite.core.security.SecurityFilter">
             <property name="tokenProvider" ref="tokenProvider"/>
             <property name="adminLoginService" ref="loginService"/>
@@ -74,4 +80,7 @@
         <!-- Name of the JAAS Context -->
         <property name="contextName" value="karaf"/>
     </bean>
+
+    <service id="userAuth" interface="bi.meteorite.core.api.security.rest.UserAuthentication"
+             ref="userAuthenticationImpl"></service>
 </blueprint>
