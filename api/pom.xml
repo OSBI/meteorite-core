@@ -4,7 +4,6 @@
     <artifactId>api</artifactId>
     <packaging>bundle</packaging>
     <version>1.0-SNAPSHOT</version>
-    <name>api</name>
     <parent>
         <groupId>bi.meteorite</groupId>
         <artifactId>core</artifactId>
@@ -13,6 +12,9 @@
     <properties>
         <top.dir>../</top.dir>
     </properties>
+
+    <name>Meteorite Core API Package</name>
+    <description>The API and interfaces for the Meteorite Core platform</description>
 
     <build>
         <plugins>

@@ -51,7 +51,7 @@
         <site>
             <id>core.website</id>
             <name>Meteorite Core</name>
-            <url>http://84.40.61.82/core_site</url>
+            <url>file:/var/www/html/site/</url>
         </site>
     </distributionManagement>
 
@@ -71,6 +71,13 @@
             <configuration>
                 <generatePdf>true</generatePdf>
                 <generateXml>true</generateXml>
+            </configuration>
+        </plugin>
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-javadoc-plugin</artifactId>
+            <version>2.10.3</version>
+            <configuration>
             </configuration>
         </plugin>
     </plugins>

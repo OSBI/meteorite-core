@@ -4,7 +4,9 @@
     <artifactId>security-provider</artifactId>
     <packaging>bundle</packaging>
     <version>1.0-SNAPSHOT</version>
-    <name>security-provider</name>
+    <name>Meteorite Core Security Provider</name>
+    <description>The provider of security for Meteorite Core. By Default this is a JAAS implementation and
+    a hazelcast backed token system.</description>
     <parent>
         <groupId>bi.meteorite</groupId>
         <artifactId>core</artifactId>

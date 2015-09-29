@@ -3,23 +3,21 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>bi.meteorite</groupId>
     <artifactId>meteorite-engine</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>karaf-assembly</packaging>
 
-    <distributionManagement>
-        <snapshotRepository>
-            <id>nexus-snapshots</id>
-            <url>http://repo.meteorite.bi/content/repositories/alabs-snapshot-local/</url>
-        </snapshotRepository>
-        <site>
-            <id>core.website</id>
-            <name>Meteorite Core</name>
-            <url>http://84.40.61.82/core_site</url>
-        </site>
-    </distributionManagement>
+    <parent>
+        <groupId>bi.meteorite</groupId>
+        <artifactId>core</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+    <properties>
+        <top.dir>../</top.dir>
+    </properties>
 
+    <name>Meteorite Core Karaf Engine</name>
+    <description>The main executable of the Meteorite Core build.</description>
     <dependencies>
      <!--   <dependency>
         &lt;!&ndash; scope is compile so all features (there is only one) are installed into startup.properties and the feature repo itself is not added in etc/org.apache.karaf.features.cfg file &ndash;&gt;
