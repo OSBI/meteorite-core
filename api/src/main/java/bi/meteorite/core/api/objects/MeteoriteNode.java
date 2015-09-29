@@ -17,7 +17,7 @@
 package bi.meteorite.core.api.objects;
 
 /**
- * Created by bugg on 23/06/15.
+ * An object stored within the repository.
  */
 public interface MeteoriteNode {
 }

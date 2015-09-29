@@ -19,7 +19,7 @@ package bi.meteorite.core.security;
 
 import bi.meteorite.core.api.security.AdminLoginService;
 import bi.meteorite.core.api.security.tokenprovider.TokenProvider;
-import bi.meteorite.core.api.security.tokenprovider.TokenProviderException;
+import bi.meteorite.core.api.security.exceptions.TokenProviderException;
 
 import java.io.IOException;
 import java.util.SortedMap;

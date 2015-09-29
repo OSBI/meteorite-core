@@ -14,18 +14,32 @@
  * limitations under the License.
  */
 
+package bi.meteorite.core.api.security.rest.objects;
 
-package bi.meteorite.core.api.cache;
-
-import java.util.Map;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- * Created by bugg on 20/07/15.
+ * Created by bugg on 20 /07/15.
  */
-public interface CacheManagerService {
+@XmlRootElement
+public class Login {
+  private String username;
+  private String password;
 
-  Map getCache(String name);
+  public String getUsername() {
+    return username;
+  }
 
-  Map getCache(String name, ClassLoader c);
+  public void setUsername(String username) {
+    this.username = username;
+  }
+
+  public String getPassword() {
+    return password;
+  }
+
+  public void setPassword(String password) {
+    this.password = password;
+  }
+
 }
-

@@ -20,30 +20,74 @@ import bi.meteorite.core.api.objects.MeteoriteNode;
 import bi.meteorite.core.api.objects.MeteoriteUser;
 
 /**
- * Created by bugg on 23/06/15.
+ * Repository operations allowed from within Meteorite Core.
  */
 public interface IRepositoryManager {
 
+  /**
+   * Initialize the repository.
+   */
   void init();
 
+  /**
+   * Start the repository.
+   */
   void start();
 
+  /**
+   * Stop the repository.
+   */
   void stop();
 
+  /**
+   * Add an object to the repository.
+   * @param node the file/folder object.
+   */
   void addNode(MeteoriteNode node);
 
+  /**
+   * Remove an object from the repository.
+   * @param node the file/folder object
+   */
   void removeNode(MeteoriteNode node);
 
+  /**
+   * Move an object within the repository.
+   * @param from from location.
+   * @param to to location.
+   * @param user the user performing the operation.
+   */
   void moveNode(String from, String to, MeteoriteUser user);
 
+  /**
+   * Copy an object within the repository.
+   * @param from from location.
+   * @param to to location.
+   * @param user the user performing the operation.
+   */
   void copyNode(String from, String to, MeteoriteUser user);
 
+  /**
+   * Remove the repository from the server.
+   */
   void dropRepository();
 
+  /**
+   * Export the repository to a file.
+   * @return the repository.
+   */
   byte[] exportRepository();
 
+  /**
+   * Restore a backup.
+   * @param data the file.
+   */
   void restoreResponsitory(byte[] data);
 
+  /**
+   * Rollback an object to a previous version.
+   * @param node
+   */
   void rollbackNode(MeteoriteNode node);
 
 }

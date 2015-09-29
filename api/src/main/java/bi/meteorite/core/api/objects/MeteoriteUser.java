@@ -17,30 +17,80 @@
 package bi.meteorite.core.api.objects;
 
 /**
- * Created by bugg on 23/06/15.
+ * A user object for Meteorite core.
  */
 public interface MeteoriteUser {
 
+  /**
+   * Get the username.
+   * @return the username
+   */
   String getUsername();
 
+  /**
+   * Set the username.
+   * @param username the username.
+   */
   void setUsername(String username);
 
+  /**
+   * Get the user password.
+   * @return the password.
+   */
   String getPassword();
 
+  /**
+   * Set the user password.
+   * @param password the password.
+   */
   void setPassword(String password);
 
+  /**
+   * Get an array of roles.
+   * @return an array of roles.
+   */
   String[] getRoles();
 
+  /**
+   * Set the roles.
+   * @param roles an array of roles.
+   */
   void setRoles(String[] roles);
 
+  /**
+   * Get the user email address.
+   * @return the email address.
+   */
   String getEmail();
 
+  /**
+   * Set the email address.
+   * @param email the email address.
+   */
   void setEmail(String email);
 
+  /**
+   * Get the users unique id
+   * @return the id
+   */
   int getId();
 
+  /**
+   * Set the users id.
+   * @param id the id.
+   */
   void setId(int id);
 
+  /**
+   * Get the organization id.
+   * @return the org id.
+   */
+  int getOrgId();
 
+  /**
+   * Set the organization id.
+   * @param orgId the organization id.
+   */
+  void setOrgId(int orgId);
 }
 

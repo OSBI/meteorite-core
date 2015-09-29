@@ -16,22 +16,32 @@
 
 package bi.meteorite.core.api.security.rest;
 
-import bi.meteorite.core.api.security.Login;
-import bi.meteorite.core.api.security.tokenprovider.TokenProviderException;
+import bi.meteorite.core.api.security.rest.objects.Login;
+import bi.meteorite.core.api.security.exceptions.TokenProviderException;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 
 /**
- * Created by bugg on 20/07/15.
+ * RESTful interface for authentication.
  */
 @Path("/auth/login")
 public interface UserAuthentication {
 
+  /**
+   * Login to the Meteorite core.
+   * @param login Login Object
+   * @return an HTTP response.
+   * @throws TokenProviderException
+   */
   @POST
   @Consumes("application/json")
   Response login(Login login) throws TokenProviderException;
 
+  /**
+   * Demo, needs removing in production.
+   * @return
+   */
   @GET
   @Produces("application/json")
   Response login();

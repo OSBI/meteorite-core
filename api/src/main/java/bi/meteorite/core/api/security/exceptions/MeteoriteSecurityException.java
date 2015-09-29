@@ -14,8 +14,10 @@
  * limitations under the License.
  */
 
+package bi.meteorite.core.api.security.exceptions;
 
 /**
- * Created by bugg on 21/07/15.
+ * Created by bugg on 03/07/15.
  */
-package bi.meteorite.core.api.cache;
+public class MeteoriteSecurityException extends Exception {
+}

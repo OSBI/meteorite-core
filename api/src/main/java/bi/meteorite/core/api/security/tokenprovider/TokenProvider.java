@@ -16,12 +16,14 @@
 
 package bi.meteorite.core.api.security.tokenprovider;
 
+import bi.meteorite.core.api.security.exceptions.TokenProviderException;
+
 import java.util.SortedMap;
 
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * Created by bugg on 20/07/15.
+ * The Token Provider.
  */
 public interface TokenProvider {
   /**

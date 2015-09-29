@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package bi.meteorite.core.api.security.tokenprovider;
+package bi.meteorite.core.api.security.exceptions;
 
 /**
- * Created by bugg on 20/07/15.
+ * Token Provider Exception
  */
 public class TokenProviderException extends Exception {
   // The serial version UID of this exception class

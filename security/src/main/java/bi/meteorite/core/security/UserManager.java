@@ -18,7 +18,7 @@ package bi.meteorite.core.security;
 
 import bi.meteorite.core.api.objects.MeteoriteUser;
 import bi.meteorite.core.api.security.IUserManagement;
-import bi.meteorite.core.api.security.MeteoriteSecurityException;
+import bi.meteorite.core.api.security.exceptions.MeteoriteSecurityException;
 
 import java.util.List;
 

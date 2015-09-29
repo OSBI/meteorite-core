@@ -17,7 +17,7 @@
 package bi.meteorite.core.api.security.tokenprovider;
 
 /**
- * Created by bugg on 20/07/15.
+ * Invalid Token Exception.
  */
 public class InvalidTokenException extends Exception {
   // The serial version UID of this exception class

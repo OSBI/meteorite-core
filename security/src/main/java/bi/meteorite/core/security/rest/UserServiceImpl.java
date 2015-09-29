@@ -17,7 +17,7 @@
 package bi.meteorite.core.security.rest;
 
 import bi.meteorite.core.api.objects.MeteoriteUser;
-import bi.meteorite.core.api.security.MeteoriteSecurityException;
+import bi.meteorite.core.api.security.exceptions.MeteoriteSecurityException;
 import bi.meteorite.core.api.security.rest.UserService;
 
 import org.ops4j.pax.cdi.api.OsgiServiceProvider;
