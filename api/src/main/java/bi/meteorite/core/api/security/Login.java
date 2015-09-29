@@ -16,9 +16,12 @@
 
 package bi.meteorite.core.api.security;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
 /**
- * Created by bugg on 20/07/15.
+ * Created by bugg on 20 /07/15.
  */
+@XmlRootElement
 public class Login {
   private String username;
   private String password;

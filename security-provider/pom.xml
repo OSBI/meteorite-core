@@ -51,5 +51,16 @@
              <version>1.9</version>
              <scope>provided</scope>
          </dependency>
-       </dependencies>
+         <dependency>
+             <groupId>com.hazelcast</groupId>
+             <artifactId>hazelcast</artifactId>
+             <version>3.2.3</version>
+         </dependency>
+         <dependency>
+             <groupId>org.osgi</groupId>
+             <artifactId>org.osgi.core</artifactId>
+             <version>6.0.0</version>
+         </dependency>
+
+     </dependencies>
 </project>

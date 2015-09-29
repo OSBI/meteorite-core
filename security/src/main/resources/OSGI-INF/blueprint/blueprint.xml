@@ -31,7 +31,7 @@
 
     <bean id="cxfServlet" class="org.apache.cxf.transport.servlet.CXFServlet" />
 
-<!--    <bean id="jsonProvider" class="com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider"/>-->
+    <bean id="jsonProvider" class="com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider"/>
 
     <jaxrs:server id="taskService" address="/rest/core">
         <jaxrs:serviceBeans>
@@ -41,13 +41,13 @@
 
         <jaxrs:providers>
             <!-- Binding Providers -->
-            <!--<ref component-id="jsonProvider"/>-->
+            <ref component-id="jsonProvider"/>
             <!-- Exception Mappers -->
         </jaxrs:providers>
         <jaxrs:features>
             <cxf:logging />
         </jaxrs:features>
-       <!-- <jaxrs:extensionMappings>
+       <!--<jaxrs:extensionMappings>
             <entry key="json" value="application/json" />
         </jaxrs:extensionMappings>-->
     </jaxrs:server>

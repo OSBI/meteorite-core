@@ -11,9 +11,11 @@
   http://cxf.apache.org/blueprint/jaxrs http://cxf.apache.org/schemas/blueprint/jaxrs.xsd
   http://cxf.apache.org/blueprint/core http://cxf.apache.org/schemas/blueprint/core.xsd'>
 
-    <reference id="cacheservice" interface="bi.meteorite.core.api.cache.CacheManagerService"/>
+<!--    <reference id="cacheservice" interface="bi.meteorite.core.api.cache.CacheManagerService"/>-->
+    <reference id="cacheservice" interface="com.hazelcast.core.HazelcastInstance"/>
 
-    <bean id="cacheManagerTokenStore" class="bi.meteorite.core.security.tokenprovider.CacheManagerTokenStore">
+    <bean id="cacheManagerTokenStore" class="bi.meteorite.core.security.tokenprovider.CacheManagerTokenStore" init-method="init">
+        <property name="bcontext" ref="blueprintBundleContext"/>
         <property name="cacheManagerService" ref="cacheservice"/>
     </bean>
     <bean id="tokenProvider" class="bi.meteorite.core.security.tokenprovider.TokenProviderImpl">

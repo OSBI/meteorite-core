@@ -16,18 +16,45 @@
 
 package bi.meteorite.core.security.tokenprovider;
 
-import bi.meteorite.core.api.cache.CacheManagerService;
+import com.hazelcast.core.HazelcastInstance;
+
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.wiring.BundleWiring;
 
 /**
  * Created by bugg on 20/07/15.
  */
 public class CacheManagerTokenStore implements TokenStorageProvider {
 
-  private CacheManagerService cacheManager;
+  private HazelcastInstance cacheManager;
+  private BundleContext bcontext;
+
+  public void init(){
+
+    CompositeClassLoader c = new CompositeClassLoader();
+
+    ClassLoader tccl = Thread.currentThread().getContextClassLoader();
+    try {
+//      Thread.currentThread().setContextClassLoader(getClass().getClassLoader());
+      cacheManager.getConfig().setClassLoader(c);
+
+      /**
+       * Start threads, or establish connections, here, now
+       */
+    } finally {
+      //Thread.currentThread().setContextClassLoader(tccl);
+      cacheManager.getConfig().setClassLoader(c);
+
+    }
+    //addInvokerClassLoader(getClass().getClassLoader());
+
+
+  }
 
   @Override
   public void addToken(Token token) {
-    cacheManager.getCache("tokens", this.getClass().getClassLoader()).put(token.getToken(), token);
+    addInvokerClassLoader(this.getClass().getClassLoader());
+    cacheManager.getMap("tokens").put(token.getToken(), token);
   }
 
   @Override
@@ -37,12 +64,16 @@ public class CacheManagerTokenStore implements TokenStorageProvider {
 
   @Override
   public Token getToken(String token) {
-    return (Token) cacheManager.getCache("tokens").get(token);
+    addInvokerClassLoader(getInvokerClassLoader());
+
+    return (Token) cacheManager.getMap("tokens").get(token);
   }
 
   @Override
   public boolean hasToken(String token) {
-    return cacheManager.getCache("tokens").get(token) != null;
+    addInvokerClassLoader(getInvokerClassLoader());
+
+    return cacheManager.getMap("tokens").get(token) != null;
   }
 
   @Override
@@ -50,7 +81,23 @@ public class CacheManagerTokenStore implements TokenStorageProvider {
 
   }
 
-  public void setCacheManagerService(CacheManagerService hazel) {
+  public void setCacheManagerService(HazelcastInstance hazel) {
     this.cacheManager = hazel;
   }
+
+  protected void addInvokerClassLoader(ClassLoader cl) {
+    ((CompositeClassLoader) getInstance().getConfig().getClassLoader()).add(cl);
+  }
+  protected ClassLoader getInvokerClassLoader() {
+    return bcontext.getBundle().adapt(BundleWiring.class).getClassLoader();
+  }
+
+  public void setBcontext(BundleContext bcontext) {
+    this.bcontext = bcontext;
+  }
+
+  public HazelcastInstance getInstance() {
+    return cacheManager;
+  }
+
 }

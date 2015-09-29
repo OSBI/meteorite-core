@@ -56,6 +56,15 @@ public class UserAuthenticationImpl implements UserAuthentication {
     return Response.status(403).build();
   }
 
+  @Override
+  public Response login() {
+    Login l = new Login();
+    l.setUsername("test");
+    l.setPassword("pass");
+    return Response.ok().entity(l).build();
+
+  }
+
   public void setAdminLoginService(AdminLoginService adminLoginService) {
     this.adminLoginService = adminLoginService;
   }

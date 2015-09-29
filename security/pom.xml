@@ -26,7 +26,9 @@
                             bi.meteorite.core.security
                         </Export-Package>
                         <Import-Package>
-                            *
+                            javax.xml.bind;version=2.1.0,
+                            javax.xml.bind.annotation;version=2.1.0,
+                            com.sun.xml.bind.v2.runtime.reflect;version=0.0.0;resolution:=optional,*
                         </Import-Package>
                     </instructions>
                 </configuration>
@@ -65,6 +67,11 @@
              <groupId>javax.ws.rs</groupId>
              <artifactId>javax.ws.rs-api</artifactId>
              <scope>provided</scope>
+         </dependency>
+         <dependency>
+             <groupId>com.fasterxml.jackson.jaxrs</groupId>
+             <artifactId>jackson-jaxrs-json-provider</artifactId>
+             <version>2.6.2</version>
          </dependency>
 
      </dependencies>
