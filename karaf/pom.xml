@@ -1,25 +1,64 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
-    <modelVersion>4.0.0</modelVersion>
+  <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>meteorite-engine</artifactId>
+  <parent>
+    <groupId>bi.meteorite</groupId>
+    <artifactId>core</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <packaging>karaf-assembly</packaging>
+  </parent>
 
-    <parent>
-        <groupId>bi.meteorite</groupId>
-        <artifactId>core</artifactId>
-        <version>1.0-SNAPSHOT</version>
-    </parent>
-    <properties>
-        <top.dir>../</top.dir>
-    </properties>
+  <artifactId>meteorite-engine</artifactId>
+  <version>1.0-SNAPSHOT</version>
+  <packaging>karaf-assembly</packaging>
 
-    <name>Meteorite Core Karaf Engine</name>
-    <description>The main executable of the Meteorite Core build.</description>
-    <dependencies>
-     <!--   <dependency>
+  <name>Meteorite Core Karaf Engine</name>
+  <description>The main executable of the Meteorite Core build.</description>
+  <properties>
+    <top.dir>../</top.dir>
+  </properties>
+  <dependencies>
+    <dependency>
+      <groupId>bi.meteorite</groupId>
+      <artifactId>meteorite-core-features</artifactId>
+      <version>1.0-SNAPSHOT</version>
+      <classifier>features</classifier>
+      <type>xml</type>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.cxf.karaf</groupId>
+      <artifactId>apache-cxf</artifactId>
+      <version>3.1.1</version>
+      <classifier>features</classifier>
+      <type>xml</type>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.karaf.cellar</groupId>
+      <artifactId>apache-karaf-cellar</artifactId>
+      <version>4.0.0</version>
+      <classifier>features</classifier>
+      <type>xml</type>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.karaf.features</groupId>
+      <artifactId>enterprise</artifactId>
+      <version>4.0.0</version>
+      <classifier>features</classifier>
+      <type>xml</type>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <!-- scope is compile so all features (there is only one) are installed into startup.properties and the feature repo itself is not added in etc/org.apache.karaf.features.cfg file -->
+      <groupId>org.apache.karaf.features</groupId>
+      <artifactId>framework</artifactId>
+      <version>4.0.0</version>
+      <type>kar</type>
+    </dependency>
+    <!--   <dependency>
         &lt;!&ndash; scope is compile so all features (there is only one) are installed into startup.properties and the feature repo itself is not added in etc/org.apache.karaf.features.cfg file &ndash;&gt;
             <groupId>org.apache.karaf.features</groupId>
             <artifactId>framework</artifactId>
@@ -34,143 +73,103 @@
             <type>xml</type>
             <scope>runtime</scope>
         </dependency>-->
-        <dependency>
-            <groupId>org.apache.karaf.features</groupId>
-            <artifactId>spring</artifactId>
-            <classifier>features</classifier>
-            <version>4.0.0</version>
-            <type>xml</type>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.karaf.features</groupId>
-            <artifactId>enterprise</artifactId>
-            <classifier>features</classifier>
-            <version>4.0.0</version>
-            <type>xml</type>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.cxf.karaf</groupId>
-            <artifactId>apache-cxf</artifactId>
-            <classifier>features</classifier>
-            <version>3.1.1</version>
-            <type>xml</type>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <!-- scope is compile so all features (there is only one) are installed into startup.properties and the feature repo itself is not added in etc/org.apache.karaf.features.cfg file -->
-            <groupId>org.apache.karaf.features</groupId>
-            <artifactId>framework</artifactId>
-            <version>4.0.0</version>
-            <type>kar</type>
-        </dependency>
+    <dependency>
+      <groupId>org.apache.karaf.features</groupId>
+      <artifactId>spring</artifactId>
+      <version>4.0.0</version>
+      <classifier>features</classifier>
+      <type>xml</type>
+      <scope>runtime</scope>
+    </dependency>
 
-        <dependency>
-            <!-- scope is runtime so the feature repo is listed in etc/org.apache.karaf.features.cfg file, and features will installed into the system directory -->
-            <groupId>org.apache.karaf.features</groupId>
-            <artifactId>standard</artifactId>
-            <classifier>features</classifier>
-            <version>4.0.0</version>
-            <type>xml</type>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>bi.meteorite</groupId>
-            <artifactId>meteorite-core-features</artifactId>
-            <version>1.0-SNAPSHOT</version>
-            <classifier>features</classifier>
-            <type>xml</type>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.karaf.cellar</groupId>
-            <artifactId>apache-karaf-cellar</artifactId>
-            <version>4.0.0</version>
-            <classifier>features</classifier>
-            <type>xml</type>
-            <scope>runtime</scope>
-        </dependency>
+    <dependency>
+      <!-- scope is runtime so the feature repo is listed in etc/org.apache.karaf.features.cfg file, and features will installed into the system directory -->
+      <groupId>org.apache.karaf.features</groupId>
+      <artifactId>standard</artifactId>
+      <version>4.0.0</version>
+      <classifier>features</classifier>
+      <type>xml</type>
+      <scope>runtime</scope>
+    </dependency>
 
-    </dependencies>
+  </dependencies>
 
-    <build>
-        <!-- if you want to include resources in the distribution -->
-        <resources>
-            <resource>
-                <directory>src/main/resources</directory>
-                <filtering>false</filtering>
-                <includes>
-                    <include>**/*</include>
-                </includes>
-            </resource>
-            <resource>
-                <directory>src/main/filtered-resources</directory>
-                <filtering>true</filtering>
-                <includes>
-                    <include>**/*</include>
-                </includes>
-            </resource>
-        </resources>
+  <build>
+    <!-- if you want to include resources in the distribution -->
+    <resources>
+      <resource>
+        <filtering>false</filtering>
+        <directory>src/main/resources</directory>
+        <includes>
+          <include>**/*</include>
+        </includes>
+      </resource>
+      <resource>
+        <filtering>true</filtering>
+        <directory>src/main/filtered-resources</directory>
+        <includes>
+          <include>**/*</include>
+        </includes>
+      </resource>
+    </resources>
 
-        <plugins>
-            <!-- if you want to include resources in the distribution -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-resources-plugin</artifactId>
-                <version>2.6</version>
-                <executions>
-                    <execution>
-                        <id>process-resources</id>
-                        <goals>
-                            <goal>resources</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.karaf.tooling</groupId>
-                <artifactId>karaf-maven-plugin</artifactId>
-                <version>4.0.0</version>
-                <extensions>true</extensions>
-                <configuration>
-                    <!-- no startupFeatures -->
-                    <bootFeatures>
-                        <feature>jaas</feature>
-                        <feature>shell</feature>
-                        <feature>ssh</feature>
-                        <feature>management</feature>
-                        <feature>bundle</feature>
-                        <feature>config</feature>
-                        <feature>deployer</feature>
-                        <feature>diagnostic</feature>
-                        <feature>instance</feature>
-                        <feature>kar</feature>
-                        <feature>log</feature>
-                        <feature>package</feature>
-                        <feature>service</feature>
-                        <feature>system</feature>
-                        <feature>feature</feature>
-                        <feature>wrap</feature>
-                        <feature>spring</feature>
-                        <feature>spring-web</feature>
-                        <feature>aries-blueprint</feature>
-                        <feature>http-whiteboard</feature>
-                        <feature>cxf</feature>
-                        <feature>cellar</feature>
-                        <!--<feature>transaction</feature>
+    <plugins>
+      <!-- if you want to include resources in the distribution -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-resources-plugin</artifactId>
+        <version>2.6</version>
+        <executions>
+          <execution>
+            <id>process-resources</id>
+            <goals>
+              <goal>resources</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.karaf.tooling</groupId>
+        <artifactId>karaf-maven-plugin</artifactId>
+        <version>4.0.0</version>
+        <extensions>true</extensions>
+        <configuration>
+          <!-- no startupFeatures -->
+          <bootFeatures>
+            <feature>jaas</feature>
+            <feature>shell</feature>
+            <feature>ssh</feature>
+            <feature>management</feature>
+            <feature>bundle</feature>
+            <feature>config</feature>
+            <feature>deployer</feature>
+            <feature>diagnostic</feature>
+            <feature>instance</feature>
+            <feature>kar</feature>
+            <feature>log</feature>
+            <feature>package</feature>
+            <feature>service</feature>
+            <feature>system</feature>
+            <feature>feature</feature>
+            <feature>wrap</feature>
+            <feature>spring</feature>
+            <feature>spring-web</feature>
+            <feature>aries-blueprint</feature>
+            <feature>http-whiteboard</feature>
+            <feature>cxf</feature>
+            <feature>cellar</feature>
+            <!--<feature>transaction</feature>
                         <feature>jndi</feature>
                         <feature>jpa</feature>-->
-                    </bootFeatures>
-                    <installedFeatures>
-                      <!--  <feature>wrapper</feature>
+          </bootFeatures>
+          <installedFeatures>
+            <!--  <feature>wrapper</feature>
                         <feature>spring/4.0.7.RELEASE_1</feature>-->
-                        <!--<feature>meteorite-core-features</feature>-->
+            <!--<feature>meteorite-core-features</feature>-->
 
-                    </installedFeatures>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
+          </installedFeatures>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
 </project>
-

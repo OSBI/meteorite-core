@@ -1,59 +1,55 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-    <artifactId>api</artifactId>
-    <packaging>bundle</packaging>
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>bi.meteorite</groupId>
+    <artifactId>core</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <parent>
-        <groupId>bi.meteorite</groupId>
-        <artifactId>core</artifactId>
-        <version>1.0-SNAPSHOT</version>
-    </parent>
-    <properties>
-        <top.dir>../</top.dir>
-    </properties>
+  </parent>
+  <artifactId>api</artifactId>
+  <version>1.0-SNAPSHOT</version>
+  <packaging>bundle</packaging>
 
-    <name>Meteorite Core API Package</name>
-    <description>The API and interfaces for the Meteorite Core platform</description>
+  <name>Meteorite Core API Package</name>
+  <description>The API and interfaces for the Meteorite Core platform</description>
+  <properties>
+    <top.dir>../</top.dir>
+  </properties>
+  <dependencies>
+    <dependency>
+      <groupId>com.qmino</groupId>
+      <artifactId>miredot-annotations</artifactId>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>servlet-api</artifactId>
+      <version>2.5</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>javax.ws.rs</groupId>
+      <artifactId>javax.ws.rs-api</artifactId>
+      <scope>provided</scope>
+    </dependency>
+  </dependencies>
 
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.felix</groupId>
-                <artifactId>maven-bundle-plugin</artifactId>
-                <version>2.3.7</version>
-                <extensions>true</extensions>
-                <configuration>
-                    <instructions>
-                        <Export-Package>
-                            bi.meteorite.core.api.*
-                        </Export-Package>
-                        <Import-Package>
-                            *
-                        </Import-Package>
-                        <!--<Private-Package>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>maven-bundle-plugin</artifactId>
+        <version>2.3.7</version>
+        <extensions>true</extensions>
+        <configuration>
+          <instructions>
+            <Export-Package>bi.meteorite.core.api.*</Export-Package>
+            <Import-Package>*</Import-Package>
+            <!--<Private-Package>
                         </Private-Package>-->
-                    </instructions>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
-        <dependencies>
-            <dependency>
-                <groupId>javax.ws.rs</groupId>
-                <artifactId>javax.ws.rs-api</artifactId>
-                <scope>provided</scope>
-            </dependency>
-            <dependency>
-                <groupId>com.qmino</groupId>
-                <artifactId>miredot-annotations</artifactId>
-                <scope>compile</scope>
-            </dependency>
-            <dependency>
-                <groupId>javax.servlet</groupId>
-                <artifactId>servlet-api</artifactId>
-                <version>2.5</version>
-                <scope>provided</scope>
-            </dependency>
-        </dependencies>
+          </instructions>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
 </project>
