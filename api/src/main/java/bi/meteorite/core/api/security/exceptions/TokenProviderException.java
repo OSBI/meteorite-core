@@ -26,8 +26,7 @@ public class TokenProviderException extends Exception {
   /**
    * Constructs a new token provider exception.
    *
-   * @param msg
-   *        An error message providing more information about the cause of the error.
+   * @param msg An error message providing more information about the cause of the error.
    */
   public TokenProviderException(final String msg) {
     super(msg);
@@ -36,8 +35,7 @@ public class TokenProviderException extends Exception {
   /**
    * Constructs a new token provider exception.
    *
-   * @param t
-   *        An exception providing more information about the cause of the error.
+   * @param t An exception providing more information about the cause of the error.
    */
   public TokenProviderException(final Throwable t) {
     super(t);

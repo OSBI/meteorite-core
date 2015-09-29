@@ -28,25 +28,25 @@ public interface IUserManagement {
 
   MeteoriteUser addUser(MeteoriteUser u) throws MeteoriteSecurityException;
 
-  boolean deleteUser(MeteoriteUser u)  throws MeteoriteSecurityException;
+  boolean deleteUser(MeteoriteUser u) throws MeteoriteSecurityException;
 
-  MeteoriteUser setUser(MeteoriteUser u)  throws MeteoriteSecurityException;
+  MeteoriteUser setUser(MeteoriteUser u) throws MeteoriteSecurityException;
 
-  MeteoriteUser getUser(int id)  throws MeteoriteSecurityException;
+  MeteoriteUser getUser(int id) throws MeteoriteSecurityException;
 
-  String[] getRoles(MeteoriteUser u)  throws MeteoriteSecurityException;
+  String[] getRoles(MeteoriteUser u) throws MeteoriteSecurityException;
 
-  void addRole(MeteoriteUser u)  throws MeteoriteSecurityException;
+  void addRole(MeteoriteUser u) throws MeteoriteSecurityException;
 
-  void removeRole(MeteoriteUser u)  throws MeteoriteSecurityException;
+  void removeRole(MeteoriteUser u) throws MeteoriteSecurityException;
 
   void removeUser(String username) throws MeteoriteSecurityException;
 
-  MeteoriteUser updateUser(MeteoriteUser u)  throws MeteoriteSecurityException;
+  MeteoriteUser updateUser(MeteoriteUser u) throws MeteoriteSecurityException;
 
-  boolean isAdmin()  throws MeteoriteSecurityException;
+  boolean isAdmin() throws MeteoriteSecurityException;
 
-  List<String> getAdminRoles()  throws MeteoriteSecurityException;
+  List<String> getAdminRoles() throws MeteoriteSecurityException;
 
 
 }

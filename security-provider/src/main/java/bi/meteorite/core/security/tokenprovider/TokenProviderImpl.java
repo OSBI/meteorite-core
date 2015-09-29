@@ -16,9 +16,9 @@
 
 package bi.meteorite.core.security.tokenprovider;
 
+import bi.meteorite.core.api.security.exceptions.TokenProviderException;
 import bi.meteorite.core.api.security.tokenprovider.InvalidTokenException;
 import bi.meteorite.core.api.security.tokenprovider.TokenProvider;
-import bi.meteorite.core.api.security.exceptions.TokenProviderException;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.binary.StringUtils;

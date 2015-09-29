@@ -29,7 +29,7 @@ public class CacheManagerTokenStore implements TokenStorageProvider {
   private HazelcastInstance cacheManager;
   private BundleContext bcontext;
 
-  public void init(){
+  public void init() {
 
     CompositeClassLoader c = new CompositeClassLoader();
 
@@ -88,6 +88,7 @@ public class CacheManagerTokenStore implements TokenStorageProvider {
   protected void addInvokerClassLoader(ClassLoader cl) {
     ((CompositeClassLoader) getInstance().getConfig().getClassLoader()).add(cl);
   }
+
   protected ClassLoader getInvokerClassLoader() {
     return bcontext.getBundle().adapt(BundleWiring.class).getClassLoader();
   }

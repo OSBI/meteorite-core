@@ -17,10 +17,10 @@
 package bi.meteorite.core.security.rest;
 
 import bi.meteorite.core.api.security.AdminLoginService;
-import bi.meteorite.core.api.security.rest.objects.Login;
-import bi.meteorite.core.api.security.rest.UserAuthentication;
-import bi.meteorite.core.api.security.tokenprovider.TokenProvider;
 import bi.meteorite.core.api.security.exceptions.TokenProviderException;
+import bi.meteorite.core.api.security.rest.UserAuthentication;
+import bi.meteorite.core.api.security.rest.objects.Login;
+import bi.meteorite.core.api.security.tokenprovider.TokenProvider;
 
 import org.ops4j.pax.cdi.api.OsgiServiceProvider;
 

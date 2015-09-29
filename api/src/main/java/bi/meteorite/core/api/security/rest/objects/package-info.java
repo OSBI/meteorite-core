@@ -14,21 +14,7 @@
  * limitations under the License.
  */
 
-package bi.meteorite.core.api.security.tokenprovider;
-
 /**
- * Invalid Token Exception.
+ * JSON serializable objects for RESTful communication.
  */
-public class InvalidTokenException extends Exception {
-  // The serial version UID of this exception class
-  private static final long serialVersionUID = 783720889456143935L;
-
-  /**
-   * Constructs a new token provider exception.
-   *
-   * @param msg An error message providing more information about the cause of the error.
-   */
-  public InvalidTokenException(final String msg) {
-    super(msg);
-  }
-}
+package bi.meteorite.core.api.security.rest.objects;

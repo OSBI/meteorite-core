@@ -52,12 +52,12 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public Response addGroup(String group) throws MeteoriteSecurityException {
+  public Response addGroup(int id, int group) throws MeteoriteSecurityException {
     return null;
   }
 
   @Override
-  public Response deleteGroup(int id) throws MeteoriteSecurityException {
+  public Response addGroup(int id, String group) throws MeteoriteSecurityException {
     return null;
   }
 

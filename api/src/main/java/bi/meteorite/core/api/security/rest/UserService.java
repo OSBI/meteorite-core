@@ -32,6 +32,7 @@ public interface UserService {
 
   /**
    * Add a user to Meteorite core.
+   *
    * @param u The Meteorite User object
    * @return an HTTP response.
    * @throws MeteoriteSecurityException
@@ -45,6 +46,7 @@ public interface UserService {
 
   /**
    * Update a user in Meteorite core.
+   *
    * @param u The Meteorite User object.
    * @return an HTTP response.
    * @throws MeteoriteSecurityException
@@ -58,6 +60,7 @@ public interface UserService {
 
   /**
    * Remove a user from Meteorite core.
+   *
    * @param u The Meteorite User object.
    * @return An HTTP response code.
    * @throws MeteoriteSecurityException
@@ -71,6 +74,7 @@ public interface UserService {
 
   /**
    * Remove a user from Meteorite core by user id.
+   *
    * @param id The user id.
    * @return an HTTP response code.
    * @throws MeteoriteSecurityException
@@ -83,6 +87,7 @@ public interface UserService {
 
   /**
    * Add user to a group.
+   *
    * @param group The group
    * @return An HTTP response.
    * @throws MeteoriteSecurityException
@@ -95,6 +100,7 @@ public interface UserService {
 
   /**
    * Add user to a group by group name.
+   *
    * @param group The group
    * @return An HTTP response.
    * @throws MeteoriteSecurityException
@@ -107,6 +113,7 @@ public interface UserService {
 
   /**
    * Get a list of existing users.
+   *
    * @return a list of existing users.
    * @throws MeteoriteSecurityException
    */
@@ -118,6 +125,7 @@ public interface UserService {
 
   /**
    * Get a user by id.
+   *
    * @param id the user id.
    * @return an HTTP response code.
    * @throws MeteoriteSecurityException

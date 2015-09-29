@@ -57,45 +57,37 @@ public interface TokenProvider {
   String USERNAME = "token_username";
 
   /**
-   * Generates a new token for the specified set of token attributes. First of all a signature is created
-   * from the set of attributes using a private key, only known by this token provider. The attributes are
-   * converted to a single String and together with the signature this forms the unencrypted token.
-   * Finally, the token is encrypted using aAES encryption method, again using a private key only known
-   * by this token provider. This encrypted token is returned.
-   * Note that to this list of attributes always a nonce and a timestamp are added. Therefore attributes
-   * with names NONCE or TIMESTAMP are preserved and should not be used. A TokenProviderException is thrown
-   * in case the map of attributes already contains these attributes.
+   * Generates a new token for the specified set of token attributes. First of all a signature is created from the set
+   * of attributes using a private key, only known by this token provider. The attributes are converted to a single
+   * String and together with the signature this forms the unencrypted token. Finally, the token is encrypted using aAES
+   * encryption method, again using a private key only known by this token provider. This encrypted token is returned.
+   * Note that to this list of attributes always a nonce and a timestamp are added. Therefore attributes with names
+   * NONCE or TIMESTAMP are preserved and should not be used. A TokenProviderException is thrown in case the map of
+   * attributes already contains these attributes.
    *
-   * @param attributes
-   *        The attributes to create the token for. May be empty or null, in which case the
-   *        token is generated from only a nonce and a timestamp.
+   * @param attributes The attributes to create the token for. May be empty or null, in which case the token is
+   *                   generated from only a nonce and a timestamp.
    * @return The generated encrypted token
-   * @throws TokenProviderException
-   *         In case an unexpected error occurred during token generation.
+   * @throws TokenProviderException In case an unexpected error occurred during token generation.
    */
   String generateToken(SortedMap<String, String> attributes) throws TokenProviderException;
 
   /**
-   * Verifies if the token is valid. If the token is valid, a map of attributes is returned which
-   * are included in the token. This is the same list as provided when the token was generated, but
-   * with additional nonce and timestamp attributes. If the token is invalid, a InvalidTokenException
-   * is thrown.
+   * Verifies if the token is valid. If the token is valid, a map of attributes is returned which are included in the
+   * token. This is the same list as provided when the token was generated, but with additional nonce and timestamp
+   * attributes. If the token is invalid, a InvalidTokenException is thrown.
    *
-   * @param encryptedToken
-   *        The encrypted token to verify
+   * @param encryptedToken The encrypted token to verify
    * @return List of original attributes, plus nonce and timestamp attributes.
-   * @throws TokenProviderException
-   *         In case an unexpected error occurred during token generation.
-   * @throws InvalidTokenException
-   *         In case the provided token is invalid
+   * @throws TokenProviderException In case an unexpected error occurred during token generation.
+   * @throws InvalidTokenException  In case the provided token is invalid
    */
   SortedMap<String, String> verifyToken(String encryptedToken) throws TokenProviderException;
 
   /**
    * Invalidates the specified token. A token that has been invalidated cannot be used anymore.
    *
-   * @param encryptedToken
-   *        the token to invalidate.
+   * @param encryptedToken the token to invalidate.
    */
   void invalidateToken(String encryptedToken);
 
