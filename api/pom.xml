@@ -19,7 +19,8 @@
     <dependency>
       <groupId>com.qmino</groupId>
       <artifactId>miredot-annotations</artifactId>
-      <scope>compile</scope>
+      <scope>provided</scope>
+      <optional>true</optional>
     </dependency>
     <dependency>
       <groupId>javax.servlet</groupId>
