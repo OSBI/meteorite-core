@@ -20,6 +20,8 @@ import com.hazelcast.core.HazelcastInstance;
 
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.wiring.BundleWiring;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Created by bugg on 20/07/15.
@@ -28,8 +30,12 @@ public class CacheManagerTokenStore implements TokenStorageProvider {
 
   private HazelcastInstance cacheManager;
   private BundleContext bcontext;
+  private static Logger logger = LoggerFactory.getLogger(CacheManagerTokenStore.class);
 
   public void init() {
+
+    logger.debug("*** Activating CacheManager");
+
 
     CompositeClassLoader c = new CompositeClassLoader();
 

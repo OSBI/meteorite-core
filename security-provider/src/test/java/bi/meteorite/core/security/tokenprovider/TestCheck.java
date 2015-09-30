@@ -50,6 +50,7 @@ public class TestCheck {
 
   @Configuration
   public Option[] config() {
+
     MavenArtifactUrlReference karafUrl = maven()
         .groupId("org.apache.karaf")
         .artifactId("apache-karaf")
@@ -65,6 +66,10 @@ public class TestCheck {
     systemProperty("org.ops4j.pax.url.mvn.repositories").value("+http://repo1.maven.org/maven2/,http://nexus.qmino"
                                                                + ".com/content/repositories/miredot");
 
+    MavenUrlReference karafCellarrepo = maven().groupId("org.apache.karaf.cellar")
+                                               .artifactId("apache-karaf-cellar")
+                                               .version("4.0.0").classifier("features").type("xml");
+
     return options(
         karafDistributionConfiguration()
             .frameworkUrl(karafUrl)
@@ -73,9 +78,19 @@ public class TestCheck {
         keepRuntimeFolder(),
         configureConsole().ignoreLocalConsole(),
         features(karafStandardRepo, "scr"),
+        features(karafCellarrepo, "cellar"),
         mavenBundle("bi.meteorite", "api", "1.0-SNAPSHOT"),
+        mavenBundle("bi.meteorite", "security-provider", "1.0-SNAPSHOT"),
+        mavenBundle("javax.ws.rs", "javax.ws.rs-api", "2.0.1"),
+        mavenBundle("commons-codec", "commons-codec", "1.9"),
+        mavenBundle("com.hazelcast", "hazelcast", "3.2.3"),
+        editConfigurationFileExtend("etc/config.properties", "org.apache.aries.blueprint.synchronous", "true"),
+        editConfigurationFilePut("etc/org.apache.karaf.features.cfg", "featuresBoot",
+            "(aries-blueprint, bundle, config, deployer, diagnostic, feature, instance, jaas, kar, log, management, package, service, shell, shell-compat, ssh, system, wrap)"),
+        wrappedBundle(mavenBundle("javax.servlet", "servlet-api", "2.5")),
         //bundle("http://www.example.com/repository/foo-1.2.3.jar"),
-        junitBundles()
+        junitBundles(),
+        cleanCaches()
     );
   }
 
