@@ -17,4 +17,4 @@
 /**
  * Created by bugg on 20/07/15.
  */
-package bi.meteorite.core.security.tokenprovider;
+package tokenprovider;

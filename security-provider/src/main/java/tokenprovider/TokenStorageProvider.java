@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package bi.meteorite.core.security.tokenprovider;
+package tokenprovider;
 
 /**
  * Token Storage Provider

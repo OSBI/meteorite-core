@@ -15,7 +15,7 @@
  */
 
 
-package bi.meteorite.core.security.tokenprovider;
+package tokenprovider;
 
 import java.util.ArrayList;
 import java.util.Collections;
