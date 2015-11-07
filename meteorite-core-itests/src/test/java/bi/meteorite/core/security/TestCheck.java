@@ -88,6 +88,10 @@ public class TestCheck {
                                .useDeployFolder(false),
         KarafDistributionOption.keepRuntimeFolder(),
         KarafDistributionOption.logLevel(LogLevelOption.LogLevel.WARN),
+        /**
+         *
+         * Uncomment to debug.
+         */
         //KarafDistributionOption.debugConfiguration("5005", true),
         editConfigurationFilePut("etc/org.apache.karaf.features.cfg", "featuresBoot", "(aries-blueprint,bundle,"
                                                                                       + "config,wrap, "
@@ -106,6 +110,7 @@ public class TestCheck {
             "(aries-blueprint, bundle, config, cellar, deployer, diagnostic, feature, instance, jaas, kar, log, "
             + "management, package, service, shell, shell-compat, ssh, system, wrap)"),*/
         CoreOptions.wrappedBundle(CoreOptions.mavenBundle("javax.servlet", "servlet-api", "2.5")),
+        CoreOptions.wrappedBundle(CoreOptions.mavenBundle("com.atlassian.clover", "clover", "4.0.2")),
         editConfigurationFilePut("etc/users.properties", "admin",
             "admin,admin,manager,viewer,Operator, Maintainer, Deployer, Auditor, Administrator, SuperUser"),
         CoreOptions.junitBundles(),

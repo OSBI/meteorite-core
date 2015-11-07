@@ -57,6 +57,11 @@
     <pluginManagement>
       <plugins>
         <plugin>
+          <groupId>com.atlassian.maven.plugins</groupId>
+          <artifactId>maven-clover2-plugin</artifactId>
+          <version>4.0.2</version>
+        </plugin>
+        <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-source-plugin</artifactId>
           <version>2.3</version>
@@ -179,6 +184,10 @@
               <headerLocation>${top.dir}/src/main/config/checkstyle/header.txt</headerLocation>
               <failOnViolation>true</failOnViolation>
               <includeTestSourceDirectory>true</includeTestSourceDirectory>
+              <includes>
+                src/main, src/test
+              </includes>
+
             </configuration>
           </execution>
         </executions>
