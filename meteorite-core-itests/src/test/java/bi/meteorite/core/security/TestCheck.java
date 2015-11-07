@@ -16,11 +16,10 @@
 
 package bi.meteorite.core.security;
 
-import bi.meteorite.core.api.security.tokenprovider.TokenProvider;
+import bi.meteorite.core.api.security.AdminLoginService;
 
 import org.apache.karaf.features.FeaturesService;
 
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.ops4j.pax.exam.Configuration;
@@ -39,6 +38,11 @@ import java.io.File;
 
 import javax.inject.Inject;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThat;
+import static org.ops4j.pax.exam.karaf.options.KarafDistributionOption.editConfigurationFilePut;
+
 /**
  * Created by bugg on 30/09/15.
  */
@@ -51,7 +55,7 @@ public class TestCheck {
 
 
   @Inject
-  private TokenProvider helloService;
+  private AdminLoginService helloService;
 
   @Configuration
   public Option[] config() {
@@ -82,26 +86,27 @@ public class TestCheck {
                                .useDeployFolder(false),
         KarafDistributionOption.keepRuntimeFolder(),
         KarafDistributionOption.logLevel(LogLevelOption.LogLevel.WARN),
+        //vmOption("-Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005"),
+        //systemTimeout(10),
+        KarafDistributionOption.debugConfiguration("5005", true),
+        editConfigurationFilePut("etc/org.apache.karaf.features.cfg", "featuresBoot", "(aries-blueprint,bundle,"
+                                                                                      + "config,wrap, "
+                                                                                      + "cellar-hazelcast,jaas)"),
 
         //configureConsole().ignoreLocalConsole(),
         KarafDistributionOption.features(karafStandardRepo, "scr"),
         KarafDistributionOption
-            .features(karafCellarrepo, "cellar-hazelcast", "cellar-shell", "cellar-config", "cellar-bundle",
-                "cellar-features"),
+            .features(karafCellarrepo, "cellar-hazelcast"),
+
         CoreOptions.mavenBundle("bi.meteorite", "api", "1.0-SNAPSHOT"),
         CoreOptions.mavenBundle("bi.meteorite", "security-provider", "1.0-SNAPSHOT"),
         CoreOptions.mavenBundle("javax.ws.rs", "javax.ws.rs-api", "2.0.1"),
         CoreOptions.mavenBundle("commons-codec", "commons-codec", "1.9"),
-        //mavenBundle("com.hazelcast", "hazelcast", "3.2.3"),
-        //mavenBundle("org.apache.karaf.cellar", "org.apache.karaf.cellar.core", "4.0.0"),
         /*editConfigurationFilePut("etc/org.apache.karaf.features.cfg", "featuresBoot",
             "(aries-blueprint, bundle, config, cellar, deployer, diagnostic, feature, instance, jaas, kar, log, "
             + "management, package, service, shell, shell-compat, ssh, system, wrap)"),*/
-        KarafDistributionOption
-            .editConfigurationFilePut("etc/org.apache.karaf.features.cfg", "featuresBoot", "(aries-blueprint,bundle,"
-                                                                                           + "config,wrap)"),
-        //editConfigurationFileExtend("etc/config.properties", "org.apache.aries.blueprint.synchronous", "true"),
         CoreOptions.wrappedBundle(CoreOptions.mavenBundle("javax.servlet", "servlet-api", "2.5")),
+        editConfigurationFilePut("etc/users.properties", "admin", "admin,admin,manager,viewer,Operator, Maintainer, Deployer, Auditor, Administrator, SuperUser"),
         CoreOptions.junitBundles(),
         CoreOptions.cleanCaches()
     );
@@ -115,7 +120,12 @@ public class TestCheck {
 
   @Test
   public void getHelloService() throws Exception {
-    Assert.assertTrue(featuresService.isInstalled(featuresService.getFeature("cellar-hazelcast")));
+
+    assertNotNull(helloService);
+
+
+    assertThat(helloService.login("karaf", "karaf"), is(true));
+
    // assertNotNull(helloService);
    // assertEquals("Hello Pax!", helloService.getClass());
   }

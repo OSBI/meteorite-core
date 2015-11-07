@@ -1,3 +1,5 @@
+karaf/assembly/
+.clover
 target/
 **/target/
 pom.xml.tag
