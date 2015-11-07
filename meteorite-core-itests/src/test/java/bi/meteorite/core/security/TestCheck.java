@@ -41,6 +41,7 @@ import javax.inject.Inject;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
+import static org.ops4j.pax.exam.karaf.options.KarafDistributionOption.configureConsole;
 import static org.ops4j.pax.exam.karaf.options.KarafDistributionOption.editConfigurationFilePut;
 
 /**
@@ -61,23 +62,24 @@ public class TestCheck {
   public Option[] config() {
 
     MavenArtifactUrlReference karafUrl = CoreOptions.maven()
-        .groupId("org.apache.karaf")
-        .artifactId("apache-karaf")
-        .version(karafVersion())
-        .type("zip");
+                                                    .groupId("org.apache.karaf")
+                                                    .artifactId("apache-karaf")
+                                                    .version(karafVersion())
+                                                    .type("zip");
 
     MavenUrlReference karafStandardRepo = CoreOptions.maven()
-        .groupId("org.apache.karaf.features")
-        .artifactId("standard")
-        .version(karafVersion())
-        .classifier("features")
-        .type("xml");
-    CoreOptions.systemProperty("org.ops4j.pax.url.mvn.repositories").value("+http://repo1.maven.org/maven2/,http://nexus.qmino"
-                                                               + ".com/content/repositories/miredot");
+                                                     .groupId("org.apache.karaf.features")
+                                                     .artifactId("standard")
+                                                     .version(karafVersion())
+                                                     .classifier("features")
+                                                     .type("xml");
+    CoreOptions.systemProperty("org.ops4j.pax.url.mvn.repositories")
+               .value("+http://repo1.maven.org/maven2/,http://nexus.qmino"
+                      + ".com/content/repositories/miredot");
 
     MavenUrlReference karafCellarrepo = CoreOptions.maven().groupId("org.apache.karaf.cellar")
-                                               .artifactId("apache-karaf-cellar")
-                                               .version("4.0.0").classifier("features").type("xml");
+                                                   .artifactId("apache-karaf-cellar")
+                                                   .version("4.0.0").classifier("features").type("xml");
 
     return CoreOptions.options(
         KarafDistributionOption.karafDistributionConfiguration()
@@ -86,14 +88,12 @@ public class TestCheck {
                                .useDeployFolder(false),
         KarafDistributionOption.keepRuntimeFolder(),
         KarafDistributionOption.logLevel(LogLevelOption.LogLevel.WARN),
-        //vmOption("-Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005"),
-        //systemTimeout(10),
-        KarafDistributionOption.debugConfiguration("5005", true),
+        //KarafDistributionOption.debugConfiguration("5005", true),
         editConfigurationFilePut("etc/org.apache.karaf.features.cfg", "featuresBoot", "(aries-blueprint,bundle,"
                                                                                       + "config,wrap, "
                                                                                       + "cellar-hazelcast,jaas)"),
 
-        //configureConsole().ignoreLocalConsole(),
+        configureConsole().ignoreLocalConsole(),
         KarafDistributionOption.features(karafStandardRepo, "scr"),
         KarafDistributionOption
             .features(karafCellarrepo, "cellar-hazelcast"),
@@ -106,7 +106,8 @@ public class TestCheck {
             "(aries-blueprint, bundle, config, cellar, deployer, diagnostic, feature, instance, jaas, kar, log, "
             + "management, package, service, shell, shell-compat, ssh, system, wrap)"),*/
         CoreOptions.wrappedBundle(CoreOptions.mavenBundle("javax.servlet", "servlet-api", "2.5")),
-        editConfigurationFilePut("etc/users.properties", "admin", "admin,admin,manager,viewer,Operator, Maintainer, Deployer, Auditor, Administrator, SuperUser"),
+        editConfigurationFilePut("etc/users.properties", "admin",
+            "admin,admin,manager,viewer,Operator, Maintainer, Deployer, Auditor, Administrator, SuperUser"),
         CoreOptions.junitBundles(),
         CoreOptions.cleanCaches()
     );
@@ -119,23 +120,13 @@ public class TestCheck {
   }
 
   @Test
-  public void getHelloService() throws Exception {
+  public void testLoginService() throws Exception {
 
     assertNotNull(helloService);
 
 
     assertThat(helloService.login("karaf", "karaf"), is(true));
 
-   // assertNotNull(helloService);
-   // assertEquals("Hello Pax!", helloService.getClass());
   }
 
-
-  /*@ProbeBuilder
-  public TestProbeBuilder probeConfiguration(TestProbeBuilder probe) {
-    System.out.println("TestProbeBuilder gets called");
-    probe.setHeader(Constants.DYNAMICIMPORT_PACKAGE, "*");
-    probe.setHeader(Constants.EXPORT_PACKAGE, "bi.meteorite.core.security");
-    return probe;
-  }*/
 }
