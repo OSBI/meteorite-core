@@ -165,7 +165,7 @@
           <installedFeatures>
             <!--  <feature>wrapper</feature>
                         <feature>spring/4.0.7.RELEASE_1</feature>-->
-            <!--<feature>meteorite-core-features</feature>-->
+            <feature>meteorite-core-features</feature>
 
           </installedFeatures>
         </configuration>
