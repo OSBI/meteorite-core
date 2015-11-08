@@ -98,9 +98,7 @@ public class TokenProviderImpl implements TokenProvider {
         bytes = keyBytes;
       } else {
         // Chop off first ENCRYPTION_METHOD_BYTES bytes
-        for (int i = 0; i < ENCRYPTION_METHOD_BYTES; i++) {
-          bytes[i] = keyBytes[i];
-        }
+        System.arraycopy(keyBytes, 0, bytes, 0, ENCRYPTION_METHOD_BYTES);
       }
 
       msecretKey = new SecretKeySpec(bytes, ENCRYPTION_METHOD);
@@ -135,8 +133,7 @@ public class TokenProviderImpl implements TokenProvider {
         throw new TokenProviderException(e);
       }
     }
-    String signature = DigestUtils.md5Hex(signvalue);
-    return signature;
+    return DigestUtils.md5Hex(signvalue);
   }
 
   private boolean verifySignature(final SortedMap<String, String> attributes, final String signature)
@@ -169,7 +166,7 @@ public class TokenProviderImpl implements TokenProvider {
   public SortedMap<String, String> stringToAttributes(final String string) throws UnsupportedEncodingException {
     SortedMap<String, String> attributes = null;
     if (string != null && !"".equals(string)) {
-      attributes = new TreeMap<String, String>();
+      attributes = new TreeMap<>();
       String[] keyvalues = string.split(" "); // space is the attribute separator
       for (String keyvalue : keyvalues) {
         String[] entry = keyvalue.split("=");
@@ -204,9 +201,7 @@ public class TokenProviderImpl implements TokenProvider {
         bytes = keyBytes;
       } else {
         // Chop off first ENCRYPTION_METHOD_BYTES bytes
-        for (int i = 0; i < ENCRYPTION_METHOD_BYTES; i++) {
-          bytes[i] = keyBytes[i];
-        }
+        System.arraycopy(keyBytes, 0, bytes, 0, ENCRYPTION_METHOD_BYTES);
       }
 
       msecretKey = new SecretKeySpec(bytes, ENCRYPTION_METHOD);
@@ -231,9 +226,9 @@ public class TokenProviderImpl implements TokenProvider {
       }
 
       // Add nonce and timestamp attributes
-      String nonce = DigestUtils.md5Hex(new Long(System.nanoTime()).toString());
+      String nonce = DigestUtils.md5Hex(Long.toString(System.nanoTime()));
       attributes.put(NONCE, nonce);
-      String timestamp = new Long(System.currentTimeMillis()).toString();
+      String timestamp = Long.toString(System.currentTimeMillis());
       attributes.put(TIMESTAMP, timestamp);
 
       // First create the unencrypted token
@@ -255,12 +250,8 @@ public class TokenProviderImpl implements TokenProvider {
       mtokenStore.addToken(new Token(encryptedToken, null, System.currentTimeMillis()));
 
       return encryptedToken;
-    } catch (BadPaddingException e) {
+    } catch (BadPaddingException | UnsupportedEncodingException | IllegalBlockSizeException e) {
       // m_logService.log(LogService.LOG_ERROR, "Could not encrypt string", e);
-    } catch (IllegalBlockSizeException e) {
-      //m_logService.log(LogService.LOG_ERROR, "Could not encrypt string", e);
-    } catch (UnsupportedEncodingException e) {
-      //m_logService.log(LogService.LOG_ERROR, "Could not encrypt string", e);
     } catch (Exception ex) {
       //m_logService.log(LogService.LOG_ERROR, "Error generating token", ex);
       throw new RuntimeException("Error generating token", ex);
@@ -288,7 +279,7 @@ public class TokenProviderImpl implements TokenProvider {
       // Now this token consists of signature + token attributes
       String signature;
       SortedMap<String, String> attributes = null;
-      if (token.indexOf(" ") != -1) {
+      if (token.contains(" ")) {
         signature = token.substring(0, token.indexOf(" "));
         attributes = stringToAttributes(token.substring(token.indexOf(" ") + 1));
       } else {
@@ -301,11 +292,7 @@ public class TokenProviderImpl implements TokenProvider {
         throw new TokenProviderException("Token is invalid, signature mismatch");
       }
       return attributes;
-    } catch (BadPaddingException e) {
-      throw new TokenProviderException(e);
-    } catch (IllegalBlockSizeException e) {
-      throw new TokenProviderException(e);
-    } catch (UnsupportedEncodingException e) {
+    } catch (BadPaddingException | UnsupportedEncodingException | IllegalBlockSizeException e) {
       throw new TokenProviderException(e);
     }
   }

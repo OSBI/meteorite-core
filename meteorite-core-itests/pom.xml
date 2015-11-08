@@ -121,5 +121,6 @@
             <artifactId>org.apache.karaf.features.core</artifactId>
             <version>4.0.1</version>
         </dependency>
+
     </dependencies>
 </project>

@@ -50,7 +50,6 @@ public class SecurityFilter implements Filter {
     }
     if (s.startsWith("/admin/ui/") || s.equals("/rest/core/auth/login")) {
       chain.doFilter(request, response);
-      return;
     } else if (servletRequest.getPathInfo().startsWith("/rest/core/admin")) {
       String token = tokenProvider.getTokenFromRequest(servletRequest);
       boolean isAdmin = false;

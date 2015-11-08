@@ -38,6 +38,7 @@ import java.io.File;
 
 import javax.inject.Inject;
 
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
@@ -92,7 +93,7 @@ public class TestCheck {
          *
          * Uncomment to debug.
          */
-        //KarafDistributionOption.debugConfiguration("5005", true),
+        KarafDistributionOption.debugConfiguration("5005", true),
         editConfigurationFilePut("etc/org.apache.karaf.features.cfg", "featuresBoot", "(aries-blueprint,bundle,"
                                                                                       + "config,wrap, "
                                                                                       + "cellar-hazelcast,jaas)"),
@@ -120,8 +121,7 @@ public class TestCheck {
 
   public static String karafVersion() {
     ConfigurationManager cm = new ConfigurationManager();
-    String karafVersion = cm.getProperty("pax.exam.karaf.version", "4.0.1");
-    return karafVersion;
+    return cm.getProperty("pax.exam.karaf.version", "4.0.1");
   }
 
   @Test
@@ -131,6 +131,16 @@ public class TestCheck {
 
 
     assertThat(helloService.login("karaf", "karaf"), is(true));
+
+  }
+
+  @Test
+  public void testGetUsername() {
+    assertNotNull(helloService);
+
+    assertThat(helloService.login("karaf", "karaf"), is(true));
+
+    assertThat(helloService.getUsername(), equalTo("karaf"));
 
   }
 

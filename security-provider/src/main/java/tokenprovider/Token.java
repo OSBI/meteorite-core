@@ -130,7 +130,7 @@ public class Token implements Serializable {
 
   public void setProperty(final String key, final String value) {
     if (mproperties == null) {
-      mproperties = new HashMap<String, String>();
+      mproperties = new HashMap<>();
     }
     mproperties.put(key, value);
   }
@@ -162,7 +162,7 @@ public class Token implements Serializable {
   }
 
   private Map<String, String> clone(final Map<String, String> map) {
-    HashMap<String, String> newMap = new HashMap<String, String>();
+    HashMap<String, String> newMap = new HashMap<>();
     for (String key : map.keySet()) {
       newMap.put(key, map.get(key));
     }

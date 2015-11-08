@@ -17,7 +17,7 @@
 package bi.meteorite.core.api.security;
 
 /**
- * Created by bugg on 20/07/15.
+ * Admin Api Interface for user management.
  */
 public interface AdminLoginService {
 
