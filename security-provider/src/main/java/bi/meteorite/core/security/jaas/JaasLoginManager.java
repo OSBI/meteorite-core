@@ -105,6 +105,7 @@ public class JaasLoginManager implements AdminLoginService {
 
   public String getUsername() {
     Set<Principal> principals = subject.getPrincipals();
+    System.out.println("size:"+principals.size());
     for(Principal p : principals){
       System.out.println(p.getClass());
       logger.debug("Principal type:"+p.getClass());
