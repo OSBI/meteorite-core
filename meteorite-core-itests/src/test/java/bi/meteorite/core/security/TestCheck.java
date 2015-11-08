@@ -93,7 +93,7 @@ public class TestCheck {
          *
          * Uncomment to debug.
          */
-        KarafDistributionOption.debugConfiguration("5005", true),
+        //KarafDistributionOption.debugConfiguration("5005", true),
         editConfigurationFilePut("etc/org.apache.karaf.features.cfg", "featuresBoot", "(aries-blueprint,bundle,"
                                                                                       + "config,wrap, "
                                                                                       + "cellar-hazelcast,jaas)"),
