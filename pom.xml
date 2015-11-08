@@ -8,18 +8,6 @@
   <name>Meteorite Core</name>
   <description>The core of the Saiku Analytics platform, Meteorite Core builds and maintains the server,
     security and persistence layers for Saiku and others.</description>
-  <distributionManagement>
-    <repository>
-      <id>deployment</id>
-      <name>Internal Releases</name>
-      <url>http://repo.meteorite.bi/content/repositories/alabs-release-local/</url>
-    </repository>
-    <snapshotRepository>
-      <id>deployment</id>
-      <name>Internal Snapshots</name>
-      <url>http://repo.meteorite.bi/content/repositories/alabs-snapshot-local/</url>
-    </snapshotRepository>
-  </distributionManagement>
   <modules>
     <module>api</module>
     <module>security-provider</module>
@@ -280,8 +268,14 @@
   </ciManagement>
 
   <distributionManagement>
+    <repository>
+      <id>deployment</id>
+      <name>Internal Releases</name>
+      <url>http://repo.meteorite.bi/content/repositories/alabs-release-local/</url>
+    </repository>
     <snapshotRepository>
-      <id>nexus-snapshots</id>
+      <id>deployment</id>
+      <name>Internal Snapshots</name>
       <url>http://repo.meteorite.bi/content/repositories/alabs-snapshot-local/</url>
     </snapshotRepository>
     <site>
