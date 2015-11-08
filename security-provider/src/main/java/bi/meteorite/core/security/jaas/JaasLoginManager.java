@@ -19,6 +19,9 @@ package bi.meteorite.core.security.jaas;
 
 import bi.meteorite.core.api.security.AdminLoginService;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.IOException;
 import java.security.Principal;
 import java.util.ArrayList;
@@ -43,6 +46,7 @@ import javax.security.auth.login.LoginException;
 //@OsgiServiceProvider(classes = { AdminLoginService.class })
 public class JaasLoginManager implements AdminLoginService {
 
+  private static final Logger logger = LoggerFactory.getLogger(JaasLoginManager.class);
   private String realm;
   private Subject subject;
   private ArrayList<String> roles = new ArrayList<>();
@@ -102,6 +106,8 @@ public class JaasLoginManager implements AdminLoginService {
   public String getUsername() {
     Set<Principal> principals = subject.getPrincipals();
     for(Principal p : principals){
+      System.out.println(p.getClass());
+      logger.debug("Principal type:"+p.getClass());
       if(p instanceof org.apache.karaf.jaas.boot.principal.UserPrincipal){
         return p.getName();
       }
