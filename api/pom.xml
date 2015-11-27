@@ -33,7 +33,14 @@
       <artifactId>javax.ws.rs-api</artifactId>
       <scope>provided</scope>
     </dependency>
-  </dependencies>
+    <dependency>
+    <groupId>org.apache.karaf.jaas</groupId>
+    <artifactId>org.apache.karaf.jaas.modules</artifactId>
+    <version>4.0.1</version>
+    <scope>provided</scope>
+  </dependency>
+
+</dependencies>
 
   <build>
     <plugins>

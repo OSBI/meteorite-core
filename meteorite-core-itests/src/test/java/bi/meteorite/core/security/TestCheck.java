@@ -17,6 +17,8 @@
 package bi.meteorite.core.security;
 
 import bi.meteorite.core.api.security.AdminLoginService;
+import bi.meteorite.core.api.security.IUserManagementProvider;
+import bi.meteorite.core.api.security.exceptions.MeteoriteSecurityException;
 
 import org.apache.karaf.features.FeaturesService;
 
@@ -58,6 +60,9 @@ public class TestCheck {
 
   @Inject
   private AdminLoginService helloService;
+
+  @Inject
+  private IUserManagementProvider usermanagement;
 
   @Configuration
   public Option[] config() {
@@ -107,6 +112,7 @@ public class TestCheck {
         CoreOptions.mavenBundle("bi.meteorite", "security-provider", "1.0-SNAPSHOT"),
         CoreOptions.mavenBundle("javax.ws.rs", "javax.ws.rs-api", "2.0.1"),
         CoreOptions.mavenBundle("commons-codec", "commons-codec", "1.9"),
+        CoreOptions.mavenBundle("com.google.guava", "guava", "18.0"),
         /*editConfigurationFilePut("etc/org.apache.karaf.features.cfg", "featuresBoot",
             "(aries-blueprint, bundle, config, cellar, deployer, diagnostic, feature, instance, jaas, kar, log, "
             + "management, package, service, shell, shell-compat, ssh, system, wrap)"),*/
@@ -142,6 +148,11 @@ public class TestCheck {
 
     assertThat(helloService.getUsername(), equalTo("karaf"));
 
+  }
+
+  @Test
+  public void testAddUser() throws MeteoriteSecurityException {
+    usermanagement.addUser("test", "test");
   }
 
 }

@@ -3,8 +3,20 @@
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd">
 
-    <!--    <reference id="cacheservice" interface="bi.meteorite.core.api.cache.CacheManagerService"/>-->
+    <!-- Get Hazelcast from Cellar -->
     <reference id="cacheservice" interface="com.hazelcast.core.HazelcastInstance"/>
+
+    <!-- JAAS Realm for user management -->
+    <reference id="realm" interface="org.apache.karaf.jaas.config.JaasRealm"/>
+
+    <!-- Backing Engine Service -->
+    <bean id="engineService" class="org.apache.karaf.jaas.modules.BackingEngineService">
+        <property name="engineFactories" ref="engineFactories"/>
+    </bean>
+
+    <!-- Backing Engine Factories -->
+    <reference-list id="engineFactories" interface="org.apache.karaf.jaas.modules.BackingEngineFactory"
+                    availability="optional"/>
 
     <bean id="cacheManagerTokenStore" class="tokenprovider.CacheManagerTokenStore"
           init-method="init">
@@ -19,12 +31,19 @@
         <property name="realm" value="karaf"/>
     </bean>
 
+    <bean id="userManager" class="bi.meteorite.core.security.jaas.JaasUserManager">
+        <property name="backingEngineService" ref="engineService"/>
+        <property name="realm" ref="realm"/>
+    </bean>
+
 
     <!-- Service objects -->
 
     <service ref="tokenProvider" interface="bi.meteorite.core.api.security.tokenprovider.TokenProvider"/>
 
     <service ref="loginService" interface="bi.meteorite.core.api.security.AdminLoginService"/>
+
+    <service ref="userManager" interface="bi.meteorite.core.api.security.IUserManagementProvider"/>
 
 
 </blueprint>

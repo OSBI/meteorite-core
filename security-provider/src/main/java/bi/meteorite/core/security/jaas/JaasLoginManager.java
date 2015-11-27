@@ -18,6 +18,8 @@
 package bi.meteorite.core.security.jaas;
 
 import bi.meteorite.core.api.security.AdminLoginService;
+import bi.meteorite.core.api.security.IMeteoriteUser;
+import bi.meteorite.core.api.security.tokenprovider.IToken;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,6 +27,7 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.security.Principal;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import javax.security.auth.Subject;
@@ -103,12 +106,24 @@ public class JaasLoginManager implements AdminLoginService {
     return authenticated;
   }
 
+  @Override
+  public boolean logout(String username) {
+    LoginCallbackHandler handler = new LoginCallbackHandler(username, null);
+    LoginContext ctx = null;
+    try {
+      ctx = new LoginContext(realm, handler);
+      ctx.logout();
+      return true;
+    } catch (LoginException e) {
+      e.printStackTrace();
+    }
+
+  return false;
+  }
+
   public String getUsername() {
     Set<Principal> principals = subject.getPrincipals();
-    System.out.println("size:"+principals.size());
     for(Principal p : principals){
-      System.out.println(p.getClass());
-      logger.debug("Principal type:"+p.getClass());
       if(p instanceof org.apache.karaf.jaas.boot.principal.UserPrincipal){
         return p.getName();
       }
@@ -116,7 +131,24 @@ public class JaasLoginManager implements AdminLoginService {
     return null;
   }
 
+  @Override
+  public List<String> getRoles() {
+    List<String> s = new ArrayList<>();
+    Set<Principal> principals = subject.getPrincipals();
+    System.out.println("size:"+principals.size());
+    for(Principal p : principals) {
+      System.out.println(p.getClass());
+      logger.debug("Principal type:" + p.getClass());
+      if (p instanceof org.apache.karaf.jaas.boot.principal.RolePrincipal) {
+        s.add(p.getName());
+      }
+    }
+    return s;
+  }
+
+
   public void setRealm(String realm) {
     this.realm = realm;
   }
+
 }

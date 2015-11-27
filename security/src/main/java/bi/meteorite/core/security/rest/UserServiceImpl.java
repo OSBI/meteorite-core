@@ -17,6 +17,7 @@
 package bi.meteorite.core.security.rest;
 
 import bi.meteorite.core.api.objects.MeteoriteUser;
+import bi.meteorite.core.api.security.IUserManagementProvider;
 import bi.meteorite.core.api.security.exceptions.MeteoriteSecurityException;
 import bi.meteorite.core.api.security.rest.UserService;
 
@@ -31,19 +32,27 @@ import javax.ws.rs.core.Response;
 @OsgiServiceProvider(classes = { UserService.class })
 @Singleton
 public class UserServiceImpl implements UserService {
+
+  private IUserManagementProvider iUserManagementProvider;
+
+
   @Override
   public Response addUser(MeteoriteUser u) throws MeteoriteSecurityException {
-    return null;
+    iUserManagementProvider.addUser(u.getUsername(), u.getPassword());
+    //TODO add other information
+    return Response.ok().build();
   }
 
   @Override
   public Response modifyUser(MeteoriteUser u) throws MeteoriteSecurityException {
-    return null;
+    iUserManagementProvider.updateUser(u);
+    return Response.ok().build();
   }
 
   @Override
   public Response deleteUser(MeteoriteUser u) throws MeteoriteSecurityException {
-    return null;
+    iUserManagementProvider.deleteUser(u.getUsername());
+    return Response.ok().build();
   }
 
   @Override
@@ -63,7 +72,7 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public Response getExistingUsers() throws MeteoriteSecurityException {
-    return Response.ok().entity("{hello}").build();
+    return null;
   }
 
   @Override

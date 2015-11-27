@@ -16,6 +16,8 @@
 
 package bi.meteorite.core.api.security;
 
+import java.util.List;
+
 /**
  * Admin Api Interface for user management.
  */
@@ -23,5 +25,10 @@ public interface AdminLoginService {
 
   boolean login(String username, String password);
 
+  boolean logout(String username);
+
   String getUsername();
+
+  List<String> getRoles();
+
 }

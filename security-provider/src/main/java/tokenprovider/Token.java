@@ -16,6 +16,8 @@
 
 package tokenprovider;
 
+import bi.meteorite.core.api.security.tokenprovider.IToken;
+
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
@@ -25,7 +27,7 @@ import java.util.Map;
  * (which is also a unique and randomly generated String). A timestamp is assigned to a token to facilitate token
  * expiration. Arbitrary String properties can be assigned to a token.
  */
-public class Token implements Serializable {
+public class Token implements Serializable, IToken {
   // The token
   private String mtoken;
 
@@ -58,6 +60,7 @@ public class Token implements Serializable {
    *
    * @return the token.
    */
+  @Override
   public String getToken() {
     return mtoken;
   }
@@ -67,6 +70,7 @@ public class Token implements Serializable {
    *
    * @param token the token to set
    */
+  @Override
   public void setToken(final String token) {
     mtoken = token;
   }
@@ -76,6 +80,7 @@ public class Token implements Serializable {
    *
    * @return the secret that only the token owner knows
    */
+  @Override
   public String getTokenSecret() {
     return mtokenSecret;
   }
@@ -85,6 +90,7 @@ public class Token implements Serializable {
    *
    * @param tokenSecret the token secret to set
    */
+  @Override
   public void setTokenSecret(final String tokenSecret) {
     mtokenSecret = tokenSecret;
   }
@@ -94,6 +100,7 @@ public class Token implements Serializable {
    *
    * @return the timestamp in milliseconds
    */
+  @Override
   public long getTimestamp() {
     System.currentTimeMillis();
     return mtimestamp;
@@ -104,6 +111,7 @@ public class Token implements Serializable {
    *
    * @param timestamp
    */
+  @Override
   public void setTimestamp(final long timestamp) {
     mtimestamp = timestamp;
   }
@@ -113,10 +121,12 @@ public class Token implements Serializable {
    *
    * @return
    */
+  @Override
   public Map<String, String> getProperties() {
     return mproperties;
   }
 
+  @Override
   public String getProperty(final String key) {
     if (mproperties == null) {
       return null;
@@ -124,10 +134,12 @@ public class Token implements Serializable {
     return mproperties.get(key);
   }
 
+  @Override
   public void setProperties(final Map<String, String> properties) {
     mproperties = properties;
   }
 
+  @Override
   public void setProperty(final String key, final String value) {
     if (mproperties == null) {
       mproperties = new HashMap<>();
@@ -143,6 +155,7 @@ public class Token implements Serializable {
    *                         then 0, this method always returns false.
    * @return
    */
+  @Override
   public boolean isExpired(final long validityDuration) {
     if (validityDuration < 0) {
       return false;
@@ -153,6 +166,7 @@ public class Token implements Serializable {
     return System.currentTimeMillis() >= expiryDate;
   }
 
+  @Override
   public Token clone() {
     Token clone = new Token(mtoken, mtokenSecret, mtimestamp);
     if (getProperties() != null) {
