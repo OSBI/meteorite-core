@@ -19,6 +19,7 @@ package bi.meteorite.core.api.security;
 import bi.meteorite.core.api.objects.MeteoriteUser;
 import bi.meteorite.core.api.security.exceptions.MeteoriteSecurityException;
 
+import org.apache.karaf.jaas.config.JaasRealm;
 import org.apache.karaf.jaas.modules.BackingEngineService;
 
 import java.util.List;
@@ -31,6 +32,8 @@ public interface IUserManagementProvider {
   void addUser(String u, String p) throws MeteoriteSecurityException;
 
   void deleteUser(String u) throws MeteoriteSecurityException;
+
+  List<String> getUsers() throws MeteoriteSecurityException;
 
   //MeteoriteUser setUser(MeteoriteUser u) throws MeteoriteSecurityException;
 
@@ -51,4 +54,6 @@ public interface IUserManagementProvider {
   List<String> getAdminRoles() throws MeteoriteSecurityException;
 
   void setBackingEngineService(BackingEngineService backingEngineService);
+
+  void setRealm(JaasRealm realm);
 }
