@@ -45,12 +45,20 @@ public class JaasUserManager implements IUserManagementProvider {
   }
   @Override
   public void addUser(String u, String p) throws MeteoriteSecurityException {
+    if(getUsers().contains(u)){
+      throw new MeteoriteSecurityException("User already exists");
+    }
     getEngine().addUser(u, p);
   }
 
   @Override
   public void deleteUser(String u) throws MeteoriteSecurityException {
-    getEngine().deleteUser(u);
+    if(getUsers().contains(u)) {
+      getEngine().deleteUser(u);
+    }
+    else{
+      throw new MeteoriteSecurityException("User Doesn't Exist");
+    }
   }
 
   @Override
@@ -65,15 +73,22 @@ public class JaasUserManager implements IUserManagementProvider {
   @Override
   public List<String> getRoles(String u) throws MeteoriteSecurityException {
     List<String> s = new ArrayList<>();
-    for(Principal p :getEngine().listUsers()){
-      if(p.getName().equals(u)){
-        for(RolePrincipal r: getEngine().listRoles(p)){
-           s.add(r.getName());
-        }
+    List u2 = getUsers();
 
+    if(u2.contains(u)) {
+      for (Principal p : getEngine().listUsers()) {
+        if (p.getName().equals(u)) {
+          for (RolePrincipal r : getEngine().listRoles(p)) {
+            s.add(r.getName());
+          }
+
+        }
       }
+      return ImmutableList.copyOf(s);
     }
-    return ImmutableList.copyOf(s);
+    else{
+      throw new MeteoriteSecurityException("User does not exist");
+    }
 
   }
 
@@ -82,9 +97,14 @@ public class JaasUserManager implements IUserManagementProvider {
     for(Principal p :getEngine().listUsers()){
       if(p.getName().equals(u)){
         List<RolePrincipal> roles = getEngine().listRoles(p);
-        for(RolePrincipal ro:roles){
-          if(!Arrays.asList(ro).contains(r)){
-            getEngine().addRole(u, r);
+        if(roles.size()==0){
+          getEngine().addRole(u, r);
+        }
+        else {
+          for (RolePrincipal ro : roles) {
+            if (!Arrays.asList(ro).contains(r)) {
+              getEngine().addRole(u, r);
+            }
           }
         }
 
@@ -94,7 +114,12 @@ public class JaasUserManager implements IUserManagementProvider {
 
   @Override
   public void removeRole(String u, String r) throws MeteoriteSecurityException {
-    getEngine().deleteRole(u, r);
+    if(getRoles(u).contains(r)) {
+      getEngine().deleteRole(u, r);
+    }
+    else{
+      throw new MeteoriteSecurityException("Role does not exist for user");
+    }
   }
 
   @Override

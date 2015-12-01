@@ -20,4 +20,8 @@ package bi.meteorite.core.api.security.exceptions;
  * Created by bugg on 03/07/15.
  */
 public class MeteoriteSecurityException extends Exception {
+
+  public MeteoriteSecurityException(String message) {
+    super(message);
+  }
 }

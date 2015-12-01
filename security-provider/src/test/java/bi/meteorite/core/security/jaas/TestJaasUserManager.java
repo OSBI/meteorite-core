@@ -1,6 +1,5 @@
 package bi.meteorite.core.security.jaas;
 
-import bi.meteorite.core.api.security.IUserManagementProvider;
 import bi.meteorite.core.api.security.exceptions.MeteoriteSecurityException;
 
 import org.apache.felix.utils.properties.Properties;
@@ -11,7 +10,8 @@ import org.apache.karaf.jaas.modules.BackingEngineFactory;
 import org.apache.karaf.jaas.modules.BackingEngineService;
 import org.apache.karaf.jaas.modules.properties.PropertiesBackingEngine;
 
-import org.junit.BeforeClass;
+import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mockito;
 
@@ -22,6 +22,7 @@ import java.util.Map;
 
 import javax.security.auth.login.AppConfigurationEntry;
 
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.hasItem;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.anyMap;
@@ -32,11 +33,12 @@ import static org.mockito.Mockito.when;
  */
 public class TestJaasUserManager {
 
-  private static BackingEngineService backingengine;
-  private static JaasRealm realm;
+  private BackingEngineService backingengine;
+  private JaasRealm realm;
+  private JaasUserManager jaasUserManager;
 
-  @BeforeClass
-  public static void setupMockedBackend(){
+  @Before
+  public void setupMockedBackend(){
     backingengine = Mockito.mock(BackingEngineService.class);
     realm = Mockito.mock(JaasRealm.class);
     AppConfigurationEntry a = Mockito.mock(AppConfigurationEntry.class);
@@ -54,21 +56,121 @@ public class TestJaasUserManager {
     l.add(backingEngineFactory);
     l.add(backingEngineFactory);
     when(backingengine.getEngineFactories()).thenReturn(l);
-  }
-
-  @Test
-  public void testAddUser() throws MeteoriteSecurityException {
-    IUserManagementProvider jaasUserManager = new JaasUserManager();
+    jaasUserManager = new JaasUserManager();
 
 
 
     jaasUserManager.setRealm(realm);
     jaasUserManager.setBackingEngineService(backingengine);
+  }
+
+  @Test
+  public void testAddUser() throws MeteoriteSecurityException {
 
     jaasUserManager.addUser("test", "password");
     assertThat(jaasUserManager.getUsers(), hasItem("test"));
 
   }
 
+  @Test(expected=MeteoriteSecurityException.class)
+  public void testAddDuplicateUser() throws MeteoriteSecurityException {
+
+    jaasUserManager.addUser("test", "password");
+    jaasUserManager.addUser("test", "password");
+
+  }
+
+
+
+  @Test
+  public void testDeleteUser() throws MeteoriteSecurityException {
+    jaasUserManager.addUser("test", "password");
+
+    assertThat(jaasUserManager.getUsers().size(), equalTo(1));
+
+    jaasUserManager.deleteUser("test");
+
+    assertThat(jaasUserManager.getUsers().size(), equalTo(0));
+  }
+
+  @Test(expected=MeteoriteSecurityException.class)
+  public void testDeleteNonExistentUser() throws MeteoriteSecurityException {
+    assertThat(jaasUserManager.getUsers().size(), equalTo(0));
+
+
+    jaasUserManager.deleteUser("nouser");
+  }
+
+  @Test
+  public void testGetRoles() throws MeteoriteSecurityException {
+
+    jaasUserManager.addUser("test", "password");
+
+    assertThat(jaasUserManager.getUsers().size(), equalTo(1));
+
+    jaasUserManager.addRole("test", "testrole");
+
+    assertThat(jaasUserManager.getRoles("test").size(), equalTo(1));
+
+  }
+
+  @Test(expected=MeteoriteSecurityException.class)
+  public void testGetRolesNonExistentUser() throws MeteoriteSecurityException {
+    jaasUserManager.addUser("test", "password");
+
+    jaasUserManager.getRoles("nouser");
+
+
+  }
+
+  @Test
+  public void testAddRole() throws MeteoriteSecurityException {
+    jaasUserManager.addUser("test", "password");
+
+    assertThat(jaasUserManager.getUsers().size(), equalTo(1));
+
+    jaasUserManager.addRole("test", "testrole");
+
+    assertThat(jaasUserManager.getRoles("test").size(), equalTo(1));
+
+
+  }
+
+  @Test
+  public void testDeleteRole() throws MeteoriteSecurityException {
+    jaasUserManager.addUser("test", "password");
+
+    assertThat(jaasUserManager.getUsers().size(), equalTo(1));
+
+    jaasUserManager.addRole("test", "testrole");
+
+    assertThat(jaasUserManager.getRoles("test").size(), equalTo(1));
+
+    jaasUserManager.removeRole("test", "testrole");
+
+    assertThat(jaasUserManager.getRoles("test").size(), equalTo(0));
+  }
+
+  @Test(expected=MeteoriteSecurityException.class)
+  public void testDeleteNonExistentRole() throws MeteoriteSecurityException {
+    jaasUserManager.addUser("test", "password");
+
+    assertThat(jaasUserManager.getUsers().size(), equalTo(1));
+
+    jaasUserManager.removeRole("test", "testrole");
+
+  }
+
+  @Ignore
+  @Test
+  public void testIsAdmin(){
+
+  }
+
+  @Ignore
+  @Test
+  public void testIsAdminNonExistentUser(){
+
+  }
 
 }
