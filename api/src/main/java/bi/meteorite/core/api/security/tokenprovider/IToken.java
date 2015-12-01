@@ -3,7 +3,7 @@ package bi.meteorite.core.api.security.tokenprovider;
 import java.util.Map;
 
 /**
- * Created by bugg on 09/11/15.
+ * An authentication token.
  */
 public interface IToken {
   String getToken();

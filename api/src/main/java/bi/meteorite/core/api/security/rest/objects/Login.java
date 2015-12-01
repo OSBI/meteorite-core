@@ -19,7 +19,7 @@ package bi.meteorite.core.api.security.rest.objects;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- * Created by bugg on 20 /07/15.
+ * Login Object.
  */
 @XmlRootElement
 public class Login {

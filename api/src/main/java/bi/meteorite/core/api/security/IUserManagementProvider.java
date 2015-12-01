@@ -25,35 +25,93 @@ import org.apache.karaf.jaas.modules.BackingEngineService;
 import java.util.List;
 
 /**
- * Created by bugg on 03/07/15.
+ * User Management Provider.
+ * API for the main user managaement interface for Meteorite Core.
  */
 public interface IUserManagementProvider {
 
+  /**
+   * Add a new user to the platform.
+   * @param u username
+   * @param p password
+   * @throws MeteoriteSecurityException
+   */
   void addUser(String u, String p) throws MeteoriteSecurityException;
 
+  /**
+   * Delete a user from the platform.
+   * @param u username
+   * @throws MeteoriteSecurityException
+   */
   void deleteUser(String u) throws MeteoriteSecurityException;
 
+  /**
+   * Get a list of users on the platform.
+   * @return a list of usernames.
+   * @throws MeteoriteSecurityException
+   */
   List<String> getUsers() throws MeteoriteSecurityException;
 
   //MeteoriteUser setUser(MeteoriteUser u) throws MeteoriteSecurityException;
 
   //MeteoriteUser getUser(int id) throws MeteoriteSecurityException;
 
+  /**
+   * Get a list of roles applied to a user.
+   * @param u username
+   * @return a list of roles.
+   * @throws MeteoriteSecurityException
+   */
   List<String> getRoles(String u) throws MeteoriteSecurityException;
 
+  /**
+   * Add a role to a user.
+   * @param u username
+   * @param r role name
+   * @throws MeteoriteSecurityException
+   */
   void addRole(String u, String r) throws MeteoriteSecurityException;
 
+  /**
+   * Remove role from a user
+   * @param u username
+   * @param r role
+   * @throws MeteoriteSecurityException
+   */
   void removeRole(String u, String r) throws MeteoriteSecurityException;
 
-  void removeUser(String u) throws MeteoriteSecurityException;
-
+  /**
+   * Update a user on the platform.
+   * @param u user object
+   * @return a updated user object
+   * @throws MeteoriteSecurityException
+   */
   MeteoriteUser updateUser(MeteoriteUser u) throws MeteoriteSecurityException;
 
+  /**
+   * Discover is the user is an administrator or not.
+   * @param u username
+   * @return true if the user is admin.
+   * @throws MeteoriteSecurityException
+   */
   boolean isAdmin(String u) throws MeteoriteSecurityException;
 
+  /**
+   * Get a list of roles that define an administrator.
+   * @return a list of administrative roles
+   * @throws MeteoriteSecurityException
+   */
   List<String> getAdminRoles() throws MeteoriteSecurityException;
 
+  /**
+   * Set the backing service engine that drives the security.
+   * @param backingEngineService
+   */
   void setBackingEngineService(BackingEngineService backingEngineService);
 
+  /**
+   * Set the JaaS realm.
+   * @param realm
+   */
   void setRealm(JaasRealm realm);
 }

@@ -17,7 +17,7 @@
 package bi.meteorite.core.api.security.exceptions;
 
 /**
- * Created by bugg on 03/07/15.
+ * Meteorite Security Exception.
  */
 public class MeteoriteSecurityException extends Exception {
 

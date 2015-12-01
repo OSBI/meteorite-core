@@ -23,7 +23,7 @@ import javax.security.auth.login.AppConfigurationEntry;
 
 
 /**
- * Created by bugg on 09/11/15.
+ * Default JaaS User Manager to control users in Karaf.
  */
 public class JaasUserManager implements IUserManagementProvider {
 
@@ -123,12 +123,6 @@ public class JaasUserManager implements IUserManagementProvider {
   }
 
   @Override
-  public void removeUser(String u) throws MeteoriteSecurityException {
-
-    getEngine().deleteUser(u);
-  }
-
-  @Override
   public MeteoriteUser updateUser(MeteoriteUser u) throws MeteoriteSecurityException {
     return null;
   }
@@ -153,10 +147,12 @@ public class JaasUserManager implements IUserManagementProvider {
     return null;
   }
 
+  @Override
   public void setBackingEngineService(BackingEngineService jassservice) {
     this.backingEngineService = jassservice;
   }
 
+  @Override
   public void setRealm(JaasRealm realm){
     this.realm = realm;
   }
