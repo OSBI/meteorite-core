@@ -47,4 +47,16 @@ public interface UserAuthentication {
   @GET
   @Produces("application/json")
   Response login();
+
+  /**
+   * Logout from the Meteorite core.
+   *
+   * @param username logout username.
+   * @return a HTTP response indicating the logout success.
+   * @throws TokenProviderException
+   */
+  @POST
+  Response logout(String username) throws TokenProviderException;
+
+
 }

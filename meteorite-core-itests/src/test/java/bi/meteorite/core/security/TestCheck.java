@@ -44,6 +44,7 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
+import static org.ops4j.pax.exam.CoreOptions.wrappedBundle;
 import static org.ops4j.pax.exam.karaf.options.KarafDistributionOption.configureConsole;
 import static org.ops4j.pax.exam.karaf.options.KarafDistributionOption.editConfigurationFilePut;
 
@@ -112,12 +113,13 @@ public class TestCheck {
         CoreOptions.mavenBundle("bi.meteorite", "security-provider", "1.0-SNAPSHOT"),
         CoreOptions.mavenBundle("javax.ws.rs", "javax.ws.rs-api", "2.0.1"),
         CoreOptions.mavenBundle("commons-codec", "commons-codec", "1.9"),
+        wrappedBundle(CoreOptions.mavenBundle("com.atlassian.clover", "clover", "4.0.6")),
         CoreOptions.mavenBundle("com.google.guava", "guava", "18.0"),
         /*editConfigurationFilePut("etc/org.apache.karaf.features.cfg", "featuresBoot",
             "(aries-blueprint, bundle, config, cellar, deployer, diagnostic, feature, instance, jaas, kar, log, "
             + "management, package, service, shell, shell-compat, ssh, system, wrap)"),*/
-        CoreOptions.wrappedBundle(CoreOptions.mavenBundle("javax.servlet", "servlet-api", "2.5")),
-        CoreOptions.wrappedBundle(CoreOptions.mavenBundle("com.atlassian.clover", "clover", "4.0.2")),
+        wrappedBundle(CoreOptions.mavenBundle("javax.servlet", "servlet-api", "2.5")),
+        wrappedBundle(CoreOptions.mavenBundle("com.atlassian.clover", "clover", "4.0.2")),
         editConfigurationFilePut("etc/users.properties", "admin",
             "admin,admin,manager,viewer,Operator, Maintainer, Deployer, Auditor, Administrator, SuperUser"),
         CoreOptions.junitBundles(),

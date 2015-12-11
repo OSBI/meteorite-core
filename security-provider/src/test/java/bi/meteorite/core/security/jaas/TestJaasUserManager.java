@@ -1,5 +1,6 @@
 package bi.meteorite.core.security.jaas;
 
+import bi.meteorite.core.api.security.IUserManagementProvider;
 import bi.meteorite.core.api.security.exceptions.MeteoriteSecurityException;
 
 import org.apache.felix.utils.properties.Properties;
@@ -35,7 +36,7 @@ public class TestJaasUserManager {
 
   private BackingEngineService backingengine;
   private JaasRealm realm;
-  private JaasUserManager jaasUserManager;
+  private IUserManagementProvider jaasUserManager;
 
   @Before
   public void setupMockedBackend(){
@@ -172,5 +173,6 @@ public class TestJaasUserManager {
   public void testIsAdminNonExistentUser(){
 
   }
+
 
 }

@@ -16,7 +16,11 @@
 
 package bi.meteorite.core.api.security;
 
+import org.apache.karaf.jaas.config.JaasRealm;
+
 import java.util.List;
+
+import javax.security.auth.login.LoginContext;
 
 /**
  * Admin Api Interface for user management.
@@ -30,5 +34,13 @@ public interface AdminLoginService {
   String getUsername();
 
   List<String> getRoles();
+
+  /**
+   * Set the JaaS realm.
+   * @param realm
+   */
+  void setRealm(JaasRealm realm);
+
+  void setLoginContext(LoginContext loginContext);
 
 }

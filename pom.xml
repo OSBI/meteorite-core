@@ -14,7 +14,7 @@
     <module>security</module>
     <module>features</module>
     <module>karaf</module>
-    <module>meteorite-core-itests</module>
+    <!--<module>meteorite-core-itests</module>-->
   </modules>
 
   <properties>
@@ -58,7 +58,7 @@
         <plugin>
           <groupId>com.atlassian.maven.plugins</groupId>
           <artifactId>maven-clover2-plugin</artifactId>
-          <version>4.0.2</version>
+          <version>4.0.6</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
@@ -89,14 +89,24 @@
         <configuration>
           <targetPercentage>50%</targetPercentage>
         </configuration>
-        <executions>
-          <execution>
-            <goals>
-              <goal>check</goal>
-            </goals>
-            <phase>verify</phase>
-          </execution>
-        </executions>
+        <!--<executions>
+        <execution>
+          <id>main</id>
+          <phase>verify</phase>
+          <goals>
+            <goal>instrument</goal>
+            <goal>aggregate</goal>
+          </goals>
+        </execution>
+        <execution>
+          <id>site</id>
+          <phase>pre-site</phase>
+          <goals>
+            <goal>instrument</goal>
+            <goal>aggregate</goal>
+          </goals>
+        </execution>
+        </executions>-->
       </plugin>
       <plugin>
         <groupId>org.sonatype.plugins</groupId>

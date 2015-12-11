@@ -18,8 +18,8 @@
 package bi.meteorite.core.security.jaas;
 
 import bi.meteorite.core.api.security.AdminLoginService;
-import bi.meteorite.core.api.security.IMeteoriteUser;
-import bi.meteorite.core.api.security.tokenprovider.IToken;
+
+import org.apache.karaf.jaas.config.JaasRealm;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,21 +40,18 @@ import javax.security.auth.login.LoginContext;
 import javax.security.auth.login.LoginException;
 
 /**
- * Created by bugg on 20/07/15.
- */
-
-/**
  * Jaas Login Manager
  */
 //@OsgiServiceProvider(classes = { AdminLoginService.class })
 public class JaasLoginManager implements AdminLoginService {
 
   private static final Logger logger = LoggerFactory.getLogger(JaasLoginManager.class);
-  private String realm;
+  private JaasRealm realm;
   private Subject subject;
   private ArrayList<String> roles = new ArrayList<>();
   public static final String ROLES_GROUP_NAME = "ROLES";
   public static final String ROLES_PREFIX = "ROLE_";
+  private LoginContext ctx;
 
   /**
    * Login Callback Handler
@@ -63,6 +60,7 @@ public class JaasLoginManager implements AdminLoginService {
 
     private String username;
     private String password;
+
 
     public LoginCallbackHandler(String username, String password) {
       this.username = username;
@@ -89,7 +87,9 @@ public class JaasLoginManager implements AdminLoginService {
     boolean authenticated;
     LoginCallbackHandler handler = new LoginCallbackHandler(username, password);
     try {
-      LoginContext ctx = new LoginContext(realm, handler);
+      if(ctx == null){
+        ctx = new LoginContext(realm.getName(), handler);
+      }
       ctx.login();
       authenticated = true;
       subject = ctx.getSubject();
@@ -109,9 +109,10 @@ public class JaasLoginManager implements AdminLoginService {
   @Override
   public boolean logout(String username) {
     LoginCallbackHandler handler = new LoginCallbackHandler(username, null);
-    LoginContext ctx = null;
     try {
-      ctx = new LoginContext(realm, handler);
+      if(ctx == null){
+        ctx = new LoginContext(realm.getName(), handler);
+      }
       ctx.logout();
       return true;
     } catch (LoginException e) {
@@ -147,7 +148,11 @@ public class JaasLoginManager implements AdminLoginService {
   }
 
 
-  public void setRealm(String realm) {
+  public void setLoginContext(LoginContext ctx) {
+    this.ctx = ctx;
+  }
+
+  public void setRealm(JaasRealm realm) {
     this.realm = realm;
   }
 
