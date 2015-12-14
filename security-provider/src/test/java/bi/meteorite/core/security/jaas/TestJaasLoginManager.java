@@ -70,7 +70,7 @@ public class TestJaasLoginManager {
 
     jaasUserManager.setRealm(realm);
     jaasUserManager.setBackingEngineService(backingengine);
-    jaasLoginManager.setRealm(realm);
+    jaasLoginManager.setRealm(realm.getName());
 
     LoginContext lcMock = mock(LoginContext.class);
 

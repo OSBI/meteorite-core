@@ -46,7 +46,7 @@ import javax.security.auth.login.LoginException;
 public class JaasLoginManager implements AdminLoginService {
 
   private static final Logger logger = LoggerFactory.getLogger(JaasLoginManager.class);
-  private JaasRealm realm;
+  private String realm;
   private Subject subject;
   private ArrayList<String> roles = new ArrayList<>();
   public static final String ROLES_GROUP_NAME = "ROLES";
@@ -88,7 +88,7 @@ public class JaasLoginManager implements AdminLoginService {
     LoginCallbackHandler handler = new LoginCallbackHandler(username, password);
     try {
       if(ctx == null){
-        ctx = new LoginContext(realm.getName(), handler);
+        ctx = new LoginContext(realm, handler);
       }
       ctx.login();
       authenticated = true;
@@ -111,7 +111,7 @@ public class JaasLoginManager implements AdminLoginService {
     LoginCallbackHandler handler = new LoginCallbackHandler(username, null);
     try {
       if(ctx == null){
-        ctx = new LoginContext(realm.getName(), handler);
+        ctx = new LoginContext(realm, handler);
       }
       ctx.logout();
       return true;
@@ -152,7 +152,7 @@ public class JaasLoginManager implements AdminLoginService {
     this.ctx = ctx;
   }
 
-  public void setRealm(JaasRealm realm) {
+  public void setRealm(String realm) {
     this.realm = realm;
   }
 

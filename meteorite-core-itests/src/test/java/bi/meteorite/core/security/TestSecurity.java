@@ -16,9 +16,12 @@
 
 package bi.meteorite.core.security;
 
-import bi.meteorite.core.api.security.AdminLoginService;
-import bi.meteorite.core.api.security.IUserManagementProvider;
 import bi.meteorite.core.api.security.exceptions.MeteoriteSecurityException;
+import bi.meteorite.core.api.security.exceptions.TokenProviderException;
+import bi.meteorite.core.api.security.rest.UserAuthentication;
+import bi.meteorite.core.api.security.rest.UserService;
+import bi.meteorite.core.api.security.rest.objects.Login;
+import bi.meteorite.core.api.security.tokenprovider.TokenProvider;
 
 import org.apache.karaf.features.FeaturesService;
 
@@ -35,46 +38,50 @@ import org.ops4j.pax.exam.options.MavenArtifactUrlReference;
 import org.ops4j.pax.exam.options.MavenUrlReference;
 import org.ops4j.pax.exam.spi.reactors.ExamReactorStrategy;
 import org.ops4j.pax.exam.spi.reactors.PerMethod;
+import org.osgi.service.cm.ConfigurationAdmin;
 
 import java.io.File;
 
 import javax.inject.Inject;
+import javax.ws.rs.core.Response;
 
-import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.core.StringContains.containsString;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
-import static org.ops4j.pax.exam.CoreOptions.wrappedBundle;
-import static org.ops4j.pax.exam.karaf.options.KarafDistributionOption.configureConsole;
-import static org.ops4j.pax.exam.karaf.options.KarafDistributionOption.editConfigurationFilePut;
+import static org.ops4j.pax.exam.CoreOptions.maven;
+import static org.ops4j.pax.exam.karaf.options.KarafDistributionOption.*;
 
 /**
  * Created by bugg on 30/09/15.
  */
 @RunWith(PaxExam.class)
 @ExamReactorStrategy(PerMethod.class)
-public class TestCheck {
+public class TestSecurity {
 
   @Inject
   protected FeaturesService featuresService;
 
+  @Inject
+  private ConfigurationAdmin caService;
 
   @Inject
-  private AdminLoginService helloService;
+  private UserAuthentication helloService;
 
   @Inject
-  private IUserManagementProvider usermanagement;
+  private UserService usermanagement;
 
   @Configuration
   public Option[] config() {
 
-    MavenArtifactUrlReference karafUrl = CoreOptions.maven()
-                                                    .groupId("org.apache.karaf")
-                                                    .artifactId("apache-karaf")
-                                                    .version(karafVersion())
+
+    MavenArtifactUrlReference karafUrl = maven()
+                                                    .groupId("bi.meteorite")
+                                                    .artifactId("meteorite-engine")
+                                                    .version("1.0-SNAPSHOT")
                                                     .type("zip");
 
-    MavenUrlReference karafStandardRepo = CoreOptions.maven()
+    MavenUrlReference karafStandardRepo = maven()
                                                      .groupId("org.apache.karaf.features")
                                                      .artifactId("standard")
                                                      .version(karafVersion())
@@ -84,7 +91,7 @@ public class TestCheck {
                .value("+http://repo1.maven.org/maven2/,http://nexus.qmino"
                       + ".com/content/repositories/miredot");
 
-    MavenUrlReference karafCellarrepo = CoreOptions.maven().groupId("org.apache.karaf.cellar")
+    MavenUrlReference karafCellarrepo = maven().groupId("org.apache.karaf.cellar")
                                                    .artifactId("apache-karaf-cellar")
                                                    .version("4.0.0").classifier("features").type("xml");
 
@@ -99,27 +106,29 @@ public class TestCheck {
          *
          * Uncomment to debug.
          */
-        //KarafDistributionOption.debugConfiguration("5005", true),
-        editConfigurationFilePut("etc/org.apache.karaf.features.cfg", "featuresBoot", "(aries-blueprint,bundle,"
-                                                                                      + "config,wrap, "
-                                                                                      + "cellar-hazelcast,jaas)"),
+        KarafDistributionOption.debugConfiguration("5005", true),
 
         configureConsole().ignoreLocalConsole(),
-        KarafDistributionOption.features(karafStandardRepo, "scr"),
-        KarafDistributionOption
-            .features(karafCellarrepo, "cellar-hazelcast"),
+
+        /*features(maven().groupId("bi.meteorite")
+                        .artifactId("meteorite-core-features").type("xml")
+                        .classifier("features").version("1.0-SNAPSHOT"),
+            "meteorite-core-features"),
+*/
+
 
         CoreOptions.mavenBundle("bi.meteorite", "api", "1.0-SNAPSHOT"),
         CoreOptions.mavenBundle("bi.meteorite", "security-provider", "1.0-SNAPSHOT"),
-        CoreOptions.mavenBundle("javax.ws.rs", "javax.ws.rs-api", "2.0.1"),
-        CoreOptions.mavenBundle("commons-codec", "commons-codec", "1.9"),
-        wrappedBundle(CoreOptions.mavenBundle("com.atlassian.clover", "clover", "4.0.6")),
+        CoreOptions.mavenBundle("bi.meteorite", "security", "1.0-SNAPSHOT"),
+        CoreOptions.mavenBundle("com.fasterxml.jackson.jaxrs", "jackson-jaxrs-json-provider", "2.6.2"),
+        CoreOptions.mavenBundle("com.fasterxml.jackson.jaxrs", "jackson-jaxrs-base", "2.6.2"),
+        CoreOptions.mavenBundle("com.fasterxml.jackson.core", "jackson-core", "2.6.2"),
+        CoreOptions.mavenBundle("com.fasterxml.jackson.core", "jackson-databind", "2.6.2"),
+        CoreOptions.mavenBundle("com.fasterxml.jackson.core", "jackson-annotations", "2.6.0"),
+        CoreOptions.mavenBundle("com.fasterxml.jackson.module", "jackson-module-jaxb-annotations", "2.6.2"),
+        CoreOptions.mavenBundle("org.glassfish.hk2.external", "javax.inject", "2.4.0-b25"),
         CoreOptions.mavenBundle("com.google.guava", "guava", "18.0"),
-        /*editConfigurationFilePut("etc/org.apache.karaf.features.cfg", "featuresBoot",
-            "(aries-blueprint, bundle, config, cellar, deployer, diagnostic, feature, instance, jaas, kar, log, "
-            + "management, package, service, shell, shell-compat, ssh, system, wrap)"),*/
-        wrappedBundle(CoreOptions.mavenBundle("javax.servlet", "servlet-api", "2.5")),
-        wrappedBundle(CoreOptions.mavenBundle("com.atlassian.clover", "clover", "4.0.2")),
+
         editConfigurationFilePut("etc/users.properties", "admin",
             "admin,admin,manager,viewer,Operator, Maintainer, Deployer, Auditor, Administrator, SuperUser"),
         CoreOptions.junitBundles(),
@@ -134,27 +143,32 @@ public class TestCheck {
 
   @Test
   public void testLoginService() throws Exception {
-
+    assertNotNull(caService);
     assertNotNull(helloService);
 
 
-    assertThat(helloService.login("karaf", "karaf"), is(true));
+    assertThat(helloService.login(new Login("karaf", "karaf")).getStatus(), is(200));
 
   }
 
   @Test
-  public void testGetUsername() {
+  public void testGetUsername() throws TokenProviderException {
+    assertNotNull(caService);
     assertNotNull(helloService);
 
-    assertThat(helloService.login("karaf", "karaf"), is(true));
+    Response s = helloService.login(new Login("karaf", "karaf"));
 
-    assertThat(helloService.getUsername(), equalTo("karaf"));
+    assertThat(s.getStatus(), is(400));
+
+    Response who = helloService.whoami(s.getCookies().get(TokenProvider.TOKEN_COOKIE_NAME).getValue());
+
+    assertThat((String)who.getEntity(), containsString("karaf"));
 
   }
 
   @Test
   public void testAddUser() throws MeteoriteSecurityException {
-    usermanagement.addUser("test", "test");
+    //usermanagement.addUser("test", "test");
   }
 
 }

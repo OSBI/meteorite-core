@@ -14,7 +14,7 @@
     <module>security</module>
     <module>features</module>
     <module>karaf</module>
-    <!--<module>meteorite-core-itests</module>-->
+    <module>meteorite-core-itests</module>
   </modules>
 
   <properties>

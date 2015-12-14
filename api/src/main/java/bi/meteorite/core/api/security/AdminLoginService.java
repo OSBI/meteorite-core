@@ -16,8 +16,6 @@
 
 package bi.meteorite.core.api.security;
 
-import org.apache.karaf.jaas.config.JaasRealm;
-
 import java.util.List;
 
 import javax.security.auth.login.LoginContext;
@@ -39,7 +37,7 @@ public interface AdminLoginService {
    * Set the JaaS realm.
    * @param realm
    */
-  void setRealm(JaasRealm realm);
+  void setRealm(String realm);
 
   void setLoginContext(LoginContext loginContext);
 
