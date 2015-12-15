@@ -15,6 +15,7 @@
     <module>features</module>
     <module>karaf</module>
     <module>meteorite-core-itests</module>
+    <module>meteorite-core-brokentests</module>
   </modules>
 
   <properties>
@@ -34,11 +35,11 @@
         <version>1</version>
         <optional>true</optional>
       </dependency>
-      <dependency>
+      <!--<dependency>
         <groupId>javax.ws.rs</groupId>
         <artifactId>javax.ws.rs-api</artifactId>
         <version>2.0.1</version>
-      </dependency>
+      </dependency>-->
       <dependency>
         <groupId>org.ops4j.pax.cdi</groupId>
         <artifactId>pax-cdi-api</artifactId>

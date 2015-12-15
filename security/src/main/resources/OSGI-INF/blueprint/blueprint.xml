@@ -78,5 +78,5 @@
     </bean>
 
     <service id="userAuth" interface="bi.meteorite.core.api.security.rest.UserAuthentication"
-             ref="userAuthenticationImpl"></service>
+             ref="userAuthenticationImpl"/>
 </blueprint>
