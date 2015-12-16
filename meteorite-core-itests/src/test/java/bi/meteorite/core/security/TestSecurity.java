@@ -20,7 +20,6 @@ import bi.meteorite.core.api.security.exceptions.MeteoriteSecurityException;
 import bi.meteorite.core.api.security.exceptions.TokenProviderException;
 import bi.meteorite.core.api.security.rest.UserAuthentication;
 import bi.meteorite.core.api.security.rest.objects.Login;
-import bi.meteorite.core.api.security.tokenprovider.TokenProvider;
 
 import org.apache.karaf.features.FeaturesService;
 
@@ -47,7 +46,6 @@ import javax.inject.Inject;
 import javax.ws.rs.core.Response;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.core.StringContains.containsString;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 import static org.ops4j.pax.exam.CoreOptions.maven;
@@ -159,9 +157,9 @@ public class TestSecurity {
 
     assertThat(s.getStatus(), is(200));
 
-    Response who = helloService.whoami(s.getCookies().get(TokenProvider.TOKEN_COOKIE_NAME).getValue());
+//    Response who = helloService.whoami(s.getCookies().get(TokenProvider.TOKEN_COOKIE_NAME).getValue());
 
-    assertThat((String)who.getEntity(), containsString("karaf"));
+//    assertThat((String)who.getEntity(), containsString("karaf"));
 
   }
 
