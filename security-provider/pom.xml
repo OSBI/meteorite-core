@@ -158,7 +158,7 @@
                 <extensions>true</extensions>
                 <configuration>
                     <instructions>
-                        <Export-Package>tokenprovider,bi.meteorite.core.security.jaas
+                        <Export-Package>bi.meteorite.core.security.tokenprovider,bi.meteorite.core.security.jaas
                         </Export-Package>
                         <Import-Package>*</Import-Package>
                     </instructions>

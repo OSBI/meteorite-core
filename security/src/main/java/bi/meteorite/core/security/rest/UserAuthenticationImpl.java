@@ -75,10 +75,10 @@ public class UserAuthenticationImpl implements UserAuthentication {
     }
   }
 
-  @Override
-  public Response whoami(String token) {
+  /*@Override
+  public Response whoami(String token) {*
     return Response.ok(adminLoginService.getUsername()).build();
-  }
+  }*/
 
   public void setAdminLoginService(AdminLoginService adminLoginService) {
     this.adminLoginService = adminLoginService;

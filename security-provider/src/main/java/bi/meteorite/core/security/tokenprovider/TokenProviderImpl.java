@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package tokenprovider;
+package bi.meteorite.core.security.tokenprovider;
 
 import bi.meteorite.core.api.security.exceptions.TokenProviderException;
 import bi.meteorite.core.api.security.tokenprovider.InvalidTokenException;

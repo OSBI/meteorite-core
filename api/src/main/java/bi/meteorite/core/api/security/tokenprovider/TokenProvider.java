@@ -34,7 +34,7 @@ public interface TokenProvider {
   /**
    * Name of the cookie that stores an Amdatu token.
    */
-  String TOKEN_COOKIE_NAME = "amdatu_token";
+  String TOKEN_COOKIE_NAME = "saiku_token";
 
   /**
    * Name under which the nonce parameter is stored.

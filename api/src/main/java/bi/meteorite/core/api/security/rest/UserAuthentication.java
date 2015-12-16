@@ -59,7 +59,7 @@ public interface UserAuthentication {
   Response logout(String username) throws TokenProviderException;
 
 
-  @GET
+  /*@GETNeeds new endpoint
   @Produces("application/json")
-  Response whoami(String token);
+  Response whoami(String token);*/
 }
