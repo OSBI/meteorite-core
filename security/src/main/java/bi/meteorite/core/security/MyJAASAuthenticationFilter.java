@@ -29,7 +29,6 @@ import javax.ws.rs.container.PreMatching;
 import javax.ws.rs.core.Cookie;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.NewCookie;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 
@@ -121,8 +120,8 @@ public class MyJAASAuthenticationFilter implements ContainerRequestFilter {
 
         try {
           String token = tokenProvider.generateToken(userMap);
-          context.getCookies()
-                 .put(TokenProvider.TOKEN_COOKIE_NAME, new NewCookie(TokenProvider.TOKEN_COOKIE_NAME, token));
+          /*context.getCookies()
+                 .put(TokenProvider.TOKEN_COOKIE_NAME, new NewCookie(TokenProvider.TOKEN_COOKIE_NAME, token));*/
           context.setProperty("test", token);
         } catch (TokenProviderException e) {
           e.printStackTrace();
