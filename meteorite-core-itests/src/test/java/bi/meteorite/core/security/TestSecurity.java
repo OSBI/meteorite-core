@@ -107,7 +107,7 @@ public class TestSecurity {
          *
          * Uncomment to debug.
          */
-        KarafDistributionOption.debugConfiguration("5005", true),
+        //KarafDistributionOption.debugConfiguration("5005", true),
 
         configureConsole().ignoreLocalConsole(),
 
