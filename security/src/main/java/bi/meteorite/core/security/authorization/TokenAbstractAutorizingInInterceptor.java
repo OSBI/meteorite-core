@@ -39,7 +39,7 @@ public abstract class TokenAbstractAutorizingInInterceptor extends AbstractAutho
         return;
       }
     }
-    else if (sc != null && sc.getUserPrincipal() != null) {
+    else if (sc.getUserPrincipal() != null) {
       if (authorize(sc, method)) {
         return;
       }

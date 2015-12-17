@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<property-edits xmlns="http://karaf.apache.org/tools/property-edits/1.0.0">
+    <edits>
+        <edit>
+            <file>system.properties</file>
+            <operation>put</operation>
+            <key>javax.ws.rs.ext.RuntimeDelegate</key>
+            <value>org.apache.cxf.jaxrs.impl.RuntimeDelegateImpl</value>
+        </edit>
+        <edit>
+            <file>config.properties</file>
+            <operation>put</operation>
+            <key>karaf.framework</key>
+            <value>equinox</value>
+        </edit>
+    </edits>
+</property-edits>
