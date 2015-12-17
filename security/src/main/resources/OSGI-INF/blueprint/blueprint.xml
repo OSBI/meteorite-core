@@ -29,7 +29,7 @@
 
     <bean id="jsonProvider" class="com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider"/>
 
-    <bean id="authorizationInterceptor" class="bi.meteorite.core.security.MyAuthorizingInterceptor">
+    <bean id="authorizationInterceptor" class="bi.meteorite.core.security.authorization.TokenAuthorizingInterceptor">
         <property name="methodRolesMap">
         <map>
             <entry key="getExistingUsers" value="admin"/>
@@ -37,11 +37,11 @@
         </map>
         </property>
     </bean>
-    <bean id="authorizationFilter" class="bi.meteorite.core.security.MyAuthorizingFilter">
+    <bean id="authorizationFilter" class="bi.meteorite.core.security.authorization.TokenAuthorizingFilter">
         <property name="interceptor" ref="authorizationInterceptor" />
     </bean>
 
-    <bean id="testFilter" class="bi.meteorite.core.security.MyContainerRequestFilter"/>
+    <bean id="testFilter" class="bi.meteorite.core.security.authentication.TokenResponseFilter"/>
 
     <jaxrs:server id="taskService" address="/rest/core">
         <jaxrs:serviceBeans>
@@ -60,8 +60,8 @@
         <jaxrs:features>
             <cxf:logging/>
             <bean class="org.apache.cxf.interceptor.security.JAASAuthenticationFeature">
-                <property name="contextName" value="karaf" /> <property name="reportFault"
-                                                                        value="true" /> </bean>
+                <property name="contextName" value="karaf" />
+                <property name="reportFault" value="true" /> </bean>
         </jaxrs:features>
         <!--<jaxrs:extensionMappings>
              <entry key="json" value="application/json" />
@@ -92,12 +92,10 @@
         </service-properties>
     </service>-->
 
-    <bean id="authenticationFilter" class="bi.meteorite.core.security.MyJAASAuthenticationFilter">
+    <bean id="authenticationFilter" class="bi.meteorite.core.security.authentication.TokenJAASAuthenticationFilter">
         <!-- Name of the JAAS Context -->
         <property name="contextName" value="karaf"/>
         <property name="tokenProvider" ref="tokenProvider"/>
-        <property name="adminLoginService" ref="loginService"/>
-
     </bean>
 
     <service id="userAuth" interface="bi.meteorite.core.api.security.rest.UserAuthentication"

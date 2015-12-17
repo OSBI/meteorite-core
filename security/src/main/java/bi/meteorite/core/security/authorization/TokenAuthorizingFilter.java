@@ -1,4 +1,4 @@
-package bi.meteorite.core.security;
+package bi.meteorite.core.security.authorization;
 
 import org.apache.cxf.interceptor.security.AccessDeniedException;
 import org.apache.cxf.jaxrs.utils.JAXRSUtils;
@@ -13,9 +13,9 @@ import javax.ws.rs.core.Response;
  * Created by bugg on 16/12/15.
  */
 @Priority(Priorities.AUTHORIZATION)
-public class MyAuthorizingFilter implements ContainerRequestFilter {
+public class TokenAuthorizingFilter implements ContainerRequestFilter {
 
-  private MyAuthorizingInterceptor interceptor;
+  private TokenAuthorizingInterceptor interceptor;
 
   public void filter(ContainerRequestContext context) {
     try {
@@ -25,7 +25,7 @@ public class MyAuthorizingFilter implements ContainerRequestFilter {
     }
   }
 
-  public void setInterceptor(MyAuthorizingInterceptor in) {
+  public void setInterceptor(TokenAuthorizingInterceptor in) {
     interceptor = in;
   }
 }

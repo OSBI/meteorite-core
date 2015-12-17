@@ -1,4 +1,4 @@
-package bi.meteorite.core.security;
+package bi.meteorite.core.security.authorization;
 
 import org.apache.cxf.common.util.StringUtils;
 
@@ -14,17 +14,17 @@ import javax.ws.rs.core.SecurityContext;
 /**
  * Created by bugg on 17/12/15.
  */
-public class MyAuthorizingInterceptor extends MyAbstractAutorizingInInterceptor {
+public class TokenAuthorizingInterceptor extends TokenAbstractAutorizingInInterceptor {
 
   protected Map<String, List<String>> methodRolesMap = new HashMap<String, List<String>>();
   protected Map<String, List<String>> userRolesMap = Collections.emptyMap();
   protected List<String> globalRoles = Collections.emptyList();
   private boolean checkConfiguredRolesOnly;
 
-  public MyAuthorizingInterceptor() {
+  public TokenAuthorizingInterceptor() {
     this(true);
   }
-  public MyAuthorizingInterceptor(boolean uniqueId) {
+  public TokenAuthorizingInterceptor(boolean uniqueId) {
     super(uniqueId);
   }
 
