@@ -12,7 +12,9 @@ import org.apache.cxf.jaxrs.utils.HttpUtils;
 import org.apache.cxf.jaxrs.utils.JAXRSUtils;
 import org.apache.cxf.message.Message;
 
+
 import java.net.URI;
+import java.security.Principal;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -30,6 +32,7 @@ import javax.ws.rs.core.Cookie;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.core.UriBuilder;
 
 /**
@@ -107,6 +110,31 @@ public class MyJAASAuthenticationFilter implements ContainerRequestFilter {
         try {
           Cookie cookie = cookies.get(TokenProvider.TOKEN_COOKIE_NAME);
           valid = tokenProvider.verifyToken(cookie.getValue());
+          SecurityContext c = new SecurityContext() {
+            java.security.Principal p = new UserPrincipal("karaf");
+
+            @Override
+            public Principal getUserPrincipal() {
+              return p;
+            }
+
+            @Override
+            public boolean isUserInRole(String role) {
+              return false;
+            }
+
+            @Override
+            public boolean isSecure() {
+              return false;
+            }
+
+            @Override
+            public String getAuthenticationScheme() {
+              return null;
+            }
+          };
+
+          context.setSecurityContext(c);
         } catch (TokenProviderException e) {
           e.printStackTrace();
         }
@@ -195,4 +223,18 @@ public class MyJAASAuthenticationFilter implements ContainerRequestFilter {
                       .isEmpty();
   }
 
+  public class UserPrincipal implements Principal {
+
+    private String name;
+
+    @Override
+    public String getName() {
+      return name;
+    }
+
+    public UserPrincipal(String name) {
+      this.name = name;
+    }
+
+  }
 }

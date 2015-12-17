@@ -29,7 +29,7 @@
 
     <bean id="jsonProvider" class="com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider"/>
 
-    <bean id="authorizationInterceptor" class="org.apache.cxf.interceptor.security.SimpleAuthorizingInterceptor">
+    <bean id="authorizationInterceptor" class="bi.meteorite.core.security.MyAuthorizingInterceptor">
         <property name="methodRolesMap">
         <map>
             <entry key="getExistingUsers" value="admin"/>
@@ -37,7 +37,7 @@
         </map>
         </property>
     </bean>
-    <bean id="authorizationFilter" class="org.apache.cxf.jaxrs.security.SimpleAuthorizingFilter">
+    <bean id="authorizationFilter" class="bi.meteorite.core.security.MyAuthorizingFilter">
         <property name="interceptor" ref="authorizationInterceptor" />
     </bean>
 
@@ -52,7 +52,7 @@
         <jaxrs:providers>
             <!-- Binding Providers -->
             <ref component-id="jsonProvider"/>
-            <!--<ref component-id="authorizationFilter"/>-->
+            <ref component-id="authorizationFilter"/>
             <ref component-id="authenticationFilter"/>
             <ref component-id="testFilter"/>
             <!-- Exception Mappers -->
