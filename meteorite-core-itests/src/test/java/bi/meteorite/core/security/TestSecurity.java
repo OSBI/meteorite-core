@@ -19,7 +19,6 @@ package bi.meteorite.core.security;
 import bi.meteorite.core.api.security.exceptions.MeteoriteSecurityException;
 import bi.meteorite.core.api.security.exceptions.TokenProviderException;
 import bi.meteorite.core.api.security.rest.UserAuthentication;
-import bi.meteorite.core.api.security.rest.objects.Login;
 
 import org.apache.karaf.features.FeaturesService;
 
@@ -43,7 +42,6 @@ import org.osgi.service.cm.ConfigurationAdmin;
 import java.io.File;
 
 import javax.inject.Inject;
-import javax.ws.rs.core.Response;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertNotNull;
