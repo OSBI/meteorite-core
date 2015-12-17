@@ -57,6 +57,11 @@ public interface TokenProvider {
   String USERNAME = "token_username";
 
   /**
+   * Comma delimited role list (this is optional).
+   */
+  String ROLES = "token_rolelist";
+
+  /**
    * Generates a new token for the specified set of token attributes. First of all a signature is created from the set
    * of attributes using a private key, only known by this token provider. The attributes are converted to a single
    * String and together with the signature this forms the unencrypted token. Finally, the token is encrypted using aAES

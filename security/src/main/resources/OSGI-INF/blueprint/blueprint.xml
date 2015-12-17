@@ -59,6 +59,9 @@
         </jaxrs:providers>
         <jaxrs:features>
             <cxf:logging/>
+            <bean class="org.apache.cxf.interceptor.security.JAASAuthenticationFeature">
+                <property name="contextName" value="karaf" /> <property name="reportFault"
+                                                                        value="true" /> </bean>
         </jaxrs:features>
         <!--<jaxrs:extensionMappings>
              <entry key="json" value="application/json" />
@@ -93,6 +96,7 @@
         <!-- Name of the JAAS Context -->
         <property name="contextName" value="karaf"/>
         <property name="tokenProvider" ref="tokenProvider"/>
+        <property name="adminLoginService" ref="loginService"/>
 
     </bean>
 

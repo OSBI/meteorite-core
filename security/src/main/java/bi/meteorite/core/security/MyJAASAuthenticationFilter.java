@@ -1,28 +1,39 @@
 package bi.meteorite.core.security;
 
 
+import bi.meteorite.core.api.security.AdminLoginService;
 import bi.meteorite.core.api.security.exceptions.TokenProviderException;
 import bi.meteorite.core.api.security.tokenprovider.TokenProvider;
 
 import org.apache.cxf.common.util.StringUtils;
 import org.apache.cxf.interceptor.security.JAASLoginInterceptor;
 import org.apache.cxf.interceptor.security.NamePasswordCallbackHandler;
+import org.apache.cxf.interceptor.security.callback.CallbackHandlerProvider;
+import org.apache.cxf.interceptor.security.callback.CallbackHandlerProviderAuthPol;
+import org.apache.cxf.interceptor.security.callback.CallbackHandlerProviderUsernameToken;
 import org.apache.cxf.jaxrs.impl.HttpHeadersImpl;
 import org.apache.cxf.jaxrs.utils.HttpUtils;
 import org.apache.cxf.jaxrs.utils.JAXRSUtils;
 import org.apache.cxf.message.Message;
-
+import org.apache.karaf.jaas.boot.principal.RolePrincipal;
 
 import java.net.URI;
+import java.security.AccessControlContext;
+import java.security.AccessController;
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
 import javax.annotation.Priority;
+import javax.security.auth.Subject;
+import javax.security.auth.callback.Callback;
 import javax.security.auth.callback.CallbackHandler;
+import javax.security.auth.callback.NameCallback;
 import javax.security.auth.login.Configuration;
 import javax.ws.rs.Priorities;
 import javax.ws.rs.container.ContainerRequestContext;
@@ -42,8 +53,11 @@ import javax.ws.rs.core.UriBuilder;
 @Priority(Priorities.AUTHENTICATION)
 public class MyJAASAuthenticationFilter implements ContainerRequestFilter {
 
+  private volatile AdminLoginService adminLoginService;
+
   private static final List<MediaType> HTML_MEDIA_TYPES =
       Arrays.asList(MediaType.APPLICATION_XHTML_XML_TYPE, MediaType.TEXT_HTML_TYPE);
+  private final ArrayList<CallbackHandlerProvider> callbackHandlerProviders;
 
   private URI redirectURI;
   private String realmName;
@@ -53,6 +67,9 @@ public class MyJAASAuthenticationFilter implements ContainerRequestFilter {
   private TokenProvider tokenProvider;
 
   public MyJAASAuthenticationFilter() {
+    this.callbackHandlerProviders = new ArrayList<CallbackHandlerProvider>();
+    this.callbackHandlerProviders.add(new CallbackHandlerProviderAuthPol());
+    this.callbackHandlerProviders.add(new CallbackHandlerProviderUsernameToken());
     interceptor = new JAASLoginInterceptor() {
       protected CallbackHandler getCallbackHandler(String name, String password) {
         return MyJAASAuthenticationFilter.this.getCallbackHandler(name, password);
@@ -110,8 +127,9 @@ public class MyJAASAuthenticationFilter implements ContainerRequestFilter {
         try {
           Cookie cookie = cookies.get(TokenProvider.TOKEN_COOKIE_NAME);
           valid = tokenProvider.verifyToken(cookie.getValue());
+          final SortedMap<String, String> finalValid = valid;
           SecurityContext c = new SecurityContext() {
-            java.security.Principal p = new UserPrincipal("karaf");
+            java.security.Principal p = new UserPrincipal(finalValid.get(TokenProvider.USERNAME));
 
             @Override
             public Principal getUserPrincipal() {
@@ -120,7 +138,9 @@ public class MyJAASAuthenticationFilter implements ContainerRequestFilter {
 
             @Override
             public boolean isUserInRole(String role) {
-              return false;
+              String roles = finalValid.get(TokenProvider.ROLES);
+              String[] rolearray = roles.split(",");
+              return Arrays.asList(rolearray).contains(role);
             }
 
             @Override
@@ -141,15 +161,30 @@ public class MyJAASAuthenticationFilter implements ContainerRequestFilter {
       }
       if(valid == null || valid.size()==0) {
 
+        CallbackHandler handler = getFirstCallbackHandler(m);
+
 
         interceptor.handleMessage(m);
-        SortedMap<String, String> userMap = new TreeMap<>();
-        userMap.put(TokenProvider.USERNAME, "admin");
 
+
+        AccessControlContext acc = AccessController.getContext();
+        Subject subject = Subject.getSubject(acc);
+        Set<Principal> principals = subject.getPrincipals();
+
+        String s = "";
+        for(Principal role:principals){
+          if(role instanceof RolePrincipal){
+            s+=role.getName()+",";
+          }
+
+        }
+        s = s.substring(0, s.length()-1);
+
+        SortedMap<String, String> userMap = new TreeMap<>();
+        userMap.put(TokenProvider.USERNAME, getUsername(handler));
+        userMap.put(TokenProvider.ROLES, s);
         try {
           String token = tokenProvider.generateToken(userMap);
-          /*context.getCookies()
-                 .put(TokenProvider.TOKEN_COOKIE_NAME, new NewCookie(TokenProvider.TOKEN_COOKIE_NAME, token));*/
           context.setProperty("test", token);
         } catch (TokenProviderException e) {
           e.printStackTrace();
@@ -161,6 +196,29 @@ public class MyJAASAuthenticationFilter implements ContainerRequestFilter {
     }
 
 
+  }
+
+  private String getUsername(CallbackHandler handler) {
+    if (handler == null) {
+      return null;
+    }
+    try {
+      NameCallback usernameCallBack = new NameCallback("user");
+      handler.handle(new Callback[]{usernameCallBack });
+      return usernameCallBack.getName();
+    } catch (Exception e) {
+      return null;
+    }
+  }
+
+  private CallbackHandler getFirstCallbackHandler(Message message) {
+    for (CallbackHandlerProvider cbp : callbackHandlerProviders) {
+      CallbackHandler cbh = cbp.create(message);
+      if (cbh != null) {
+        return cbh;
+      }
+    }
+    return null;
   }
 
   public void setTokenProvider(TokenProvider tokenProvider) {
@@ -237,4 +295,9 @@ public class MyJAASAuthenticationFilter implements ContainerRequestFilter {
     }
 
   }
+
+  public void setAdminLoginService(AdminLoginService adminLoginService) {
+    this.adminLoginService = adminLoginService;
+  }
+
 }
