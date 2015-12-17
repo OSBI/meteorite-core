@@ -17,9 +17,9 @@
 package bi.meteorite.core.api.security.rest;
 
 import bi.meteorite.core.api.security.exceptions.TokenProviderException;
-import bi.meteorite.core.api.security.rest.objects.Login;
 
-import javax.ws.rs.*;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
 import javax.ws.rs.core.Response;
 
 /**
@@ -27,26 +27,6 @@ import javax.ws.rs.core.Response;
  */
 @Path("/auth/login")
 public interface UserAuthentication {
-
-  /**
-   * Login to the Meteorite core.
-   *
-   * @param login Login Object
-   * @return an HTTP response.
-   * @throws TokenProviderException
-   */
-  @POST
-  @Consumes("application/json")
-  Response login(Login login) throws TokenProviderException;
-
-  /**
-   * Demo, needs removing in production.
-   *
-   * @return
-   */
-  @GET
-  @Produces("application/json")
-  Response login();
 
   /**
    * Logout from the Meteorite core.
@@ -58,8 +38,4 @@ public interface UserAuthentication {
   @POST
   Response logout(String username) throws TokenProviderException;
 
-
-  /*@GETNeeds new endpoint
-  @Produces("application/json")
-  Response whoami(String token);*/
 }

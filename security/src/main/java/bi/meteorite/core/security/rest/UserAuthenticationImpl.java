@@ -19,16 +19,11 @@ package bi.meteorite.core.security.rest;
 import bi.meteorite.core.api.security.AdminLoginService;
 import bi.meteorite.core.api.security.exceptions.TokenProviderException;
 import bi.meteorite.core.api.security.rest.UserAuthentication;
-import bi.meteorite.core.api.security.rest.objects.Login;
 import bi.meteorite.core.api.security.tokenprovider.TokenProvider;
 
 import org.ops4j.pax.cdi.api.OsgiServiceProvider;
 
-import java.util.SortedMap;
-import java.util.TreeMap;
-
 import javax.inject.Singleton;
-import javax.ws.rs.core.NewCookie;
 import javax.ws.rs.core.Response;
 
 /**
@@ -41,30 +36,6 @@ public class UserAuthenticationImpl implements UserAuthentication {
   private volatile AdminLoginService adminLoginService;
   private volatile TokenProvider tokenProvider;
 
-
-  @Override
-  public Response login(Login login) throws TokenProviderException {
-    if (adminLoginService.login(login.getUsername(), login.getPassword())) {
-      SortedMap<String, String> userMap = new TreeMap<>();
-      userMap.put(TokenProvider.USERNAME, "admin");
-
-      String token = tokenProvider.generateToken(userMap);
-
-      return Response.ok().cookie(new NewCookie(TokenProvider.TOKEN_COOKIE_NAME, token)).build();
-    }
-
-    return Response.status(403).build();
-  }
-
-  @Override
-  public Response login() {
-    Login l = new Login();
-    l.setUsername("test");
-    l.setPassword("pass");
-    return Response.ok().entity(l).build();
-
-  }
-
   @Override
   public Response logout(String username) throws TokenProviderException {
     if (adminLoginService.logout(username)) {
@@ -74,10 +45,6 @@ public class UserAuthenticationImpl implements UserAuthentication {
     }
   }
 
-  /*@Override
-  public Response whoami(String token) {*
-    return Response.ok(adminLoginService.getUsername()).build();
-  }*/
 
   public void setAdminLoginService(AdminLoginService adminLoginService) {
     this.adminLoginService = adminLoginService;
