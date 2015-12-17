@@ -17,7 +17,18 @@
     <module>meteorite-core-itests</module>
 <!--    <module>meteorite-core-brokentests</module>-->
   </modules>
-
+  <profiles>
+    <profile>
+      <id>clover</id>
+      <modules>
+        <module>api</module>
+        <module>security-provider</module>
+        <module>security</module>
+        <module>features</module>
+        <module>karaf</module>
+      </modules>
+    </profile>
+  </profiles>
   <properties>
     <top.dir>${project.basedir}</top.dir>
   </properties>
