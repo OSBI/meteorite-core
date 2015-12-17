@@ -43,9 +43,7 @@ import java.io.File;
 
 import javax.inject.Inject;
 
-import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertThat;
 import static org.ops4j.pax.exam.CoreOptions.maven;
 import static org.ops4j.pax.exam.karaf.options.KarafDistributionOption.configureConsole;
 import static org.ops4j.pax.exam.karaf.options.KarafDistributionOption.editConfigurationFilePut;
@@ -152,7 +150,7 @@ public class TestSecurity {
 
   //  Response s = helloService.login(new Login("karaf", "karaf"));
 
-    assertThat(s.getStatus(), is(200));
+    //assertThat(s.getStatus(), is(200));
 
 //    Response who = helloService.whoami(s.getCookies().get(TokenProvider.TOKEN_COOKIE_NAME).getValue());
 
