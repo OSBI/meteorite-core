@@ -1,3 +1,19 @@
+/*
+ * Copyright 2015 OSBI Ltd
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package bi.meteorite.core.security.jaas;
 
 import bi.meteorite.core.api.security.AdminLoginService;
@@ -44,7 +60,7 @@ public class TestJaasLoginManager {
 
 
   @Before
-  public void setupMockedBackend(){
+  public void setupMockedBackend() {
     jaasLoginManager = new JaasLoginManager();
     backingengine = mock(BackingEngineService.class);
     realm = mock(JaasRealm.class);
@@ -54,7 +70,7 @@ public class TestJaasLoginManager {
     Map<String, Object> map = new HashMap<>();
     map.put("org.apache.karaf.jaas.module", "mock");
     when(a.getOptions().get(ProxyLoginModule.PROPERTY_MODULE)).thenReturn(map);
-    AppConfigurationEntry[] array = {a};
+    AppConfigurationEntry[] array = { a };
 
     when(realm.getEntries()).thenReturn(array);
     BackingEngineFactory backingEngineFactory = mock(BackingEngineFactory.class);
@@ -65,7 +81,6 @@ public class TestJaasLoginManager {
     l.add(backingEngineFactory);
     when(backingengine.getEngineFactories()).thenReturn(l);
     jaasUserManager = new JaasUserManager();
-
 
 
     jaasUserManager.setRealm(realm);
@@ -122,7 +137,7 @@ public class TestJaasLoginManager {
   }
 
   @Test
-  public void testLogout(){
+  public void testLogout() {
     boolean ans = jaasLoginManager.login("test", "password");
 
     assertEquals(ans, true);
@@ -134,7 +149,7 @@ public class TestJaasLoginManager {
   }
 
   @Test
-  public void testLogoutWithoutLogin(){
+  public void testLogoutWithoutLogin() {
 
     boolean ans = jaasLoginManager.logout("test");
 

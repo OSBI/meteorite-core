@@ -67,10 +67,9 @@ public class UserAuthenticationImpl implements UserAuthentication {
 
   @Override
   public Response logout(String username) throws TokenProviderException {
-    if(adminLoginService.logout(username)){
+    if (adminLoginService.logout(username)) {
       return Response.ok().build();
-    }
-    else{
+    } else {
       return Response.serverError().build();
     }
   }

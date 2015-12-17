@@ -31,14 +31,14 @@
 
     <bean id="authorizationInterceptor" class="bi.meteorite.core.security.authorization.TokenAuthorizingInterceptor">
         <property name="methodRolesMap">
-        <map>
-            <entry key="getExistingUsers" value="admin"/>
-            <entry key="getBook" value="ROLE_BOOK_OWNER"/>
-        </map>
+            <map>
+                <entry key="getExistingUsers" value="admin"/>
+                <entry key="getBook" value="ROLE_BOOK_OWNER"/>
+            </map>
         </property>
     </bean>
     <bean id="authorizationFilter" class="bi.meteorite.core.security.authorization.TokenAuthorizingFilter">
-        <property name="interceptor" ref="authorizationInterceptor" />
+        <property name="interceptor" ref="authorizationInterceptor"/>
     </bean>
 
     <bean id="testFilter" class="bi.meteorite.core.security.authentication.TokenResponseFilter"/>
@@ -60,8 +60,8 @@
         <jaxrs:features>
             <cxf:logging/>
             <bean class="org.apache.cxf.interceptor.security.JAASAuthenticationFeature">
-                <property name="contextName" value="karaf" />
-                <property name="reportFault" value="true" />
+                <property name="contextName" value="karaf"/>
+                <property name="reportFault" value="true"/>
             </bean>
         </jaxrs:features>
         <!--<jaxrs:extensionMappings>
@@ -85,13 +85,13 @@
             <property name="adminLoginService" ref="loginService"/>
         </bean>
     </service>
-<!-- Mounts the CXF endpoint on /services -->
- <!--   <service interface="javax.servlet.http.HttpServlet" ref="cxfServlet">
-        <service-properties>
-            <entry key="alias" value="/services"/>
-            <entry key="servlet-name" value="bi.meteorite.core.api"/>
-        </service-properties>
-    </service>-->
+    <!-- Mounts the CXF endpoint on /services -->
+    <!--   <service interface="javax.servlet.http.HttpServlet" ref="cxfServlet">
+           <service-properties>
+               <entry key="alias" value="/services"/>
+               <entry key="servlet-name" value="bi.meteorite.core.api"/>
+           </service-properties>
+       </service>-->
 
     <bean id="authenticationFilter" class="bi.meteorite.core.security.authentication.TokenJAASAuthenticationFilter">
         <!-- Name of the JAAS Context -->

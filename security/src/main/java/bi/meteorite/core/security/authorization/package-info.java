@@ -13,33 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bi.meteorite.core.api.security.tokenprovider;
-
-import java.util.Map;
 
 /**
- * An authentication token.
+ * Created by bugg on 17/12/15.
  */
-public interface IToken {
-  String getToken();
-
-  void setToken(String token);
-
-  String getTokenSecret();
-
-  void setTokenSecret(String tokenSecret);
-
-  long getTimestamp();
-
-  void setTimestamp(long timestamp);
-
-  Map<String, String> getProperties();
-
-  String getProperty(String key);
-
-  void setProperties(Map<String, String> properties);
-
-  void setProperty(String key, String value);
-
-  boolean isExpired(long validityDuration);
-}
+package bi.meteorite.core.security.authorization;

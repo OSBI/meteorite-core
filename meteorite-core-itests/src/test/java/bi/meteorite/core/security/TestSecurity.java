@@ -65,7 +65,7 @@ public class TestSecurity {
   @Inject
   private ConfigurationAdmin caService;
 
-  @Filter(timeout=60000)
+  @Filter(timeout = 60000)
   @Inject
   private UserAuthentication helloService;
 
@@ -77,24 +77,24 @@ public class TestSecurity {
 
 
     MavenArtifactUrlReference karafUrl = maven()
-                                                    .groupId("bi.meteorite")
-                                                    .artifactId("meteorite-engine")
-                                                    .version("1.0-SNAPSHOT")
-                                                    .type("zip");
+        .groupId("bi.meteorite")
+        .artifactId("meteorite-engine")
+        .version("1.0-SNAPSHOT")
+        .type("zip");
 
     MavenUrlReference karafStandardRepo = maven()
-                                                     .groupId("org.apache.karaf.features")
-                                                     .artifactId("standard")
-                                                     .version(karafVersion())
-                                                     .classifier("features")
-                                                     .type("xml");
+        .groupId("org.apache.karaf.features")
+        .artifactId("standard")
+        .version(karafVersion())
+        .classifier("features")
+        .type("xml");
     CoreOptions.systemProperty("org.ops4j.pax.url.mvn.repositories")
                .value("+http://repo1.maven.org/maven2/,http://nexus.qmino"
                       + ".com/content/repositories/miredot");
 
     MavenUrlReference karafCellarrepo = maven().groupId("org.apache.karaf.cellar")
-                                                   .artifactId("apache-karaf-cellar")
-                                                   .version("4.0.0").classifier("features").type("xml");
+                                               .artifactId("apache-karaf-cellar")
+                                               .version("4.0.0").classifier("features").type("xml");
 
     return CoreOptions.options(
         KarafDistributionOption.karafDistributionConfiguration()
@@ -110,7 +110,6 @@ public class TestSecurity {
         //KarafDistributionOption.debugConfiguration("5005", true),
 
         configureConsole().ignoreLocalConsole(),
-
 
 
         CoreOptions.mavenBundle("bi.meteorite", "api", "1.0-SNAPSHOT"),

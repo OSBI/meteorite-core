@@ -139,7 +139,7 @@
           </execution>
         </executions>
       </plugin>
-      <plugin>
+      <!--<plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>license-maven-plugin</artifactId>
       </plugin>
@@ -147,7 +147,7 @@
         <groupId>org.apache.rat</groupId>
         <artifactId>apache-rat-plugin</artifactId>
         <version>0.11</version>
-      </plugin>
+      </plugin>-->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-source-plugin</artifactId>
@@ -205,9 +205,9 @@
               <headerLocation>${top.dir}/src/main/config/checkstyle/header.txt</headerLocation>
               <failOnViolation>true</failOnViolation>
               <includeTestSourceDirectory>true</includeTestSourceDirectory>
-              <includes>
+             <!-- <includes>
                 src/main, src/test
-              </includes>
+              </includes>-->
 
             </configuration>
           </execution>
@@ -240,6 +240,29 @@
             src/main, src/test
           </includes>
         </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-checkstyle-plugin</artifactId>
+        <configuration>
+          <configLocation>${top.dir}/src/main/config/checkstyle/checker.xml</configLocation>
+          <suppressionsLocation>${top.dir}/src/main/config/checkstyle/suppressions.xml</suppressionsLocation>
+          <consoleOutput>true</consoleOutput>
+          <headerLocation>${top.dir}/src/main/config/checkstyle/header.txt</headerLocation>
+          <failOnViolation>true</failOnViolation>
+          <includeTestSourceDirectory>true</includeTestSourceDirectory>
+          <!--<includes>
+            src/main, src/test
+          </includes>-->
+
+        </configuration>
+        <reportSets>
+          <reportSet>
+            <reports>
+              <report>checkstyle</report>
+            </reports>
+          </reportSet>
+        </reportSets>
       </plugin>
     </plugins>
   </reporting>

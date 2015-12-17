@@ -1,3 +1,19 @@
+/*
+ * Copyright 2015 OSBI Ltd
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package bi.meteorite.core.security.jaas;
 
 import bi.meteorite.core.api.objects.MeteoriteUser;
@@ -31,21 +47,22 @@ public class JaasUserManager implements IUserManagementProvider {
   private JaasRealm realm;
 
 
-  private BackingEngine getEngine(){
+  private BackingEngine getEngine() {
     for (AppConfigurationEntry entry : realm.getEntries()) {
-        String moduleClass = (String) entry.getOptions().get(ProxyLoginModule.PROPERTY_MODULE);
-        if (moduleClass != null) {
-          BackingEngineFactory factories =
-              backingEngineService.getEngineFactories().get(1);
-          Map<String, ?> options = entry.getOptions();
-          return factories.build(options);
-        }
+      String moduleClass = (String) entry.getOptions().get(ProxyLoginModule.PROPERTY_MODULE);
+      if (moduleClass != null) {
+        BackingEngineFactory factories =
+            backingEngineService.getEngineFactories().get(1);
+        Map<String, ?> options = entry.getOptions();
+        return factories.build(options);
       }
+    }
     return null;
   }
+
   @Override
   public void addUser(String u, String p) throws MeteoriteSecurityException {
-    if(getUsers().contains(u)){
+    if (getUsers().contains(u)) {
       throw new MeteoriteSecurityException("User already exists");
     }
     getEngine().addUser(u, p);
@@ -53,10 +70,9 @@ public class JaasUserManager implements IUserManagementProvider {
 
   @Override
   public void deleteUser(String u) throws MeteoriteSecurityException {
-    if(getUsers().contains(u)) {
+    if (getUsers().contains(u)) {
       getEngine().deleteUser(u);
-    }
-    else{
+    } else {
       throw new MeteoriteSecurityException("User Doesn't Exist");
     }
   }
@@ -64,7 +80,7 @@ public class JaasUserManager implements IUserManagementProvider {
   @Override
   public List<String> getUsers() throws MeteoriteSecurityException {
     List<String> users = new ArrayList<>();
-    for(org.apache.karaf.jaas.boot.principal.UserPrincipal user: getEngine().listUsers()){
+    for (org.apache.karaf.jaas.boot.principal.UserPrincipal user : getEngine().listUsers()) {
       users.add(user.getName());
     }
     return users;
@@ -75,7 +91,7 @@ public class JaasUserManager implements IUserManagementProvider {
     List<String> s = new ArrayList<>();
     List u2 = getUsers();
 
-    if(u2.contains(u)) {
+    if (u2.contains(u)) {
       for (Principal p : getEngine().listUsers()) {
         if (p.getName().equals(u)) {
           for (RolePrincipal r : getEngine().listRoles(p)) {
@@ -85,8 +101,7 @@ public class JaasUserManager implements IUserManagementProvider {
         }
       }
       return ImmutableList.copyOf(s);
-    }
-    else{
+    } else {
       throw new MeteoriteSecurityException("User does not exist");
     }
 
@@ -94,13 +109,12 @@ public class JaasUserManager implements IUserManagementProvider {
 
   @Override
   public void addRole(String u, String r) throws MeteoriteSecurityException {
-    for(Principal p :getEngine().listUsers()){
-      if(p.getName().equals(u)){
+    for (Principal p : getEngine().listUsers()) {
+      if (p.getName().equals(u)) {
         List<RolePrincipal> roles = getEngine().listRoles(p);
-        if(roles.size()==0){
+        if (roles.size() == 0) {
           getEngine().addRole(u, r);
-        }
-        else {
+        } else {
           for (RolePrincipal ro : roles) {
             if (!Arrays.asList(ro).contains(r)) {
               getEngine().addRole(u, r);
@@ -114,10 +128,9 @@ public class JaasUserManager implements IUserManagementProvider {
 
   @Override
   public void removeRole(String u, String r) throws MeteoriteSecurityException {
-    if(getRoles(u).contains(r)) {
+    if (getRoles(u).contains(r)) {
       getEngine().deleteRole(u, r);
-    }
-    else{
+    } else {
       throw new MeteoriteSecurityException("Role does not exist for user");
     }
   }
@@ -129,11 +142,11 @@ public class JaasUserManager implements IUserManagementProvider {
 
   @Override
   public boolean isAdmin(String u) throws MeteoriteSecurityException {
-    for(Principal p :getEngine().listUsers()) {
+    for (Principal p : getEngine().listUsers()) {
       if (p.getName().equals(u)) {
         List<RolePrincipal> roles = getEngine().listRoles(p);
-        for(RolePrincipal r : roles){
-          if(getAdminRoles().contains(r.getName())){
+        for (RolePrincipal r : roles) {
+          if (getAdminRoles().contains(r.getName())) {
             return true;
           }
         }
@@ -153,7 +166,7 @@ public class JaasUserManager implements IUserManagementProvider {
   }
 
   @Override
-  public void setRealm(JaasRealm realm){
+  public void setRealm(JaasRealm realm) {
     this.realm = realm;
   }
 }

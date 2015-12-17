@@ -33,7 +33,12 @@ import java.util.Dictionary;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
-import javax.crypto.*;
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.KeyGenerator;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import javax.servlet.http.HttpServletRequest;
 
@@ -114,7 +119,7 @@ public class TokenProviderImpl implements TokenProvider {
   }
 
   private void startCiphers() {
-    if(mencryptCipher == null || mdecryptCipher == null) {
+    if (mencryptCipher == null || mdecryptCipher == null) {
       try {
         mencryptCipher = Cipher.getInstance(ENCRYPTION_METHOD);
         mencryptCipher.init(Cipher.ENCRYPT_MODE, msecretKey);
@@ -180,7 +185,7 @@ public class TokenProviderImpl implements TokenProvider {
     return attributes;
   }
 
-  private void initKey(){
+  private void initKey() {
     Object key = "[randomkey]";
     if (key != null && RANDOM_KEY.equals(key.toString())) {
       // The value [randomkey] is intended for a single server setup. In this case we generate a
@@ -211,6 +216,7 @@ public class TokenProviderImpl implements TokenProvider {
 
     }
   }
+
   public String generateToken(final SortedMap<String, String> attributes) throws TokenProviderException {
 
 

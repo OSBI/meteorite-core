@@ -1,3 +1,19 @@
+/*
+ * Copyright 2015 OSBI Ltd
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package bi.meteorite.core.security.authentication;
 
 
@@ -67,7 +83,7 @@ public class TokenJAASAuthenticationFilter extends JAASAuthenticationFilter {
     try {
       SortedMap<String, String> valid = null;
       Map<String, Cookie> cookies = context.getCookies();
-      if(cookies.containsKey(TokenProvider.TOKEN_COOKIE_NAME)){
+      if (cookies.containsKey(TokenProvider.TOKEN_COOKIE_NAME)) {
         try {
           Cookie cookie = cookies.get(TokenProvider.TOKEN_COOKIE_NAME);
           valid = tokenProvider.verifyToken(cookie.getValue());
@@ -107,7 +123,7 @@ public class TokenJAASAuthenticationFilter extends JAASAuthenticationFilter {
 
         }
       }
-      if(valid == null || valid.size()==0) {
+      if (valid == null || valid.size() == 0) {
 
         CallbackHandler handler = getFirstCallbackHandler(m);
 
@@ -120,13 +136,13 @@ public class TokenJAASAuthenticationFilter extends JAASAuthenticationFilter {
         Set<Principal> principals = subject.getPrincipals();
 
         String s = "";
-        for(Principal role:principals){
-          if(role instanceof RolePrincipal){
-            s+=role.getName()+",";
+        for (Principal role : principals) {
+          if (role instanceof RolePrincipal) {
+            s += role.getName() + ",";
           }
 
         }
-        s = s.substring(0, s.length()-1);
+        s = s.substring(0, s.length() - 1);
 
         SortedMap<String, String> userMap = new TreeMap<>();
         userMap.put(TokenProvider.USERNAME, getUsername(handler));
@@ -152,7 +168,7 @@ public class TokenJAASAuthenticationFilter extends JAASAuthenticationFilter {
     }
     try {
       NameCallback usernameCallBack = new NameCallback("user");
-      handler.handle(new Callback[]{usernameCallBack });
+      handler.handle(new Callback[] { usernameCallBack });
       return usernameCallBack.getName();
     } catch (Exception e) {
       return null;
@@ -173,6 +189,9 @@ public class TokenJAASAuthenticationFilter extends JAASAuthenticationFilter {
     this.tokenProvider = tokenProvider;
   }
 
+  /**
+   * A Core User Principal.
+   */
   public class UserPrincipal implements Principal {
 
     private String name;

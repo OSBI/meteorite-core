@@ -14,12 +14,9 @@
  * limitations under the License.
  */
 
-
 package bi.meteorite.core.security.jaas;
 
 import bi.meteorite.core.api.security.AdminLoginService;
-
-import org.apache.karaf.jaas.config.JaasRealm;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,7 +42,7 @@ import javax.security.auth.login.LoginException;
 //@OsgiServiceProvider(classes = { AdminLoginService.class })
 public class JaasLoginManager implements AdminLoginService {
 
-  private static final Logger logger = LoggerFactory.getLogger(JaasLoginManager.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(JaasLoginManager.class);
   private String realm;
   private Subject subject;
   private ArrayList<String> roles = new ArrayList<>();
@@ -87,7 +84,7 @@ public class JaasLoginManager implements AdminLoginService {
     boolean authenticated;
     LoginCallbackHandler handler = new LoginCallbackHandler(username, password);
     try {
-      if(ctx == null){
+      if (ctx == null) {
         ctx = new LoginContext(realm, handler);
       }
       ctx.login();
@@ -110,7 +107,7 @@ public class JaasLoginManager implements AdminLoginService {
   public boolean logout(String username) {
     LoginCallbackHandler handler = new LoginCallbackHandler(username, null);
     try {
-      if(ctx == null){
+      if (ctx == null) {
         ctx = new LoginContext(realm, handler);
       }
       ctx.logout();
@@ -119,13 +116,13 @@ public class JaasLoginManager implements AdminLoginService {
       e.printStackTrace();
     }
 
-  return false;
+    return false;
   }
 
   public String getUsername() {
     Set<Principal> principals = subject.getPrincipals();
-    for(Principal p : principals){
-      if(p instanceof org.apache.karaf.jaas.boot.principal.UserPrincipal){
+    for (Principal p : principals) {
+      if (p instanceof org.apache.karaf.jaas.boot.principal.UserPrincipal) {
         return p.getName();
       }
     }
@@ -136,10 +133,10 @@ public class JaasLoginManager implements AdminLoginService {
   public List<String> getRoles() {
     List<String> s = new ArrayList<>();
     Set<Principal> principals = subject.getPrincipals();
-    System.out.println("size:"+principals.size());
-    for(Principal p : principals) {
+    System.out.println("size:" + principals.size());
+    for (Principal p : principals) {
       System.out.println(p.getClass());
-      logger.debug("Principal type:" + p.getClass());
+      LOGGER.debug("Principal type:" + p.getClass());
       if (p instanceof org.apache.karaf.jaas.boot.principal.RolePrincipal) {
         s.add(p.getName());
       }

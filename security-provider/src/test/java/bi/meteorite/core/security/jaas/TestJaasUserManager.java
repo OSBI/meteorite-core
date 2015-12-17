@@ -1,3 +1,19 @@
+/*
+ * Copyright 2015 OSBI Ltd
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package bi.meteorite.core.security.jaas;
 
 import bi.meteorite.core.api.security.IUserManagementProvider;
@@ -39,7 +55,7 @@ public class TestJaasUserManager {
   private IUserManagementProvider jaasUserManager;
 
   @Before
-  public void setupMockedBackend(){
+  public void setupMockedBackend() {
     backingengine = Mockito.mock(BackingEngineService.class);
     realm = Mockito.mock(JaasRealm.class);
     AppConfigurationEntry a = Mockito.mock(AppConfigurationEntry.class);
@@ -47,7 +63,7 @@ public class TestJaasUserManager {
     Map<String, Object> map = new HashMap<>();
     map.put("org.apache.karaf.jaas.module", "mock");
     when(a.getOptions().get(ProxyLoginModule.PROPERTY_MODULE)).thenReturn(map);
-    AppConfigurationEntry[] array = {a};
+    AppConfigurationEntry[] array = { a };
 
     when(realm.getEntries()).thenReturn(array);
     BackingEngineFactory backingEngineFactory = Mockito.mock(BackingEngineFactory.class);
@@ -58,7 +74,6 @@ public class TestJaasUserManager {
     l.add(backingEngineFactory);
     when(backingengine.getEngineFactories()).thenReturn(l);
     jaasUserManager = new JaasUserManager();
-
 
 
     jaasUserManager.setRealm(realm);
@@ -73,14 +88,13 @@ public class TestJaasUserManager {
 
   }
 
-  @Test(expected=MeteoriteSecurityException.class)
+  @Test(expected = MeteoriteSecurityException.class)
   public void testAddDuplicateUser() throws MeteoriteSecurityException {
 
     jaasUserManager.addUser("test", "password");
     jaasUserManager.addUser("test", "password");
 
   }
-
 
 
   @Test
@@ -94,7 +108,7 @@ public class TestJaasUserManager {
     assertThat(jaasUserManager.getUsers().size(), equalTo(0));
   }
 
-  @Test(expected=MeteoriteSecurityException.class)
+  @Test(expected = MeteoriteSecurityException.class)
   public void testDeleteNonExistentUser() throws MeteoriteSecurityException {
     assertThat(jaasUserManager.getUsers().size(), equalTo(0));
 
@@ -115,7 +129,7 @@ public class TestJaasUserManager {
 
   }
 
-  @Test(expected=MeteoriteSecurityException.class)
+  @Test(expected = MeteoriteSecurityException.class)
   public void testGetRolesNonExistentUser() throws MeteoriteSecurityException {
     jaasUserManager.addUser("test", "password");
 
@@ -152,7 +166,7 @@ public class TestJaasUserManager {
     assertThat(jaasUserManager.getRoles("test").size(), equalTo(0));
   }
 
-  @Test(expected=MeteoriteSecurityException.class)
+  @Test(expected = MeteoriteSecurityException.class)
   public void testDeleteNonExistentRole() throws MeteoriteSecurityException {
     jaasUserManager.addUser("test", "password");
 
@@ -164,13 +178,13 @@ public class TestJaasUserManager {
 
   @Ignore
   @Test
-  public void testIsAdmin(){
+  public void testIsAdmin() {
 
   }
 
   @Ignore
   @Test
-  public void testIsAdminNonExistentUser(){
+  public void testIsAdminNonExistentUser() {
 
   }
 
