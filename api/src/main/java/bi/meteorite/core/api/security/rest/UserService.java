@@ -23,6 +23,7 @@ import com.qmino.miredot.annotations.ReturnType;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
+import javax.annotation.security.RolesAllowed;
 
 /**
  * User creation and manipulation for administrators of Meteorite core.
@@ -121,6 +122,7 @@ public interface UserService {
   @Produces({ "application/json" })
   @Path("/user")
   @ReturnType("java.util.List<SaikuUser>")
+  @RolesAllowed("admin")
   Response getExistingUsers() throws MeteoriteSecurityException;
 
   /**

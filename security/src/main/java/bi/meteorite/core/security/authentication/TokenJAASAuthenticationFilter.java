@@ -45,6 +45,7 @@ public class TokenJAASAuthenticationFilter extends JAASAuthenticationFilter {
 
   private JAASLoginInterceptor interceptor;
   private TokenProvider tokenProvider;
+  private SecurityContext oldcontext;
 
   public TokenJAASAuthenticationFilter() {
     this.callbackHandlerProviders = new ArrayList<>();
@@ -57,6 +58,7 @@ public class TokenJAASAuthenticationFilter extends JAASAuthenticationFilter {
       }
     };
     interceptor.setUseDoAs(false);
+    interceptor.setContextName("karaf");
   }
 
   @Override
@@ -96,9 +98,13 @@ public class TokenJAASAuthenticationFilter extends JAASAuthenticationFilter {
             }
           };
 
+          oldcontext = context.getSecurityContext();
           context.setSecurityContext(c);
         } catch (TokenProviderException e) {
-          e.printStackTrace();
+          //e.printStackTrace();
+          //Token auth failed replace with old context for PW login.
+          context.setSecurityContext(oldcontext);
+
         }
       }
       if(valid == null || valid.size()==0) {

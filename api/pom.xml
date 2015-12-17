@@ -17,6 +17,11 @@
   </properties>
   <dependencies>
     <dependency>
+      <groupId>javax.annotation</groupId>
+      <artifactId>jsr250-api</artifactId>
+      <version>1.0</version>
+    </dependency>
+    <dependency>
       <groupId>com.qmino</groupId>
       <artifactId>miredot-annotations</artifactId>
       <scope>provided</scope>

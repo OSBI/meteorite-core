@@ -33,7 +33,13 @@ public abstract class TokenAbstractAutorizingInInterceptor extends AbstractAutho
   public void handleMessage(Message message) throws Fault {
     Method method = getTargetMethod(message);
     SecurityContext sc = message.get(SecurityContext.class);
-    if (sc != null && sc.getUserPrincipal() != null) {
+    if(sc == null){
+      org.apache.cxf.security.SecurityContext sc2 = message.get(org.apache.cxf.security.SecurityContext.class);
+      if (authorize(sc2, method)) {
+        return;
+      }
+    }
+    else if (sc != null && sc.getUserPrincipal() != null) {
       if (authorize(sc, method)) {
         return;
       }

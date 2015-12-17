@@ -61,7 +61,8 @@
             <cxf:logging/>
             <bean class="org.apache.cxf.interceptor.security.JAASAuthenticationFeature">
                 <property name="contextName" value="karaf" />
-                <property name="reportFault" value="true" /> </bean>
+                <property name="reportFault" value="true" />
+            </bean>
         </jaxrs:features>
         <!--<jaxrs:extensionMappings>
              <entry key="json" value="application/json" />
