@@ -72,7 +72,7 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public Response getExistingUsers() throws MeteoriteSecurityException {
-    return Response.ok("{\"login\":{\"password\":\"pass\",\"username\":\"test1\"}}").build();
+    return Response.ok("{\"login\":{\"password\":\"pass\",\"username\":\"test2\"}}").build();
   }
 
   @Override
