@@ -105,13 +105,13 @@ public interface IUserManagementProvider {
 
   /**
    * Set the backing service engine that drives the security.
-   * @param backingEngineService
+   * @param backingEngineService the backing engine service.
    */
   void setBackingEngineService(BackingEngineService backingEngineService);
 
   /**
    * Set the JaaS realm.
-   * @param realm
+   * @param realm the JAAS Realm
    */
   void setRealm(JaasRealm realm);
 }

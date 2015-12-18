@@ -27,7 +27,7 @@ import javax.inject.Singleton;
 import javax.ws.rs.core.Response;
 
 /**
- * Created by bugg on 10/07/15.
+ * User Service Rest Implementation.
  */
 @OsgiServiceProvider(classes = { UserService.class })
 @Singleton

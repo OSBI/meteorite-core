@@ -35,7 +35,7 @@ public interface AdminLoginService {
 
   /**
    * Set the JaaS realm.
-   * @param realm
+   * @param realm The JAAS Realm
    */
   void setRealm(String realm);
 

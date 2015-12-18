@@ -86,7 +86,7 @@ public interface IRepositoryManager {
 
   /**
    * Rollback an object to a previous version.
-   * @param node
+   * @param node the node to rollback on.
    */
   void rollbackNode(MeteoriteNode node);
 

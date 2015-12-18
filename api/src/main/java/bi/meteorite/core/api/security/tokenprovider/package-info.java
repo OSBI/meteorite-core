@@ -15,6 +15,6 @@
  */
 
 /**
- * Created by bugg on 20/07/15.
+ * Token Provider Implementations.
  */
 package bi.meteorite.core.api.security.tokenprovider;

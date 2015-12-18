@@ -85,7 +85,6 @@ public interface TokenProvider {
    * @param encryptedToken The encrypted token to verify
    * @return List of original attributes, plus nonce and timestamp attributes.
    * @throws TokenProviderException In case an unexpected error occurred during token generation.
-   * @throws InvalidTokenException  In case the provided token is invalid
    */
   SortedMap<String, String> verifyToken(String encryptedToken) throws TokenProviderException;
 

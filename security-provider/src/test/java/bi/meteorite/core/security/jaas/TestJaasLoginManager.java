@@ -45,11 +45,10 @@ import javax.security.auth.login.LoginContext;
 import javax.security.auth.login.LoginException;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Matchers.anyMap;
 import static org.mockito.Mockito.*;
 
 /**
- * Created by bugg on 03/12/15.
+ * JAAS Login Tests.
  */
 public class TestJaasLoginManager {
 

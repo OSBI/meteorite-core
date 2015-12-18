@@ -45,9 +45,9 @@ public class JaasLoginManager implements AdminLoginService {
   private static final Logger LOGGER = LoggerFactory.getLogger(JaasLoginManager.class);
   private String realm;
   private Subject subject;
-  private ArrayList<String> roles = new ArrayList<>();
+  private final ArrayList<String> roles = new ArrayList<>();
   public static final String ROLES_GROUP_NAME = "ROLES";
-  public static final String ROLES_PREFIX = "ROLE_";
+  private static final String ROLES_PREFIX = "ROLE_";
   private LoginContext ctx;
 
   /**
@@ -55,8 +55,8 @@ public class JaasLoginManager implements AdminLoginService {
    */
   private class LoginCallbackHandler implements CallbackHandler {
 
-    private String username;
-    private String password;
+    private final String username;
+    private final String password;
 
 
     public LoginCallbackHandler(String username, String password) {

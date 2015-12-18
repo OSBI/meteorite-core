@@ -15,6 +15,6 @@
  */
 
 /**
- * Created by bugg on 03/07/15.
+ * Repository package.
  */
 package bi.meteorite.core.api.repository;

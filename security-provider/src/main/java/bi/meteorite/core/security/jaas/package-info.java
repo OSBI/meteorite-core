@@ -16,6 +16,6 @@
 
 
 /**
- * Created by bugg on 20/07/15.
+ * JAAS Security Interfaces.
  */
 package bi.meteorite.core.security.jaas;

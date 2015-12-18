@@ -15,6 +15,6 @@
  */
 
 /**
- * Created by bugg on 18/12/15.
+ * Utility classes.
  */
 package bi.meteorite.util;

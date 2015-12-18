@@ -42,12 +42,8 @@ import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import javax.servlet.http.HttpServletRequest;
 
-/*import org.osgi.service.cm.ConfigurationException;
-import org.osgi.service.cm.ManagedService;
-import org.osgi.service.log.LogService;*/
-
 /**
- * Created by bugg on 20/07/15.
+ * Token Provider.
  */
 public class TokenProviderImpl implements TokenProvider {
 
@@ -151,8 +147,8 @@ public class TokenProviderImpl implements TokenProvider {
 
   // Converts a map of attribute keys and values into a single String representation, using
   // URL encoding
-  public String attributesToString(final SortedMap<String, String> attributes) throws UnsupportedEncodingException {
-    StringBuffer result = new StringBuffer();
+  private String attributesToString(final SortedMap<String, String> attributes) throws UnsupportedEncodingException {
+    StringBuilder result = new StringBuilder();
     if (attributes != null && attributes.size() > 0) {
       for (String key : attributes.keySet()) {
         String value = attributes.get(key);
@@ -170,7 +166,7 @@ public class TokenProviderImpl implements TokenProvider {
   }
 
   // Converts a single String into a map of attribute keys and values using URL decoding
-  public SortedMap<String, String> stringToAttributes(final String string) throws UnsupportedEncodingException {
+  private SortedMap<String, String> stringToAttributes(final String string) throws UnsupportedEncodingException {
     SortedMap<String, String> attributes = null;
     if (string != null && !"".equals(string)) {
       attributes = new TreeMap<>();

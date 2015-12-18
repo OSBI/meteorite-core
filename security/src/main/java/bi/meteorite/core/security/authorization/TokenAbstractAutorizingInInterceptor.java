@@ -66,13 +66,13 @@ public abstract class TokenAbstractAutorizingInInterceptor extends AbstractAutho
     throw new AccessDeniedException("Unauthorized");
   }
 
-  protected boolean authorize(SecurityContext sc, Method method) {
+  private boolean authorize(SecurityContext sc, Method method) {
     List<String> expectedRoles = getExpectedRoles(method);
     if (expectedRoles.isEmpty()) {
 
       List<String> denyRoles = getDenyRoles(method);
 
-      return denyRoles.isEmpty() ? true : isUserInRole(sc, denyRoles, true);
+      return denyRoles.isEmpty() || isUserInRole(sc, denyRoles, true);
     }
 
     if (isUserInRole(sc, expectedRoles, false)) {

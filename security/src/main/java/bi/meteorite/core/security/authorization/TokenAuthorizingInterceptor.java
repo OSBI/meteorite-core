@@ -28,13 +28,13 @@ import java.util.Map;
 import javax.ws.rs.core.SecurityContext;
 
 /**
- * Created by bugg on 17/12/15.
+ * Token Based Authorizing Interceptor.
  */
 public class TokenAuthorizingInterceptor extends TokenAbstractAutorizingInInterceptor {
 
-  protected Map<String, List<String>> methodRolesMap = new HashMap<String, List<String>>();
-  protected Map<String, List<String>> userRolesMap = Collections.emptyMap();
-  protected List<String> globalRoles = Collections.emptyList();
+  private final Map<String, List<String>> methodRolesMap = new HashMap<>();
+  private Map<String, List<String>> userRolesMap = Collections.emptyMap();
+  private List<String> globalRoles = Collections.emptyList();
   private boolean checkConfiguredRolesOnly;
 
   public TokenAuthorizingInterceptor() {
@@ -67,15 +67,10 @@ public class TokenAuthorizingInterceptor extends TokenAbstractAutorizingInInterc
     }
   }
 
-  protected String createMethodSig(Method method) {
+  private String createMethodSig(Method method) {
     StringBuilder b = new StringBuilder(method.getReturnType().getName());
     b.append(' ').append(method.getName()).append('(');
-    boolean first = true;
     for (Class<?> cls : method.getParameterTypes()) {
-      if (!first) {
-        b.append(", ");
-        first = false;
-      }
       b.append(cls.getName());
     }
     b.append(')');
@@ -112,7 +107,7 @@ public class TokenAuthorizingInterceptor extends TokenAbstractAutorizingInInterc
   }
 
   private static Map<String, List<String>> parseRolesMap(Map<String, String> rolesMap) {
-    Map<String, List<String>> map = new HashMap<String, List<String>>();
+    Map<String, List<String>> map = new HashMap<>();
     for (Map.Entry<String, String> entry : rolesMap.entrySet()) {
       map.put(entry.getKey(), Arrays.asList(StringUtils.split(entry.getValue(), " ")));
     }

@@ -15,6 +15,6 @@
  */
 
 /**
- * Created by bugg on 03/07/15.
+ * Security package.
  */
 package bi.meteorite.core.security;

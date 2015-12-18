@@ -27,7 +27,7 @@ import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.NewCookie;
 
 /**
- * Created by bugg on 16/12/15.
+ * Token Response Filter.
  */
 public class TokenResponseFilter implements ContainerResponseFilter {
 

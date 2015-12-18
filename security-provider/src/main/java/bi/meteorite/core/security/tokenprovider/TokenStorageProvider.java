@@ -31,15 +31,15 @@ public interface TokenStorageProvider {
    * Updates all properties of the token identified by the token key (returned by getToken()). If no token exists with
    * this identifier, nothing happens.
    *
-   * @param token
+   * @param token the token to update.
    */
   void updateToken(Token token);
 
   /**
    * Returns a token from the store.
    *
-   * @param token
-   * @return
+   * @param token the token to return from the store.
+   * @return the token object.
    */
   Token getToken(String token);
 

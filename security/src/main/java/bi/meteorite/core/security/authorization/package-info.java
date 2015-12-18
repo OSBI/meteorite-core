@@ -15,6 +15,6 @@
  */
 
 /**
- * Created by bugg on 17/12/15.
+ * CXF Token Authorization.
  */
 package bi.meteorite.core.security.authorization;

@@ -15,6 +15,6 @@
  */
 
 /**
- * Created by bugg on 09/07/15.
+ * Security Rest Interfaces.
  */
 package bi.meteorite.core.api.security.rest;

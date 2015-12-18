@@ -46,18 +46,16 @@ import static org.mockito.Matchers.anyMap;
 import static org.mockito.Mockito.when;
 
 /**
- * Created by bugg on 30/11/15.
+ * JAAS User Management Tests.
  */
 public class TestJaasUserManager {
 
-  private BackingEngineService backingengine;
-  private JaasRealm realm;
   private IUserManagementProvider jaasUserManager;
 
   @Before
   public void setupMockedBackend() {
-    backingengine = Mockito.mock(BackingEngineService.class);
-    realm = Mockito.mock(JaasRealm.class);
+    BackingEngineService backingengine = Mockito.mock(BackingEngineService.class);
+    JaasRealm realm = Mockito.mock(JaasRealm.class);
     AppConfigurationEntry a = Mockito.mock(AppConfigurationEntry.class);
 
     Map<String, Object> map = new HashMap<>();

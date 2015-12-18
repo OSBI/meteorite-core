@@ -40,11 +40,11 @@ import static org.ops4j.pax.exam.karaf.options.KarafDistributionOption.configure
 import static org.ops4j.pax.exam.karaf.options.KarafDistributionOption.editConfigurationFilePut;
 
 /**
- * Created by bugg on 18/12/15.
+ * Bootstrap for the integration tests.
  */
 public class ITestBootstrap {
 
-  Client client = ClientBuilder.newClient();
+  private final Client client = ClientBuilder.newClient();
 
   @Configuration
   public Option[] config() {
@@ -108,13 +108,13 @@ public class ITestBootstrap {
     );
   }
 
-  public static String karafVersion() {
+  private static String karafVersion() {
     ConfigurationManager cm = new ConfigurationManager();
     return cm.getProperty("pax.exam.karaf.version", "4.0.1");
   }
 
 
-  protected String getBasicAuthentication(String user, String password) {
+  private String getBasicAuthentication(String user, String password) {
     String token = user + ":" + password;
     try {
       return "Basic " + DatatypeConverter.printBase64Binary(token.getBytes("UTF-8"));

@@ -26,7 +26,7 @@ import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.core.Response;
 
 /**
- * Created by bugg on 16/12/15.
+ * Token Authorizing Filter.
  */
 @Priority(Priorities.AUTHORIZATION)
 public class TokenAuthorizingFilter implements ContainerRequestFilter {

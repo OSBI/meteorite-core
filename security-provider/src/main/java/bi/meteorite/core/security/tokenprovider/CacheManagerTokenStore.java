@@ -24,7 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Created by bugg on 20/07/15.
+ * Token Storage.
  */
 public class CacheManagerTokenStore implements TokenStorageProvider {
 

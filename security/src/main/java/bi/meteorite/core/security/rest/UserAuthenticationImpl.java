@@ -27,14 +27,13 @@ import javax.inject.Singleton;
 import javax.ws.rs.core.Response;
 
 /**
- * Created by bugg on 20/07/15.
+ * User Authentication Implementation.
  */
 @OsgiServiceProvider(classes = { UserAuthentication.class })
 @Singleton
 public class UserAuthenticationImpl implements UserAuthentication {
 
   private volatile AdminLoginService adminLoginService;
-  private volatile TokenProvider tokenProvider;
 
   @Override
   public Response logout(String username) throws TokenProviderException {
@@ -51,6 +50,6 @@ public class UserAuthenticationImpl implements UserAuthentication {
   }
 
   public void setTokenProvider(TokenProvider tokenProvider) {
-    this.tokenProvider = tokenProvider;
+    TokenProvider tokenProvider1 = tokenProvider;
   }
 }

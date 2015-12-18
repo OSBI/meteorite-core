@@ -109,7 +109,7 @@ public class Token implements Serializable, IToken {
   /**
    * Sets the timestamp.
    *
-   * @param timestamp
+   * @param timestamp the timestamp.
    */
   @Override
   public void setTimestamp(final long timestamp) {
@@ -119,7 +119,7 @@ public class Token implements Serializable, IToken {
   /**
    * Returns the map of arbitrary properties.
    *
-   * @return
+   * @return a property map.
    */
   @Override
   public Map<String, String> getProperties() {
@@ -153,7 +153,7 @@ public class Token implements Serializable, IToken {
    *
    * @param validityDuration The amount of milliseconds the token is valid. Can be 0. If the validityDuration is smaller
    *                         then 0, this method always returns false.
-   * @return
+   * @return an expired flag.
    */
   @Override
   public boolean isExpired(final long validityDuration) {

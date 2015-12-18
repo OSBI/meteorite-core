@@ -23,7 +23,7 @@ import bi.meteorite.core.api.security.exceptions.MeteoriteSecurityException;
 import java.util.List;
 
 /**
- * Created by bugg on 03/07/15.
+ * User Management Implementation.
  */
 public class UserManager implements IUserManagement {
   @Override

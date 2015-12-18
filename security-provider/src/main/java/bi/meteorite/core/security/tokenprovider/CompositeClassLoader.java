@@ -36,7 +36,7 @@ public class CompositeClassLoader extends ClassLoader {
   /**
    * Add a loader to the n
    *
-   * @param classLoader
+   * @param classLoader The classloader to add.
    */
   public void add(ClassLoader classLoader) {
     if (classLoader != null) {

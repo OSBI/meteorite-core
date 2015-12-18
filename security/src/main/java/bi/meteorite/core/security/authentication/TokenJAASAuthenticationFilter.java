@@ -59,7 +59,7 @@ public class TokenJAASAuthenticationFilter extends JAASAuthenticationFilter {
 
   private final ArrayList<CallbackHandlerProvider> callbackHandlerProviders;
 
-  private JAASLoginInterceptor interceptor;
+  private final JAASLoginInterceptor interceptor;
   private TokenProvider tokenProvider;
   private SecurityContext oldcontext;
 
@@ -89,7 +89,7 @@ public class TokenJAASAuthenticationFilter extends JAASAuthenticationFilter {
           valid = tokenProvider.verifyToken(cookie.getValue());
           final SortedMap<String, String> finalValid = valid;
           SecurityContext c = new SecurityContext() {
-            java.security.Principal p = new UserPrincipal(finalValid.get(TokenProvider.USERNAME));
+            final java.security.Principal p = new UserPrincipal(finalValid.get(TokenProvider.USERNAME));
 
             @Override
             public Principal getUserPrincipal() {
@@ -194,7 +194,7 @@ public class TokenJAASAuthenticationFilter extends JAASAuthenticationFilter {
    */
   public class UserPrincipal implements Principal {
 
-    private String name;
+    private final String name;
 
     @Override
     public String getName() {

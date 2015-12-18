@@ -31,7 +31,7 @@ import com.google.common.collect.ImmutableList;
 
 import java.security.Principal;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -116,7 +116,7 @@ public class JaasUserManager implements IUserManagementProvider {
           getEngine().addRole(u, r);
         } else {
           for (RolePrincipal ro : roles) {
-            if (!Arrays.asList(ro).contains(r)) {
+            if (!Collections.singletonList(ro).contains(r)) {
               getEngine().addRole(u, r);
             }
           }

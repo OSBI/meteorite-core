@@ -15,6 +15,6 @@
  */
 
 /**
- * Created by bugg on 30/09/15.
+ * Root package.
  */
 package bi.meteorite;
