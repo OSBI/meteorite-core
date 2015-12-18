@@ -26,6 +26,7 @@
 
     <reference id="userManager" interface="bi.meteorite.core.api.security.IUserManagementProvider"/>
 
+
     <!-- REST service -->
 
     <bean id="cxfServlet" class="org.apache.cxf.transport.servlet.CXFServlet"/>

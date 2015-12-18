@@ -17,6 +17,7 @@
 package bi.meteorite.core.security.jaas;
 
 import bi.meteorite.core.api.objects.MeteoriteUser;
+import bi.meteorite.core.api.persistence.UserService;
 import bi.meteorite.core.api.security.IUserManagementProvider;
 import bi.meteorite.core.api.security.exceptions.MeteoriteSecurityException;
 import bi.meteorite.core.security.objects.User;
@@ -46,7 +47,7 @@ public class JaasUserManager implements IUserManagementProvider {
 
   private BackingEngineService backingEngineService;
   private JaasRealm realm;
-
+  private UserService userService;
 
   private BackingEngine getEngine() {
     for (AppConfigurationEntry entry : realm.getEntries()) {
@@ -80,6 +81,10 @@ public class JaasUserManager implements IUserManagementProvider {
 
   @Override
   public List<String> getUsers() throws MeteoriteSecurityException {
+    MeteoriteUser u = new User();
+    u.setId("1234");
+    u.setUsername("test");
+    userService.addUser(u);
     List<String> users = new ArrayList<>();
     for (org.apache.karaf.jaas.boot.principal.UserPrincipal user : getEngine().listUsers()) {
       users.add(user.getName());
@@ -183,6 +188,10 @@ public class JaasUserManager implements IUserManagementProvider {
   @Override
   public void setRealm(JaasRealm realm) {
     this.realm = realm;
+  }
+
+  public void setUserService(UserService userService) {
+    this.userService = userService;
   }
 }
 

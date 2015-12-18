@@ -12,6 +12,7 @@
     <module>api</module>
     <module>security-provider</module>
     <module>security</module>
+    <module>meteorite-persistence</module>
     <module>features</module>
     <module>karaf</module>
     <module>meteorite-core-itests</module>
@@ -298,6 +299,14 @@
       <id>Maven Central</id>
       <name>Maven Central</name>
       <url>http://repo1.maven.org/maven2</url>
+    </repository>
+    <repository>
+      <id>Spring release</id>
+      <url>http://repository.springsource.com/maven/bundles/release</url>
+    </repository>
+    <repository>
+      <id>spring external</id>
+      <url>http://repository.springsource.com/maven/bundles/external</url>
     </repository>
   </repositories>
   <scm>

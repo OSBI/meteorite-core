@@ -6,6 +6,9 @@
     <!-- Get Hazelcast from Cellar -->
     <reference id="cacheservice" interface="com.hazelcast.core.HazelcastInstance"/>
 
+    <reference id="persistenceUser" interface="bi.meteorite.core.api.persistence.UserService"/>
+
+
     <!-- JAAS Realm for user management -->
     <reference id="realm" interface="org.apache.karaf.jaas.config.JaasRealm"/>
 
@@ -34,6 +37,7 @@
     <bean id="userManager" class="bi.meteorite.core.security.jaas.JaasUserManager">
         <property name="backingEngineService" ref="engineService"/>
         <property name="realm" ref="realm"/>
+        <property name="userService" ref="persistenceUser"/>
     </bean>
 
 
