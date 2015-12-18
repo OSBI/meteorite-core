@@ -18,51 +18,51 @@ package bi.meteorite.core.security.hibernate;
 
 import bi.meteorite.core.api.objects.MeteoriteUser;
 import bi.meteorite.core.api.persistence.UserService;
+import bi.meteorite.core.security.hibernate.entity.Users;
 
-import org.ops4j.pax.cdi.api.OsgiServiceProvider;
-import org.ops4j.pax.cdi.api.Properties;
-import org.ops4j.pax.cdi.api.Property;
-
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 import javax.inject.Singleton;
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.transaction.Transactional;
 
 /**
  * Implementation for hibernate persistence of users.
  */
-@OsgiServiceProvider(classes = { UserService.class })
-// The properties below allow to transparently export the service as a web service using Distributed OSGi
-@Properties({
-    @Property(name = "service.exported.interfaces", value = "*")
-})
 @Singleton
 @Transactional
 public class UserServiceImpl implements UserService {
 
-  @PersistenceContext(unitName = "userlist")
   EntityManager em;
 
   @Override
   @Transactional(Transactional.TxType.SUPPORTS)
   public MeteoriteUser getUser(String id) {
-    return em.find(MeteoriteUser.class, id);
+    Users user = em.find(Users.class, id);
+    return user.convert(user);
   }
 
   @Override
   public void addUser(MeteoriteUser user) {
-    em.persist(user);
+    em.persist(new Users(user.getUsername(), user.getPassword(), Arrays.asList(user.getRoles()),
+        user.getOrgId(), user.getEmail()));
     em.flush();
   }
 
   @Transactional(Transactional.TxType.SUPPORTS)
   @Override
   public Collection<MeteoriteUser> getUsers() {
-    CriteriaQuery<MeteoriteUser> query = em.getCriteriaBuilder().createQuery(MeteoriteUser.class);
-    return em.createQuery(query.select(query.from(MeteoriteUser.class))).getResultList();
+    CriteriaQuery<Users> query = em.getCriteriaBuilder().createQuery(Users.class);
+    List<Users> collection = em.createQuery(query.select(query.from(Users.class))).getResultList();
+    List<MeteoriteUser> m = new ArrayList<>();
+    for (Users c : collection) {
+      m.add(c.convert(c));
+    }
+    return m;
   }
 
   @Override
@@ -75,7 +75,7 @@ public class UserServiceImpl implements UserService {
     em.remove(getUser(id));
   }
 
-  public void setEm(EntityManager em) {
+  public void setEntityManager(EntityManager em) {
     this.em = em;
   }
 }

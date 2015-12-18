@@ -108,7 +108,7 @@ public interface IUserManagementProvider {
    * @return a Meteorite User.
    * @throws MeteoriteSecurityException
    */
-  MeteoriteUser getUser(String id) throws MeteoriteSecurityException;
+  MeteoriteUser getUser(int id) throws MeteoriteSecurityException;
 
   /**
    * Set the backing service engine that drives the security.

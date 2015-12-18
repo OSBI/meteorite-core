@@ -68,7 +68,7 @@ public class User implements MeteoriteUser {
   }
 
   @Override
-  public void setId(String id) {
+  public void setId(int id) {
 
   }
 

@@ -81,10 +81,6 @@ public class JaasUserManager implements IUserManagementProvider {
 
   @Override
   public List<String> getUsers() throws MeteoriteSecurityException {
-    MeteoriteUser u = new User();
-    u.setId("1234");
-    u.setUsername("test");
-    userService.addUser(u);
     List<String> users = new ArrayList<>();
     for (org.apache.karaf.jaas.boot.principal.UserPrincipal user : getEngine().listUsers()) {
       users.add(user.getName());
@@ -167,12 +163,12 @@ public class JaasUserManager implements IUserManagementProvider {
   }
 
   @Override
-  public MeteoriteUser getUser(String id) throws MeteoriteSecurityException {
+  public MeteoriteUser getUser(int id) throws MeteoriteSecurityException {
     for (org.apache.karaf.jaas.boot.principal.UserPrincipal user : getEngine().listUsers()) {
       if (user.getName().equals(id)) {
         MeteoriteUser u = new User();
         u.setId(id);
-        u.setUsername(id);
+        u.setUsername(u.getUsername());
         return u;
       }
     }

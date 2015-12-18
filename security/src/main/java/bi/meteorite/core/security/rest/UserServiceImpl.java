@@ -76,7 +76,7 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public Response getUser(String id) throws MeteoriteSecurityException {
+  public Response getUser(int id) throws MeteoriteSecurityException {
     return Response.ok(iUserManagementProvider.getUser(id)).build();
   }
 

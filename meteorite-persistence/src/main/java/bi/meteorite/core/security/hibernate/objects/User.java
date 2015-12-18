@@ -18,33 +18,10 @@ package bi.meteorite.core.security.hibernate.objects;
 
 import bi.meteorite.core.api.objects.MeteoriteUser;
 
-import java.util.List;
-
-import javax.persistence.Id;
-
 /**
- * An annotated user object for persistence.
+ * A User Object
  */
-public class HibernateUser implements MeteoriteUser {
-
-  @Id
-  String id;
-  String username;
-  String password;
-  List<String> roles;
-  String orgId;
-  String email;
-
-  public HibernateUser(String id, String username, String password, List<String> roles, String orgId,
-                       String email) {
-    this.id = id;
-    this.username = username;
-    this.password = password;
-    this.roles = roles;
-    this.orgId = orgId;
-    this.email = email;
-  }
-
+public class User implements MeteoriteUser {
   @Override
   public String getUsername() {
     return null;
@@ -91,7 +68,7 @@ public class HibernateUser implements MeteoriteUser {
   }
 
   @Override
-  public void setId(String id) {
+  public void setId(int id) {
 
   }
 

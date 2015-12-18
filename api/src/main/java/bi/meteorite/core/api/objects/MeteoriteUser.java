@@ -79,7 +79,7 @@ public interface MeteoriteUser {
    * Set the users id.
    * @param id the id.
    */
-  void setId(String id);
+  void setId(int id);
 
   /**
    * Get the organization id.

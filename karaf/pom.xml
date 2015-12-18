@@ -171,10 +171,10 @@
             <feature>pax-cdi</feature>
             <feature>transaction</feature>
             <feature>jndi</feature>
-            <feature>jpa</feature>
+            <feature>jpa/1.0.4</feature>
             <feature>jdbc</feature>
             <feature>pax-jdbc-h2</feature>
-            <feature> pax-jdbc-config</feature>
+            <feature>pax-jdbc-config</feature>
             <feature>pax-jdbc-pool-dbcp2</feature>
           </bootFeatures>
           <installedFeatures>

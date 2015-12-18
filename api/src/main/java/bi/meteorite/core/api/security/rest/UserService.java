@@ -143,7 +143,7 @@ public interface UserService {
   @Produces({ "application/json" })
   @Path("/user/lookup/{id}")
   @ReturnType("bi.meteorite.core.api.objects.MeteoriteUser")
-  Response getUser(@PathParam("id") String id) throws MeteoriteSecurityException;
+  Response getUser(@PathParam("id") int id) throws MeteoriteSecurityException;
 
   /**
    * Discover who is logged in.

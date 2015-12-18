@@ -104,7 +104,8 @@
                         <Export-Package>
                         </Export-Package>
                         <Import-Package>!javax.transaction, javax.transaction;version="[1.1,2)", *,
-                            org.hibernate.proxy, javassist.util.proxy</Import-Package>
+                            org.hibernate.proxy, javassist.util.proxy
+                        </Import-Package>
                         <Meta-Persistence>META-INF/persistence.xml</Meta-Persistence>
                     </instructions>
                 </configuration>
