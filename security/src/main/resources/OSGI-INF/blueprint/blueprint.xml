@@ -10,6 +10,7 @@
 
 
     <bean id="taskServiceImpl" class="bi.meteorite.core.security.rest.UserServiceImpl">
+        <property name="iUserManagementProvider" ref="userManager"/>
     </bean>
 
     <bean id="userAuthenticationImpl" class="bi.meteorite.core.security.rest.UserAuthenticationImpl">
@@ -22,6 +23,8 @@
     <reference id="tokenProvider" interface="bi.meteorite.core.api.security.tokenprovider.TokenProvider"/>
 
     <reference id="loginService" interface="bi.meteorite.core.api.security.AdminLoginService"/>
+
+    <reference id="userManager" interface="bi.meteorite.core.api.security.IUserManagementProvider"/>
 
     <!-- REST service -->
 

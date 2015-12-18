@@ -73,13 +73,13 @@ public interface MeteoriteUser {
    * Get the users unique id
    * @return the id
    */
-  int getId();
+  String getId();
 
   /**
    * Set the users id.
    * @param id the id.
    */
-  void setId(int id);
+  void setId(String id);
 
   /**
    * Get the organization id.

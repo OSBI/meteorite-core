@@ -39,14 +39,12 @@ public class UserServiceImpl implements UserService {
   @Override
   public Response addUser(MeteoriteUser u) throws MeteoriteSecurityException {
     iUserManagementProvider.addUser(u.getUsername(), u.getPassword());
-    //TODO add other information
     return Response.ok().build();
   }
 
   @Override
   public Response modifyUser(MeteoriteUser u) throws MeteoriteSecurityException {
-    iUserManagementProvider.updateUser(u);
-    return Response.ok().build();
+    return Response.ok(iUserManagementProvider.updateUser(u)).build();
   }
 
   @Override
@@ -56,32 +54,38 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public Response deleteUser(int id) throws MeteoriteSecurityException {
-    return null;
+  public Response deleteUser(String id) throws MeteoriteSecurityException {
+    iUserManagementProvider.deleteUser(id);
+    return Response.ok().build();
   }
 
   @Override
-  public Response addGroup(int id, int group) throws MeteoriteSecurityException {
-    return null;
+  public Response addRole(String id, int group) throws MeteoriteSecurityException {
+    return Response.serverError().build();
   }
 
   @Override
-  public Response addGroup(int id, String group) throws MeteoriteSecurityException {
-    return null;
+  public Response addRole(String id, String group) throws MeteoriteSecurityException {
+    iUserManagementProvider.addRole(id, group);
+    return Response.ok().build();
   }
 
   @Override
   public Response getExistingUsers() throws MeteoriteSecurityException {
-    return Response.ok("{\"login\":{\"password\":\"pass\",\"username\":\"test2\"}}").build();
+    return Response.ok(iUserManagementProvider.getUsers()).build();
   }
 
   @Override
-  public Response getUser(int id) throws MeteoriteSecurityException {
-    return null;
+  public Response getUser(String id) throws MeteoriteSecurityException {
+    return Response.ok(iUserManagementProvider.getUser(id)).build();
   }
 
   @Override
   public Response whoami() throws MeteoriteSecurityException {
     return Response.ok("{\"login\":{\"password\":\"pass\",\"username\":\"test3\"}}").build();
+  }
+
+  public void setiUserManagementProvider(IUserManagementProvider iUserManagementProvider) {
+    this.iUserManagementProvider = iUserManagementProvider;
   }
 }

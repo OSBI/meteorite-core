@@ -91,7 +91,7 @@ public interface UserService {
   @Produces({ "application/json" })
   @Path("/user/lookup/{userid}")
   @ReturnType("bi.meteorite.core.api.objects.MeteoriteUser")
-  Response deleteUser(@PathParam("userid") int id) throws MeteoriteSecurityException;
+  Response deleteUser(@PathParam("userid") String id) throws MeteoriteSecurityException;
 
   /**
    * Add user to a group.
@@ -104,7 +104,7 @@ public interface UserService {
   @Produces({ "application/json" })
   @Consumes({ "application/json" })
   @Path("/user/lookup/{id}/group/{gid}")
-  Response addGroup(@PathParam("id") int id, @PathParam("gid") int group) throws MeteoriteSecurityException;
+  Response addRole(@PathParam("id") String id, @PathParam("gid") int group) throws MeteoriteSecurityException;
 
   /**
    * Add user to a group by group name.
@@ -117,7 +117,7 @@ public interface UserService {
   @Produces({ "application/json" })
   @Consumes({ "application/json" })
   @Path("/user/lookup/{id}/group/{group}")
-  Response addGroup(@PathParam("id") int id, @PathParam("group") String group) throws MeteoriteSecurityException;
+  Response addRole(@PathParam("id") String id, @PathParam("group") String group) throws MeteoriteSecurityException;
 
   /**
    * Get a list of existing users.
@@ -143,7 +143,7 @@ public interface UserService {
   @Produces({ "application/json" })
   @Path("/user/lookup/{id}")
   @ReturnType("bi.meteorite.core.api.objects.MeteoriteUser")
-  Response getUser(@PathParam("id") int id) throws MeteoriteSecurityException;
+  Response getUser(@PathParam("id") String id) throws MeteoriteSecurityException;
 
   /**
    * Discover who is logged in.

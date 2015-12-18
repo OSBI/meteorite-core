@@ -104,6 +104,13 @@ public interface IUserManagementProvider {
   List<String> getAdminRoles() throws MeteoriteSecurityException;
 
   /**
+   * Get a single user.
+   * @return a Meteorite User.
+   * @throws MeteoriteSecurityException
+   */
+  MeteoriteUser getUser(String id) throws MeteoriteSecurityException;
+
+  /**
    * Set the backing service engine that drives the security.
    * @param backingEngineService the backing engine service.
    */

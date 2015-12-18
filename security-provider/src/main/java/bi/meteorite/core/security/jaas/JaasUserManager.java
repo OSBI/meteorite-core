@@ -19,6 +19,7 @@ package bi.meteorite.core.security.jaas;
 import bi.meteorite.core.api.objects.MeteoriteUser;
 import bi.meteorite.core.api.security.IUserManagementProvider;
 import bi.meteorite.core.api.security.exceptions.MeteoriteSecurityException;
+import bi.meteorite.core.security.objects.User;
 
 import org.apache.karaf.jaas.boot.ProxyLoginModule;
 import org.apache.karaf.jaas.boot.principal.RolePrincipal;
@@ -158,6 +159,20 @@ public class JaasUserManager implements IUserManagementProvider {
   @Override
   public List<String> getAdminRoles() throws MeteoriteSecurityException {
     return null;
+  }
+
+  @Override
+  public MeteoriteUser getUser(String id) throws MeteoriteSecurityException {
+    for (org.apache.karaf.jaas.boot.principal.UserPrincipal user : getEngine().listUsers()) {
+      if (user.getName().equals(id)) {
+        MeteoriteUser u = new User();
+        u.setId(id);
+        u.setUsername(id);
+        return u;
+      }
+    }
+    return null;
+
   }
 
   @Override
