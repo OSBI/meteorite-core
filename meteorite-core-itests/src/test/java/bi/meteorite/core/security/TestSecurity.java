@@ -19,41 +19,32 @@ package bi.meteorite.core.security;
 import bi.meteorite.core.api.security.exceptions.MeteoriteSecurityException;
 import bi.meteorite.core.api.security.exceptions.TokenProviderException;
 import bi.meteorite.core.api.security.rest.UserAuthentication;
+import bi.meteorite.util.ITestBootstrap;
 
 import org.apache.karaf.features.FeaturesService;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.ops4j.pax.exam.Configuration;
-import org.ops4j.pax.exam.ConfigurationManager;
-import org.ops4j.pax.exam.CoreOptions;
-import org.ops4j.pax.exam.Option;
 import org.ops4j.pax.exam.junit.PaxExam;
-import org.ops4j.pax.exam.karaf.options.KarafDistributionOption;
-import org.ops4j.pax.exam.karaf.options.LogLevelOption;
-import org.ops4j.pax.exam.options.MavenArtifactUrlReference;
-import org.ops4j.pax.exam.options.MavenUrlReference;
 import org.ops4j.pax.exam.spi.reactors.ExamReactorStrategy;
 import org.ops4j.pax.exam.spi.reactors.PerMethod;
-import org.ops4j.pax.exam.util.Filter;
 import org.osgi.service.cm.ConfigurationAdmin;
 
-import java.io.File;
-
 import javax.inject.Inject;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
+import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertNotNull;
-import static org.ops4j.pax.exam.CoreOptions.maven;
-import static org.ops4j.pax.exam.karaf.options.KarafDistributionOption.configureConsole;
-import static org.ops4j.pax.exam.karaf.options.KarafDistributionOption.editConfigurationFilePut;
 
 /**
- * Created by bugg on 30/09/15.
+ * Tests for the authentication mechanism for Meteorite Core.
  */
 @RunWith(PaxExam.class)
 @ExamReactorStrategy(PerMethod.class)
-public class TestSecurity {
+public class TestSecurity extends ITestBootstrap {
 
   @Inject
   protected FeaturesService featuresService;
@@ -61,107 +52,103 @@ public class TestSecurity {
   @Inject
   private ConfigurationAdmin caService;
 
-  @Filter(timeout = 60000)
   @Inject
-  private UserAuthentication helloService;
+  private UserAuthentication authenticationService;
 
-  /*@Inject
-  private UserService usermanagement;*/
-
-  @Configuration
-  public Option[] config() {
-
-
-    MavenArtifactUrlReference karafUrl = maven()
-        .groupId("bi.meteorite")
-        .artifactId("meteorite-engine")
-        .version("1.0-SNAPSHOT")
-        .type("zip");
-
-    MavenUrlReference karafStandardRepo = maven()
-        .groupId("org.apache.karaf.features")
-        .artifactId("standard")
-        .version(karafVersion())
-        .classifier("features")
-        .type("xml");
-    CoreOptions.systemProperty("org.ops4j.pax.url.mvn.repositories")
-               .value("+http://repo1.maven.org/maven2/,http://nexus.qmino"
-                      + ".com/content/repositories/miredot");
-
-    MavenUrlReference karafCellarrepo = maven().groupId("org.apache.karaf.cellar")
-                                               .artifactId("apache-karaf-cellar")
-                                               .version("4.0.0").classifier("features").type("xml");
-
-    return CoreOptions.options(
-        KarafDistributionOption.karafDistributionConfiguration()
-                               .frameworkUrl(karafUrl)
-                               .unpackDirectory(new File("target", "exam"))
-                               .useDeployFolder(false),
-        KarafDistributionOption.keepRuntimeFolder(),
-        KarafDistributionOption.logLevel(LogLevelOption.LogLevel.ERROR),
-        /**
-         *
-         * Uncomment to debug.
-         */
-        //KarafDistributionOption.debugConfiguration("5005", true),
-
-        configureConsole().ignoreLocalConsole(),
-
-
-        CoreOptions.mavenBundle("bi.meteorite", "api", "1.0-SNAPSHOT"),
-        CoreOptions.mavenBundle("bi.meteorite", "security-provider", "1.0-SNAPSHOT"),
-        CoreOptions.mavenBundle("bi.meteorite", "security", "1.0-SNAPSHOT"),
-        CoreOptions.mavenBundle("com.fasterxml.jackson.jaxrs", "jackson-jaxrs-json-provider", "2.6.2"),
-        CoreOptions.mavenBundle("com.fasterxml.jackson.jaxrs", "jackson-jaxrs-base", "2.6.2"),
-        CoreOptions.mavenBundle("com.fasterxml.jackson.core", "jackson-core", "2.6.2"),
-        CoreOptions.mavenBundle("com.fasterxml.jackson.core", "jackson-databind", "2.6.2"),
-        CoreOptions.mavenBundle("com.fasterxml.jackson.core", "jackson-annotations", "2.6.0"),
-        CoreOptions.mavenBundle("com.fasterxml.jackson.module", "jackson-module-jaxb-annotations", "2.6.2"),
-        CoreOptions.mavenBundle("com.google.guava", "guava", "18.0"),
-
-        editConfigurationFilePut("etc/system.properties", "javax.ws.rs.ext.RuntimeDelegate", "org.apache.cxf.jaxrs"
-                                                                                             + ".impl.RuntimeDelegateImpl"),
-        editConfigurationFilePut("etc/users.properties", "admin",
-            "admin,admin,manager,viewer,Operator, Maintainer, Deployer, Auditor, Administrator, SuperUser"),
-        CoreOptions.junitBundles(),
-        CoreOptions.cleanCaches()
-    );
-  }
-
-  public static String karafVersion() {
-    ConfigurationManager cm = new ConfigurationManager();
-    return cm.getProperty("pax.exam.karaf.version", "4.0.1");
-  }
-
+  /**
+   * Test that a user can login
+   *
+   * @throws Exception
+   */
   @Test
   public void testLoginService() throws Exception {
     assertNotNull(caService);
-    assertNotNull(helloService);
+    assertNotNull(authenticationService);
 
+    Response response = get("http://localhost:8181/cxf/rest/core/user", MediaType.APPLICATION_JSON);
 
- //   assertThat(helloService.login(new Login("karaf", "karaf")).getStatus(), is(200));
+    assertThat(response.getStatusInfo().getFamily(), is(Response.Status.Family.SERVER_ERROR));
+    assertThat(response.readEntity(String.class), containsString("Username can not be null"));
+
+    response = get("http://localhost:8181/cxf/rest/core/user", "karaf", "karaf", MediaType.APPLICATION_JSON);
+
+    assertThat(response.getStatusInfo().getFamily(), is(Response.Status.Family.SUCCESSFUL));
 
   }
 
+  /**
+   * Test that an admin user can login and get a response from a admin only, and non admin endpoint.
+   *
+   * @throws TokenProviderException
+   */
   @Test
-  public void testGetUsername() throws TokenProviderException {
+  public void testRoleRestrictedEndpoints() throws TokenProviderException {
     assertNotNull(caService);
-    assertNotNull(helloService);
+    assertNotNull(authenticationService);
 
-  //  Response s = helloService.login(new Login("karaf", "karaf"));
+    Response response = get("http://localhost:8181/cxf/rest/core/user/whoami", "karaf", "karaf", MediaType
+        .APPLICATION_JSON);
 
-    //assertThat(s.getStatus(), is(200));
+    assertThat(response.getStatusInfo().getFamily(), is(Response.Status.Family.SUCCESSFUL));
 
-//    Response who = helloService.whoami(s.getCookies().get(TokenProvider.TOKEN_COOKIE_NAME).getValue());
+    assertThat(response.readEntity(String.class), containsString("test3"));
 
-//    assertThat((String)who.getEntity(), containsString("karaf"));
+    response = get("http://localhost:8181/cxf/rest/core/user", "karaf", "karaf", MediaType.APPLICATION_JSON);
+
+    assertThat(response.getStatusInfo().getFamily(), is(Response.Status.Family.SUCCESSFUL));
 
   }
 
-  @Ignore
+  /**
+   * Test that a non admin user can login but not hit an admin only endpoint.
+   *
+   * @throws MeteoriteSecurityException
+   */
   @Test
-  public void testAddUser() throws MeteoriteSecurityException {
-    //usermanagement.addUser("test", "test");
+  public void testNonAdminLockDown() throws MeteoriteSecurityException {
+    assertNotNull(caService);
+    assertNotNull(authenticationService);
+
+    Response response = get("http://localhost:8181/cxf/rest/core/user/whoami", "nonadmin", "nonadmin", MediaType
+        .APPLICATION_JSON);
+
+    assertThat(response.getStatusInfo().getFamily(), is(Response.Status.Family.SUCCESSFUL));
+
+    response = get("http://localhost:8181/cxf/rest/core/user", "nonadmin", "nonadmin", MediaType
+        .APPLICATION_JSON);
+
+    assertThat(response.getStatusInfo().getFamily(), is(Response.Status.Family.CLIENT_ERROR));
   }
 
+
+  /**
+   * Test that an admin and a non admin user login but the non admin user cannot imitate the admin user.
+   *
+   * @throws MeteoriteSecurityException
+   */
+  @Test
+  public void testCheckDualLogins() throws MeteoriteSecurityException {
+    Thread thread1 = new Thread() {
+      public void run() {
+        try {
+          testNonAdminLockDown();
+        } catch (MeteoriteSecurityException e) {
+          e.printStackTrace();
+        }
+      }
+    };
+
+    Thread thread2 = new Thread() {
+      public void run() {
+        try {
+          testRoleRestrictedEndpoints();
+        } catch (TokenProviderException e) {
+          e.printStackTrace();
+        }
+      }
+    };
+
+    thread1.start();
+    thread2.start();
+  }
 }

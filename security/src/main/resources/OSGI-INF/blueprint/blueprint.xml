@@ -33,7 +33,6 @@
         <property name="methodRolesMap">
             <map>
                 <entry key="getExistingUsers" value="admin"/>
-                <entry key="getBook" value="ROLE_BOOK_OWNER"/>
             </map>
         </property>
     </bean>
@@ -101,4 +100,5 @@
 
     <service id="userAuth" interface="bi.meteorite.core.api.security.rest.UserAuthentication"
              ref="userAuthenticationImpl"/>
+    <service id="userService" interface="bi.meteorite.core.api.security.rest.UserService" ref="taskServiceImpl"/>
 </blueprint>

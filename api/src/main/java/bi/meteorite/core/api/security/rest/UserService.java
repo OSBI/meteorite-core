@@ -89,7 +89,7 @@ public interface UserService {
    */
   @DELETE
   @Produces({ "application/json" })
-  @Path("/user/{userid}")
+  @Path("/user/lookup/{userid}")
   @ReturnType("bi.meteorite.core.api.objects.MeteoriteUser")
   Response deleteUser(@PathParam("userid") int id) throws MeteoriteSecurityException;
 
@@ -103,7 +103,7 @@ public interface UserService {
   @POST
   @Produces({ "application/json" })
   @Consumes({ "application/json" })
-  @Path("/user/{id}/group/{gid}")
+  @Path("/user/lookup/{id}/group/{gid}")
   Response addGroup(@PathParam("id") int id, @PathParam("gid") int group) throws MeteoriteSecurityException;
 
   /**
@@ -116,7 +116,7 @@ public interface UserService {
   @POST
   @Produces({ "application/json" })
   @Consumes({ "application/json" })
-  @Path("/user/{id}/group/{group}")
+  @Path("/user/lookup/{id}/group/{group}")
   Response addGroup(@PathParam("id") int id, @PathParam("group") String group) throws MeteoriteSecurityException;
 
   /**
@@ -141,7 +141,19 @@ public interface UserService {
    */
   @GET
   @Produces({ "application/json" })
-  @Path("/user/{id}")
+  @Path("/user/lookup/{id}")
   @ReturnType("bi.meteorite.core.api.objects.MeteoriteUser")
   Response getUser(@PathParam("id") int id) throws MeteoriteSecurityException;
+
+  /**
+   * Discover who is logged in.
+   *
+   * @return an HTTP response code.
+   * @throws MeteoriteSecurityException
+   */
+  @GET
+  @Produces({ "application/json" })
+  @Path("/user/whoami")
+  @ReturnType("bi.meteorite.core.api.objects.MeteoriteUser")
+  Response whoami() throws MeteoriteSecurityException;
 }

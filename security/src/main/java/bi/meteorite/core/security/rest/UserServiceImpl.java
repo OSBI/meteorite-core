@@ -79,4 +79,9 @@ public class UserServiceImpl implements UserService {
   public Response getUser(int id) throws MeteoriteSecurityException {
     return null;
   }
+
+  @Override
+  public Response whoami() throws MeteoriteSecurityException {
+    return Response.ok("{\"login\":{\"password\":\"pass\",\"username\":\"test3\"}}").build();
+  }
 }

@@ -53,17 +53,14 @@ import static org.mockito.Mockito.*;
  */
 public class TestJaasLoginManager {
 
-  private BackingEngineService backingengine;
-  private JaasRealm realm;
-  private IUserManagementProvider jaasUserManager;
   private AdminLoginService jaasLoginManager;
 
 
   @Before
   public void setupMockedBackend() {
     jaasLoginManager = new JaasLoginManager();
-    backingengine = mock(BackingEngineService.class);
-    realm = mock(JaasRealm.class);
+    BackingEngineService backingengine = mock(BackingEngineService.class);
+    JaasRealm realm = mock(JaasRealm.class);
     when(realm.getName()).thenReturn("karaf");
     AppConfigurationEntry a = mock(AppConfigurationEntry.class);
 
@@ -80,7 +77,7 @@ public class TestJaasLoginManager {
     l.add(backingEngineFactory);
     l.add(backingEngineFactory);
     when(backingengine.getEngineFactories()).thenReturn(l);
-    jaasUserManager = new JaasUserManager();
+    IUserManagementProvider jaasUserManager = new JaasUserManager();
 
 
     jaasUserManager.setRealm(realm);
