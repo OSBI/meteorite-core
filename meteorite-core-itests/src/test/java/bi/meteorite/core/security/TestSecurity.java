@@ -16,6 +16,7 @@
 
 package bi.meteorite.core.security;
 
+import bi.meteorite.core.api.persistence.UserService;
 import bi.meteorite.core.api.security.exceptions.MeteoriteSecurityException;
 import bi.meteorite.core.api.security.exceptions.TokenProviderException;
 import bi.meteorite.core.api.security.rest.UserAuthentication;
@@ -28,9 +29,16 @@ import org.junit.runner.RunWith;
 import org.ops4j.pax.exam.junit.PaxExam;
 import org.ops4j.pax.exam.spi.reactors.ExamReactorStrategy;
 import org.ops4j.pax.exam.spi.reactors.PerMethod;
+import org.ops4j.pax.exam.util.Filter;
+import org.osgi.framework.BundleContext;
 import org.osgi.service.cm.ConfigurationAdmin;
+import org.osgi.service.jdbc.DataSourceFactory;
+import org.osgi.util.tracker.ServiceTracker;
+
+import java.sql.SQLException;
 
 import javax.inject.Inject;
+import javax.sql.DataSource;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -52,8 +60,20 @@ public class TestSecurity extends ITestBootstrap {
   @Inject
   private ConfigurationAdmin caService;
 
+  @Filter(timeout = 30000L)
   @Inject
   private UserAuthentication authenticationService;
+
+  @Filter(timeout = 30000L)
+  @Inject
+  private UserService userService;
+
+  @Inject
+  @Filter(value = "(osgi.jdbc.driver.class=org.h2.Driver)", timeout = 30000L)
+  private DataSourceFactory dsf;
+
+  @Inject
+  BundleContext context;
 
   /**
    * Test that a user can login
@@ -64,6 +84,11 @@ public class TestSecurity extends ITestBootstrap {
   public void testLoginService() throws Exception {
     assertNotNull(caService);
     assertNotNull(authenticationService);
+    assertNotNull(dsf);
+    ServiceTracker<DataSource, Object> tracker = new ServiceTracker<DataSource, Object>(
+        context, DataSource.class, null);
+    tracker.open();
+    DataSource dataSource = (DataSource) tracker.waitForService(10000);
 
     Response response = get("http://localhost:8181/cxf/rest/core/user", MediaType.APPLICATION_JSON);
 
@@ -82,10 +107,14 @@ public class TestSecurity extends ITestBootstrap {
    * @throws TokenProviderException
    */
   @Test
-  public void testRoleRestrictedEndpoints() throws TokenProviderException {
+  public void testRoleRestrictedEndpoints() throws TokenProviderException, SQLException, InterruptedException {
     assertNotNull(caService);
     assertNotNull(authenticationService);
-
+    assertNotNull(dsf);
+    ServiceTracker<DataSource, Object> tracker = new ServiceTracker<DataSource, Object>(
+        context, DataSource.class, null);
+    tracker.open();
+    DataSource dataSource = (DataSource) tracker.waitForService(10000);
     Response response = get("http://localhost:8181/cxf/rest/core/user/whoami", "karaf", "karaf", MediaType
         .APPLICATION_JSON);
 
@@ -105,10 +134,14 @@ public class TestSecurity extends ITestBootstrap {
    * @throws MeteoriteSecurityException
    */
   @Test
-  public void testNonAdminLockDown() throws MeteoriteSecurityException {
+  public void testNonAdminLockDown() throws MeteoriteSecurityException, SQLException, InterruptedException {
     assertNotNull(caService);
     assertNotNull(authenticationService);
-
+    assertNotNull(dsf);
+    ServiceTracker<DataSource, Object> tracker = new ServiceTracker<DataSource, Object>(
+        context, DataSource.class, null);
+    tracker.open();
+    DataSource dataSource = (DataSource) tracker.waitForService(10000);
     Response response = get("http://localhost:8181/cxf/rest/core/user/whoami", "nonadmin", "nonadmin", MediaType
         .APPLICATION_JSON);
 
@@ -134,6 +167,10 @@ public class TestSecurity extends ITestBootstrap {
           testNonAdminLockDown();
         } catch (MeteoriteSecurityException e) {
           e.printStackTrace();
+        } catch (SQLException e) {
+          e.printStackTrace();
+        } catch (InterruptedException e) {
+          e.printStackTrace();
         }
       }
     };
@@ -143,6 +180,10 @@ public class TestSecurity extends ITestBootstrap {
         try {
           testRoleRestrictedEndpoints();
         } catch (TokenProviderException e) {
+          e.printStackTrace();
+        } catch (SQLException e) {
+          e.printStackTrace();
+        } catch (InterruptedException e) {
           e.printStackTrace();
         }
       }

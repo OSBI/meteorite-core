@@ -17,6 +17,9 @@
 
 package bi.meteorite.util;
 
+import org.apache.felix.service.command.CommandProcessor;
+import org.apache.felix.service.command.CommandSession;
+
 import org.ops4j.pax.exam.Configuration;
 import org.ops4j.pax.exam.ConfigurationManager;
 import org.ops4j.pax.exam.CoreOptions;
@@ -25,10 +28,25 @@ import org.ops4j.pax.exam.karaf.options.KarafDistributionOption;
 import org.ops4j.pax.exam.karaf.options.LogLevelOption;
 import org.ops4j.pax.exam.options.MavenArtifactUrlReference;
 import org.ops4j.pax.exam.options.MavenUrlReference;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.Constants;
+import org.osgi.framework.Filter;
+import org.osgi.framework.FrameworkUtil;
+import org.osgi.framework.InvalidSyntaxException;
+import org.osgi.util.tracker.ServiceTracker;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
+import java.util.Dictionary;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.FutureTask;
+import java.util.concurrent.TimeUnit;
 
+import javax.inject.Inject;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
@@ -45,6 +63,11 @@ import static org.ops4j.pax.exam.karaf.options.KarafDistributionOption.editConfi
 public class ITestBootstrap {
 
   private final Client client = ClientBuilder.newClient();
+  static final Long SERVICE_TIMEOUT = 30000L;
+  @Inject
+  protected BundleContext bundleContext;
+
+  ExecutorService executor = Executors.newCachedThreadPool();
 
   @Configuration
   public Option[] config() {
@@ -76,7 +99,7 @@ public class ITestBootstrap {
                                .unpackDirectory(new File("target", "exam"))
                                .useDeployFolder(false),
         KarafDistributionOption.keepRuntimeFolder(),
-        KarafDistributionOption.logLevel(LogLevelOption.LogLevel.ERROR),
+        KarafDistributionOption.logLevel(LogLevelOption.LogLevel.WARN),
         /**
          *
          * Uncomment to debug.
@@ -89,6 +112,7 @@ public class ITestBootstrap {
         CoreOptions.mavenBundle("bi.meteorite", "api", "1.0-SNAPSHOT"),
         CoreOptions.mavenBundle("bi.meteorite", "security-provider", "1.0-SNAPSHOT"),
         CoreOptions.mavenBundle("bi.meteorite", "security", "1.0-SNAPSHOT"),
+        CoreOptions.mavenBundle("bi.meteorite", "meteorite-persistence", "1.0-SNAPSHOT"),
         CoreOptions.mavenBundle("com.fasterxml.jackson.jaxrs", "jackson-jaxrs-json-provider", "2.6.2"),
         CoreOptions.mavenBundle("com.fasterxml.jackson.jaxrs", "jackson-jaxrs-base", "2.6.2"),
         CoreOptions.mavenBundle("com.fasterxml.jackson.core", "jackson-core", "2.6.2"),
@@ -96,13 +120,15 @@ public class ITestBootstrap {
         CoreOptions.mavenBundle("com.fasterxml.jackson.core", "jackson-annotations", "2.6.0"),
         CoreOptions.mavenBundle("com.fasterxml.jackson.module", "jackson-module-jaxb-annotations", "2.6.2"),
         CoreOptions.mavenBundle("com.google.guava", "guava", "18.0"),
+        CoreOptions.mavenBundle("javax.transaction", "javax.transaction-api", "1.2"),
+        CoreOptions.mavenBundle("org.hibernate.javax.persistence", "hibernate-jpa-2.1-api", "1.0.0.Final"),
+        CoreOptions.mavenBundle("javax.interceptor", "javax.interceptor-api", "1.2"),
 
-        editConfigurationFilePut("etc/system.properties", "javax.ws.rs.ext.RuntimeDelegate", "org.apache.cxf.jaxrs"
-                                                                                             + ".impl.RuntimeDelegateImpl"),
         editConfigurationFilePut("etc/users.properties", "admin",
             "admin,admin,manager,viewer,Operator, Maintainer, Deployer, Auditor, Administrator, SuperUser"),
         editConfigurationFilePut("etc/users.properties", "nonadmin",
             "nonadmin,ROLE_USER"),
+
         CoreOptions.junitBundles(),
         CoreOptions.cleanCaches()
     );
@@ -137,6 +163,88 @@ public class ITestBootstrap {
   protected Response get(String url, String token, String type) {
     WebTarget target = client.target(url);
     return target.request(type).cookie("saiku_token", token).get();
+  }
+
+
+  protected String executeCommand(final String command, final Long timeout, final Boolean silent) {
+    String response;
+    final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+    final PrintStream printStream = new PrintStream(byteArrayOutputStream);
+    final CommandProcessor commandProcessor = getOsgiService(CommandProcessor.class);
+    final CommandSession commandSession = commandProcessor.createSession(System.in, printStream, System.err);
+    FutureTask<String> commandFuture = new FutureTask<String>(new Callable<String>() {
+      public String call() {
+        try {
+          if (!silent) {
+            System.err.println(command);
+          }
+          commandSession.execute(command);
+        } catch (Exception e) {
+          e.printStackTrace(System.err);
+        }
+        printStream.flush();
+        return byteArrayOutputStream.toString();
+      }
+    });
+
+    try {
+      executor.submit(commandFuture);
+      response = commandFuture.get(timeout, TimeUnit.MILLISECONDS);
+    } catch (Exception e) {
+      e.printStackTrace(System.err);
+      response = "SHELL COMMAND TIMED OUT: ";
+    }
+
+    return response;
+  }
+
+  protected <T> T getOsgiService(Class<T> type, long timeout) {
+    return getOsgiService(type, null, timeout);
+  }
+
+  protected <T> T getOsgiService(Class<T> type) {
+    return getOsgiService(type, null, SERVICE_TIMEOUT);
+  }
+
+  protected <T> T getOsgiService(Class<T> type, String filter, long timeout) {
+    ServiceTracker tracker = null;
+    try {
+      String flt;
+      if (filter != null) {
+        if (filter.startsWith("(")) {
+          flt = "(&(" + Constants.OBJECTCLASS + "=" + type.getName() + ")" + filter + ")";
+        } else {
+          flt = "(&(" + Constants.OBJECTCLASS + "=" + type.getName() + ")(" + filter + "))";
+        }
+      } else {
+        flt = "(" + Constants.OBJECTCLASS + "=" + type.getName() + ")";
+      }
+      Filter osgiFilter = FrameworkUtil.createFilter(flt);
+      tracker = new ServiceTracker(bundleContext, osgiFilter, null);
+      tracker.open(true);
+      // Note that the tracker is not closed to keep the reference
+      // This is buggy, as the service reference may change i think
+      Object svc = type.cast(tracker.waitForService(timeout));
+      if (svc == null) {
+        Dictionary dic = bundleContext.getBundle().getHeaders();
+        //System.err.println("Test bundle headers: " + TestUtility.explode(dic));
+
+        //for (ServiceReference ref : TestUtility.asCollection(bundleContext.getAllServiceReferences(null, null))) {
+        //System.err.println("ServiceReference: " + ref);
+        //}
+
+        //for (ServiceReference ref : TestUtility.asCollection(bundleContext.getAllServiceReferences(null, flt))) {
+//          System.err.println("Filtered ServiceReference: " + ref);
+        //      }
+
+        throw new RuntimeException("Gave up waiting for service " + flt);
+      }
+      return type.cast(svc);
+    } catch (InvalidSyntaxException e) {
+      throw new IllegalArgumentException("Invalid filter", e);
+    } catch (InterruptedException e) {
+      throw new RuntimeException(e);
+    }
   }
 
 }

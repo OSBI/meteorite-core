@@ -4,10 +4,12 @@
            xmlns:jpa="http://aries.apache.org/xmlns/jpa/v1.1.0"
 >
 
-    <reference id="txManager" interface="javax.transaction.TransactionManager" availability="mandatory"/>
+    <!--<reference id="txManager" interface="javax.transaction.TransactionManager" availability="mandatory"/>-->
+    <reference id="emDataSource" interface="javax.sql.DataSource" filter="(osgi.jndi.service.name=userlist)"
+               timeout="30000" availability="optional"/>
 
     <bean id="userPersistService" class="bi.meteorite.core.security.hibernate.UserServiceImpl">
-        <tx:transaction method="*" value="Required"/>
+        <!--<tx:transaction method="*" value="Required"/>-->
         <jpa:context property="entityManager" unitname="userlist2"/>
     </bean>
 
