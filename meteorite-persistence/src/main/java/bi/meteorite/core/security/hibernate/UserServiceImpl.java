@@ -27,6 +27,7 @@ import java.util.List;
 
 import javax.inject.Singleton;
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.transaction.Transactional;
 
@@ -37,6 +38,7 @@ import javax.transaction.Transactional;
 @Transactional
 public class UserServiceImpl implements UserService {
 
+  @PersistenceContext(unitName = "userlist2")
   EntityManager em;
 
   @Override

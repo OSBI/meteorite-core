@@ -8,6 +8,7 @@
 
     <reference id="persistenceUser" interface="bi.meteorite.core.api.persistence.UserService"/>
 
+    <reference id="persistenceEvent" interface="bi.meteorite.core.api.persistence.EventService"/>
 
     <!-- JAAS Realm for user management -->
     <reference id="realm" interface="org.apache.karaf.jaas.config.JaasRealm"/>
@@ -40,6 +41,12 @@
         <property name="userService" ref="persistenceUser"/>
     </bean>
 
+
+
+    <bean id="defaultUsers" class="bi.meteorite.core.security.hibernate.DefaultUsers">
+        <property name="userService" ref="persistenceUser"/>
+        <property name="eventService" ref="persistenceEvent"/>
+    </bean>
 
     <!-- Service objects -->
 
