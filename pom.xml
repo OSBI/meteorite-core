@@ -17,7 +17,6 @@
     <module>karaf</module>
     <module>meteorite-core-itests</module>
     <module>model</module>
-    <!--    <module>meteorite-core-brokentests</module>-->
   </modules>
   <profiles>
     <profile>

@@ -6,7 +6,7 @@
     <artifactId>core</artifactId>
     <version>1.0-SNAPSHOT</version>
   </parent>
-  <artifactId>api</artifactId>
+  <artifactId>meteorite-core-api</artifactId>
   <version>1.0-SNAPSHOT</version>
   <packaging>bundle</packaging>
 

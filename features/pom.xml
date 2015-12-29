@@ -11,7 +11,7 @@
 
   <artifactId>meteorite-core-features</artifactId>
   <version>1.0-SNAPSHOT</version>
-  <packaging>feature</packaging>
+  <packaging>meteorite-core-feature</packaging>
   <name>Meteorite Core Features</name>
   <description>The Apache Karaf features build for Meteorite Core</description>
   <properties>
