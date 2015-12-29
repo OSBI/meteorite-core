@@ -19,10 +19,11 @@ package bi.meteorite.core.security.rest;
 import bi.meteorite.core.api.security.AdminLoginService;
 import bi.meteorite.core.api.security.exceptions.TokenProviderException;
 import bi.meteorite.core.api.security.rest.UserAuthentication;
-import bi.meteorite.core.api.security.tokenprovider.TokenProvider;
 
+import org.ops4j.pax.cdi.api.OsgiService;
 import org.ops4j.pax.cdi.api.OsgiServiceProvider;
 
+import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.ws.rs.core.Response;
 
@@ -33,6 +34,8 @@ import javax.ws.rs.core.Response;
 @Singleton
 public class UserAuthenticationImpl implements UserAuthentication {
 
+  @Inject
+  @OsgiService
   private volatile AdminLoginService adminLoginService;
 
   @Override
@@ -49,7 +52,4 @@ public class UserAuthenticationImpl implements UserAuthentication {
     this.adminLoginService = adminLoginService;
   }
 
-  public void setTokenProvider(TokenProvider tokenProvider) {
-    TokenProvider tokenProvider1 = tokenProvider;
-  }
 }

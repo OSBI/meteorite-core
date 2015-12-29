@@ -20,6 +20,8 @@ import bi.meteorite.core.api.security.tokenprovider.TokenProvider;
 
 import java.io.IOException;
 
+import javax.inject.Named;
+import javax.inject.Singleton;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerResponseContext;
 import javax.ws.rs.container.ContainerResponseFilter;
@@ -29,6 +31,8 @@ import javax.ws.rs.core.NewCookie;
 /**
  * Token Response Filter.
  */
+@Singleton
+@Named("tokenResponseFilter")
 public class TokenResponseFilter implements ContainerResponseFilter {
 
 

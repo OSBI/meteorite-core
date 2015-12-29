@@ -85,6 +85,26 @@
                     </instructions>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.apache.aries.blueprint</groupId>
+                <artifactId>blueprint-maven-plugin</artifactId>
+                <version>1.3.0</version>
+                <configuration>
+                    <scanPaths>
+                        <scanPath>bi.meteorite.core.security.rest</scanPath>
+                        <scanPath>bi.meteorite.core.security.authentication</scanPath>
+                        <scanPath>bi.meteorite.core.security.authorization</scanPath>
+                    </scanPaths>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>blueprint-generate</goal>
+                        </goals>
+                        <phase>process-classes</phase>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 </project>

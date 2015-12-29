@@ -20,6 +20,9 @@ import org.apache.cxf.interceptor.security.AccessDeniedException;
 import org.apache.cxf.jaxrs.utils.JAXRSUtils;
 
 import javax.annotation.Priority;
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.inject.Singleton;
 import javax.ws.rs.Priorities;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
@@ -29,8 +32,12 @@ import javax.ws.rs.core.Response;
  * Token Authorizing Filter.
  */
 @Priority(Priorities.AUTHORIZATION)
+@Singleton
+@Named("authorizationFilter")
 public class TokenAuthorizingFilter implements ContainerRequestFilter {
 
+  @Inject
+  @Named("authorizationInterceptor")
   private TokenAuthorizingInterceptor interceptor;
 
   public void filter(ContainerRequestContext context) {

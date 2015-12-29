@@ -21,8 +21,11 @@ import bi.meteorite.core.api.security.IUserManagementProvider;
 import bi.meteorite.core.api.security.exceptions.MeteoriteSecurityException;
 import bi.meteorite.core.api.security.rest.UserService;
 
+import org.ops4j.pax.cdi.api.OsgiService;
 import org.ops4j.pax.cdi.api.OsgiServiceProvider;
 
+import javax.inject.Inject;
+import javax.inject.Named;
 import javax.inject.Singleton;
 import javax.ws.rs.core.Response;
 
@@ -31,8 +34,11 @@ import javax.ws.rs.core.Response;
  */
 @OsgiServiceProvider(classes = { UserService.class })
 @Singleton
+@Named("userRestServiceBean")
 public class UserServiceImpl implements UserService {
 
+  @Inject
+  @OsgiService
   private IUserManagementProvider iUserManagementProvider;
 
 

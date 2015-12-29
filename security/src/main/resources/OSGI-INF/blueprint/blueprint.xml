@@ -9,22 +9,13 @@
   http://cxf.apache.org/blueprint/core http://cxf.apache.org/schemas/blueprint/core.xsd">
 
 
-    <bean id="taskServiceImpl" class="bi.meteorite.core.security.rest.UserServiceImpl">
-        <property name="iUserManagementProvider" ref="userManager"/>
-    </bean>
-
-    <bean id="userAuthenticationImpl" class="bi.meteorite.core.security.rest.UserAuthenticationImpl">
-        <property name="adminLoginService" ref="loginService"/>
-        <property name="tokenProvider" ref="tokenProvider"/>
-    </bean>
-
     <!-- Service objects -->
 
     <reference id="tokenProvider" interface="bi.meteorite.core.api.security.tokenprovider.TokenProvider"/>
 
     <reference id="loginService" interface="bi.meteorite.core.api.security.AdminLoginService"/>
 
-    <reference id="userManager" interface="bi.meteorite.core.api.security.IUserManagementProvider"/>
+    <!--<reference id="userManager" interface="bi.meteorite.core.api.security.IUserManagementProvider"/>-->
 
 
     <!-- REST service -->
@@ -40,15 +31,10 @@
             </map>
         </property>
     </bean>
-    <bean id="authorizationFilter" class="bi.meteorite.core.security.authorization.TokenAuthorizingFilter">
-        <property name="interceptor" ref="authorizationInterceptor"/>
-    </bean>
-
-    <bean id="testFilter" class="bi.meteorite.core.security.authentication.TokenResponseFilter"/>
 
     <jaxrs:server id="taskService" address="/rest/core">
         <jaxrs:serviceBeans>
-            <ref component-id="taskServiceImpl"/>
+            <ref component-id="userRestServiceBean"/>
             <ref component-id="userAuthenticationImpl"/>
         </jaxrs:serviceBeans>
 
@@ -57,7 +43,7 @@
             <ref component-id="jsonProvider"/>
             <ref component-id="authorizationFilter"/>
             <ref component-id="authenticationFilter"/>
-            <ref component-id="testFilter"/>
+            <ref component-id="tokenResponseFilter"/>
             <!-- Exception Mappers -->
         </jaxrs:providers>
         <jaxrs:features>
@@ -102,7 +88,7 @@
         <property name="tokenProvider" ref="tokenProvider"/>
     </bean>
 
-    <service id="userAuth" interface="bi.meteorite.core.api.security.rest.UserAuthentication"
+   <!-- <service id="userAuth" interface="bi.meteorite.core.api.security.rest.UserAuthentication"
              ref="userAuthenticationImpl"/>
-    <service id="userService" interface="bi.meteorite.core.api.security.rest.UserService" ref="taskServiceImpl"/>
+    <service id="userService" interface="bi.meteorite.core.api.security.rest.UserService" ref="taskServiceImpl"/>-->
 </blueprint>
