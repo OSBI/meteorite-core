@@ -15,9 +15,6 @@
 
     <reference id="loginService" interface="bi.meteorite.core.api.security.AdminLoginService"/>
 
-    <!--<reference id="userManager" interface="bi.meteorite.core.api.security.IUserManagementProvider"/>-->
-
-
     <!-- REST service -->
 
     <bean id="cxfServlet" class="org.apache.cxf.transport.servlet.CXFServlet"/>
@@ -88,7 +85,4 @@
         <property name="tokenProvider" ref="tokenProvider"/>
     </bean>
 
-   <!-- <service id="userAuth" interface="bi.meteorite.core.api.security.rest.UserAuthentication"
-             ref="userAuthenticationImpl"/>
-    <service id="userService" interface="bi.meteorite.core.api.security.rest.UserService" ref="taskServiceImpl"/>-->
 </blueprint>

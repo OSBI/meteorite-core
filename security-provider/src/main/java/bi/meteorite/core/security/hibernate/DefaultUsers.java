@@ -40,7 +40,7 @@ public class DefaultUsers {
   private EventService eventService;
 
   public DefaultUsers() {
-  //  insertUsers();
+    //  insertUsers();
   }
 
   public void insertUsers() {
@@ -51,7 +51,7 @@ public class DefaultUsers {
           "Adding users to user list", new Date()));
       MeteoriteUser u = new UserImpl();
       u.setUsername("admin");
-      List<String> s = Lists.newArrayList( "ROLE_ADMIN", "ROLE_USER" );
+      List<String> s = Lists.newArrayList("ROLE_ADMIN", "ROLE_USER");
       u.setRoles(s);
       u.setPassword("admin");
       userService.addUser(u);
@@ -59,7 +59,7 @@ public class DefaultUsers {
       u = new UserImpl();
       u.setUsername("smith");
       u.setPassword("smith");
-      List<String> s2 = Lists.newArrayList( "ROLE_USER" );
+      List<String> s2 = Lists.newArrayList("ROLE_USER");
       u.setRoles(s2);
       userService.addUser(u);
 

@@ -36,7 +36,7 @@ import javax.transaction.Transactional;
 /**
  * Implementation for hibernate persistence of users.
  */
-@OsgiServiceProvider(classes = {UserService.class})
+@OsgiServiceProvider(classes = { UserService.class })
 @Properties({
     @Property(name = "service.exported.interfaces", value = "*")
 })

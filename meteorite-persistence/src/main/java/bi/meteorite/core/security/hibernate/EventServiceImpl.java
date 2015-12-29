@@ -35,7 +35,7 @@ import javax.transaction.Transactional;
 /**
  * Created by bugg on 21/12/15.
  */
-@OsgiServiceProvider(classes = {EventService.class})
+@OsgiServiceProvider(classes = { EventService.class })
 @Properties({
     @Property(name = "service.exported.interfaces", value = "*")
 })
@@ -58,7 +58,7 @@ public class EventServiceImpl implements EventService {
   public Event getEventByUUID(String uuid) {
     List<EventImpl> result =
         (List<EventImpl>) em.createQuery("select e from " + EventImpl.class.getName() + " e where uuid = :uuid")
-                         .setParameter("uuid", uuid).getResultList();
+                            .setParameter("uuid", uuid).getResultList();
 
     if (result.size() > 0) {
       return result.get(0);
@@ -71,7 +71,7 @@ public class EventServiceImpl implements EventService {
   public Event getEventByEventName(String name) {
     List<EventImpl> result =
         (List<EventImpl>) em.createQuery("select e from " + EventImpl.class.getName() + " e where eventName = :ename")
-                         .setParameter("ename", name).getResultList();
+                            .setParameter("ename", name).getResultList();
     if (result.size() > 0) {
       return result.get(0);
     }

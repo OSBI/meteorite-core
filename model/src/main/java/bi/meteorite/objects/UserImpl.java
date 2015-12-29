@@ -22,10 +22,8 @@ import bi.meteorite.core.api.objects.Role;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -41,7 +39,7 @@ public class UserImpl implements MeteoriteUser {
 
   @Id
   @Column
-  @GeneratedValue(strategy= GenerationType.AUTO)
+  @GeneratedValue(strategy = GenerationType.AUTO)
   private int id;
 
   @Column(length = 100)
@@ -83,8 +81,8 @@ public class UserImpl implements MeteoriteUser {
   @Override
   public List<String> getRoles() {
     //return roles;
-    List l= new ArrayList();
-    for(Role role: roles){
+    List l = new ArrayList();
+    for (Role role : roles) {
       l.add(role.getRole());
     }
     return l;
@@ -92,7 +90,7 @@ public class UserImpl implements MeteoriteUser {
 
   @Override
   public void setRoles(List<String> roles) {
-    for(String r: roles){
+    for (String r : roles) {
       this.roles.add(new RoleImpl(r, this));
     }
   }

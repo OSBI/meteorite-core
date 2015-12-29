@@ -39,7 +39,7 @@ public class EventImpl implements Event {
 
   @Id
   @Column(nullable = false)
-  @GeneratedValue(strategy= GenerationType.AUTO)
+  @GeneratedValue(strategy = GenerationType.AUTO)
   int id;
 
   @Column
@@ -158,15 +158,15 @@ public class EventImpl implements Event {
 
   @Override
   public String toString() {
-    return "EventImpl{" +
-           "id=" + id +
-           ", uuid='" + uuid + '\'' +
-           ", className='" + className + '\'' +
-           ", eventName='" + eventName + '\'' +
-           ", comment='" + comment + '\'' +
-           ", startDate=" + startDate +
-           ", endDate=" + endDate +
-           ", duration=" + duration +
-           '}';
+    return "EventImpl{"
+           + "id=" + id
+           + ", uuid='" + uuid + '\''
+           + ", className='" + className + '\''
+           + ", eventName='" + eventName + '\''
+           + ", comment='" + comment + '\''
+           + ", startDate=" + startDate
+           + ", endDate=" + endDate
+           + ", duration=" + duration
+           + '}';
   }
 }
