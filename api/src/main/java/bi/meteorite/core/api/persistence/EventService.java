@@ -18,7 +18,7 @@ package bi.meteorite.core.api.persistence;
 
 import bi.meteorite.core.api.objects.Event;
 
-import java.util.Collection;
+import java.util.List;
 
 /**
  * Created by bugg on 21/12/15.
@@ -33,7 +33,7 @@ public interface EventService {
 
   Event addEvent(Event user);
 
-  Collection<Event> getEvents();
+  List<? extends Event> getEvents();
 
   void updateEvent(Event event);
 

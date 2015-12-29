@@ -20,7 +20,7 @@ import bi.meteorite.core.api.objects.MeteoriteUser;
 import bi.meteorite.core.api.persistence.UserService;
 import bi.meteorite.core.api.security.IUserManagementProvider;
 import bi.meteorite.core.api.security.exceptions.MeteoriteSecurityException;
-import bi.meteorite.core.security.objects.User;
+import bi.meteorite.objects.UserImpl;
 
 import org.apache.karaf.jaas.boot.ProxyLoginModule;
 import org.apache.karaf.jaas.boot.principal.RolePrincipal;
@@ -31,22 +31,38 @@ import org.apache.karaf.jaas.modules.BackingEngineService;
 
 import com.google.common.collect.ImmutableList;
 
+import org.ops4j.pax.cdi.api.OsgiService;
+import org.ops4j.pax.cdi.api.OsgiServiceProvider;
+
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.inject.Singleton;
 import javax.security.auth.login.AppConfigurationEntry;
 
 
 /**
  * Default JaaS User Manager to control users in Karaf.
  */
+@Singleton
+@OsgiServiceProvider(classes = { IUserManagementProvider.class })
 public class JaasUserManager implements IUserManagementProvider {
 
+  @Inject
+  @Named("engineService")
   private BackingEngineService backingEngineService;
+
+  @Inject
+  @OsgiService
   private JaasRealm realm;
+
+  @Inject
+  @OsgiService
   private UserService userService;
 
   private BackingEngine getEngine() {
@@ -166,7 +182,7 @@ public class JaasUserManager implements IUserManagementProvider {
   public MeteoriteUser getUser(int id) throws MeteoriteSecurityException {
     for (org.apache.karaf.jaas.boot.principal.UserPrincipal user : getEngine().listUsers()) {
       if (user.getName().equals(id)) {
-        MeteoriteUser u = new User();
+        MeteoriteUser u = new UserImpl();
         u.setId(id);
         u.setUsername(u.getUsername());
         return u;

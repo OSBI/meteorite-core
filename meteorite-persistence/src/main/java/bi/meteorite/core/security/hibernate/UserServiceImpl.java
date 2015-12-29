@@ -18,10 +18,12 @@ package bi.meteorite.core.security.hibernate;
 
 import bi.meteorite.core.api.objects.MeteoriteUser;
 import bi.meteorite.core.api.persistence.UserService;
-import bi.meteorite.core.security.hibernate.entity.Users;
+import bi.meteorite.objects.UserImpl;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+import org.ops4j.pax.cdi.api.OsgiServiceProvider;
+import org.ops4j.pax.cdi.api.Properties;
+import org.ops4j.pax.cdi.api.Property;
+
 import java.util.Collection;
 import java.util.List;
 
@@ -34,37 +36,37 @@ import javax.transaction.Transactional;
 /**
  * Implementation for hibernate persistence of users.
  */
+@OsgiServiceProvider(classes = {UserService.class})
+@Properties({
+    @Property(name = "service.exported.interfaces", value = "*")
+})
 @Singleton
 @Transactional
 public class UserServiceImpl implements UserService {
 
-  @PersistenceContext(unitName = "userlist2")
+  @PersistenceContext(unitName = "systemdbunit")
   EntityManager em;
 
   @Override
   @Transactional(Transactional.TxType.SUPPORTS)
   public MeteoriteUser getUser(String id) {
-    Users user = em.find(Users.class, id);
-    return user.convert(user);
+    MeteoriteUser user = em.find(UserImpl.class, id);
+    return user;
   }
 
   @Override
   public void addUser(MeteoriteUser user) {
-    em.persist(new Users(user.getUsername(), user.getPassword(), Arrays.asList(user.getRoles()),
-        user.getOrgId(), user.getEmail()));
+    UserImpl u = (UserImpl) user;
+    em.persist(u);
     em.flush();
   }
 
   @Transactional(Transactional.TxType.SUPPORTS)
   @Override
   public Collection<MeteoriteUser> getUsers() {
-    CriteriaQuery<Users> query = em.getCriteriaBuilder().createQuery(Users.class);
-    List<Users> collection = em.createQuery(query.select(query.from(Users.class))).getResultList();
-    List<MeteoriteUser> m = new ArrayList<>();
-    for (Users c : collection) {
-      m.add(c.convert(c));
-    }
-    return m;
+    CriteriaQuery<UserImpl> query = em.getCriteriaBuilder().createQuery(UserImpl.class);
+    List collection = em.createQuery(query.select(query.from(UserImpl.class))).getResultList();
+    return collection;
   }
 
   @Override

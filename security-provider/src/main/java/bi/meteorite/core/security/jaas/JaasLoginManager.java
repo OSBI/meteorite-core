@@ -18,6 +18,7 @@ package bi.meteorite.core.security.jaas;
 
 import bi.meteorite.core.api.security.AdminLoginService;
 
+import org.ops4j.pax.cdi.api.OsgiServiceProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,7 +40,7 @@ import javax.security.auth.login.LoginException;
 /**
  * Jaas Login Manager
  */
-//@OsgiServiceProvider(classes = { AdminLoginService.class })
+@OsgiServiceProvider(classes = { AdminLoginService.class })
 public class JaasLoginManager implements AdminLoginService {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(JaasLoginManager.class);

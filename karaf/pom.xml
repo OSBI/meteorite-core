@@ -167,7 +167,7 @@
             <feature>http-whiteboard</feature>
             <feature>cxf</feature>
             <feature>cellar</feature>
-            <feature>hibernate</feature>
+            <feature>custom-hibernate</feature>
             <feature>pax-cdi</feature>
             <feature>transaction</feature>
             <feature>jndi</feature>
@@ -175,6 +175,7 @@
             <feature>jdbc</feature>
             <feature>pax-jdbc</feature>
             <feature>pax-jdbc-h2</feature>
+            <feature>pax-jdbc-derby</feature>
             <feature>pax-jdbc-config</feature>
             <feature>pax-jdbc-pool-dbcp2</feature>
           </bootFeatures>

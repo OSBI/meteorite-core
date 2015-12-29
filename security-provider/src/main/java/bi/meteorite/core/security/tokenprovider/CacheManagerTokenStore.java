@@ -18,18 +18,28 @@ package bi.meteorite.core.security.tokenprovider;
 
 import com.hazelcast.core.HazelcastInstance;
 
+import org.ops4j.pax.cdi.api.OsgiService;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.wiring.BundleWiring;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 /**
  * Token Storage.
  */
+@Singleton
 public class CacheManagerTokenStore implements TokenStorageProvider {
 
+  @OsgiService
+  @Inject
   private HazelcastInstance cacheManager;
+
+  @Inject
   private BundleContext bcontext;
+
   private static Logger logger = LoggerFactory.getLogger(CacheManagerTokenStore.class);
 
   public void init() {

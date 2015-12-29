@@ -24,6 +24,8 @@ import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.binary.StringUtils;
 import org.apache.commons.codec.digest.DigestUtils;
 
+import org.ops4j.pax.cdi.api.OsgiServiceProvider;
+
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
@@ -40,17 +42,22 @@ import javax.crypto.KeyGenerator;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import javax.servlet.http.HttpServletRequest;
 
 /**
  * Token Provider.
  */
+@Singleton
+@OsgiServiceProvider(classes = { TokenProvider.class })
 public class TokenProviderImpl implements TokenProvider {
 
   public static final String AUTHORIZATION_HEADER_AMDATU = TokenUtil.AUTHORIZATION_HEADER_AMDATU;
 
   // Service dependencies
   //private volatile LogService m_logService;
+  @Inject
   private volatile TokenStorageProvider mtokenStore;
 
   // Encryption and decryption key and ciphers

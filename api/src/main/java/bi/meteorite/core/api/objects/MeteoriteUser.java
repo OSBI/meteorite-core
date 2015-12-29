@@ -16,6 +16,8 @@
 
 package bi.meteorite.core.api.objects;
 
+import java.util.List;
+
 /**
  * A user object for Meteorite core.
  */
@@ -49,13 +51,13 @@ public interface MeteoriteUser {
    * Get an array of roles.
    * @return an array of roles.
    */
-  String[] getRoles();
+  List<String> getRoles();
 
   /**
    * Set the roles.
    * @param roles an array of roles.
    */
-  void setRoles(String[] roles);
+  void setRoles(List<String> roles);
 
   /**
    * Get the user email address.
@@ -73,7 +75,7 @@ public interface MeteoriteUser {
    * Get the users unique id
    * @return the id
    */
-  String getId();
+  int getId();
 
   /**
    * Set the users id.

@@ -18,10 +18,15 @@ package bi.meteorite.core.security.hibernate;
 
 import bi.meteorite.core.api.objects.Event;
 import bi.meteorite.core.api.persistence.EventService;
+import bi.meteorite.objects.EventImpl;
 
-import java.util.Collection;
+import org.ops4j.pax.cdi.api.OsgiServiceProvider;
+import org.ops4j.pax.cdi.api.Properties;
+import org.ops4j.pax.cdi.api.Property;
+
 import java.util.List;
 
+import javax.inject.Singleton;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaQuery;
@@ -30,9 +35,15 @@ import javax.transaction.Transactional;
 /**
  * Created by bugg on 21/12/15.
  */
+@OsgiServiceProvider(classes = {EventService.class})
+@Properties({
+    @Property(name = "service.exported.interfaces", value = "*")
+})
+@Singleton
+@Transactional
 public class EventServiceImpl implements EventService {
 
-  @PersistenceContext(unitName = "eventlistunit")
+  @PersistenceContext(unitName = "systemdbunit")
   EntityManager em;
 
 
@@ -45,8 +56,9 @@ public class EventServiceImpl implements EventService {
 
   @Override
   public Event getEventByUUID(String uuid) {
-    List<Event> result = (List<Event>) em.createQuery("select e from Events e where uuid = :uuid").setParameter("uuid",
-        uuid).getResultList();
+    List<EventImpl> result =
+        (List<EventImpl>) em.createQuery("select e from " + EventImpl.class.getName() + " e where uuid = :uuid")
+                         .setParameter("uuid", uuid).getResultList();
 
     if (result.size() > 0) {
       return result.get(0);
@@ -57,9 +69,9 @@ public class EventServiceImpl implements EventService {
 
   @Override
   public Event getEventByEventName(String name) {
-    List<Event> result = (List<Event>) em.createQuery("select e from Events e where eventName = :ename")
-                                         .setParameter("ename", name).getResultList();
-
+    List<EventImpl> result =
+        (List<EventImpl>) em.createQuery("select e from " + EventImpl.class.getName() + " e where eventName = :ename")
+                         .setParameter("ename", name).getResultList();
     if (result.size() > 0) {
       return result.get(0);
     }
@@ -68,17 +80,16 @@ public class EventServiceImpl implements EventService {
   }
 
   @Override
-  public Event addEvent(Event user) {
-    em.persist(user);
+  public Event addEvent(Event e) {
+    em.persist(e);
     em.flush();
-    return user;
+    return e;
   }
 
   @Override
-  public Collection<Event> getEvents() {
-    CriteriaQuery<Event> query = em.getCriteriaBuilder().createQuery(Event.class);
-    List<Event> collection = em.createQuery(query.select(query.from(Event.class))).getResultList();
-    return collection;
+  public List<? extends Event> getEvents() {
+    CriteriaQuery<EventImpl> query = em.getCriteriaBuilder().createQuery(EventImpl.class);
+    return em.createQuery(query.select(query.from(EventImpl.class))).getResultList();
   }
 
   @Override

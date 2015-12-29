@@ -21,11 +21,15 @@ import bi.meteorite.core.api.objects.Event;
 import bi.meteorite.core.api.objects.MeteoriteUser;
 import bi.meteorite.core.api.persistence.EventService;
 import bi.meteorite.core.api.persistence.UserService;
-import bi.meteorite.core.security.objects.EventImpl;
-import bi.meteorite.core.security.objects.User;
+import bi.meteorite.objects.EventImpl;
+import bi.meteorite.objects.UserImpl;
+
+import com.google.common.collect.Lists;
 
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
+
 
 /**
  * Created by bugg on 21/12/15.
@@ -45,17 +49,17 @@ public class DefaultUsers {
       String uuid = UUID.randomUUID().toString();
       Event e = eventService.addEvent(new EventImpl(uuid, this.getClass().getName(), "Start Adding users",
           "Adding users to user list", new Date()));
-      MeteoriteUser u = new User();
+      MeteoriteUser u = new UserImpl();
       u.setUsername("admin");
-      String[] s = { "ROLE_ADMIN", "ROLE_USER" };
+      List<String> s = Lists.newArrayList( "ROLE_ADMIN", "ROLE_USER" );
       u.setRoles(s);
       u.setPassword("admin");
       userService.addUser(u);
 
-      u = new User();
+      u = new UserImpl();
       u.setUsername("smith");
       u.setPassword("smith");
-      String[] s2 = { "ROLE_USER" };
+      List<String> s2 = Lists.newArrayList( "ROLE_USER" );
       u.setRoles(s2);
       userService.addUser(u);
 
