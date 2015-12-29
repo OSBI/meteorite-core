@@ -18,39 +18,182 @@
     <module>meteorite-core-itests</module>
     <module>model</module>
   </modules>
-  <profiles>
-    <profile>
-      <id>clover</id>
-      <modules>
-        <module>api</module>
-        <module>security-provider</module>
-        <module>security</module>
-        <module>features</module>
-        <module>karaf</module>
-      </modules>
-    </profile>
-  </profiles>
   <properties>
+    <karaf.version>4.0.2</karaf.version>
+    <paxexamversion>4.6.0</paxexamversion>
     <top.dir>${project.basedir}</top.dir>
+
   </properties>
 
   <dependencyManagement>
     <dependencies>
+      <dependency>
+        <groupId>com.fasterxml.jackson.jaxrs</groupId>
+        <artifactId>jackson-jaxrs-json-provider</artifactId>
+        <version>2.6.2</version>
+      </dependency>
+      <dependency>
+        <groupId>com.google.guava</groupId>
+        <artifactId>guava</artifactId>
+        <version>18.0</version>
+      </dependency>
+      <dependency>
+        <groupId>com.hazelcast</groupId>
+        <artifactId>hazelcast</artifactId>
+        <version>3.2.3</version>
+      </dependency>
       <dependency>
         <groupId>com.qmino</groupId>
         <artifactId>miredot-annotations</artifactId>
         <version>1.3.1</version>
       </dependency>
       <dependency>
+        <groupId>commons-codec</groupId>
+        <artifactId>commons-codec</artifactId>
+        <version>1.9</version>
+        <scope>provided</scope>
+      </dependency>
+      <dependency>
+        <groupId>javax.annotation</groupId>
+        <artifactId>jsr250-api</artifactId>
+        <version>1.0</version>
+      </dependency>
+      <dependency>
         <groupId>javax.inject</groupId>
         <artifactId>javax.inject</artifactId>
         <version>1</version>
-        <optional>true</optional>
+      </dependency>
+      <dependency>
+        <groupId>javax.interceptor</groupId>
+        <artifactId>javax.interceptor-api</artifactId>
+        <version>1.2</version>
+      </dependency>
+      <dependency>
+        <groupId>javax.servlet</groupId>
+        <artifactId>servlet-api</artifactId>
+        <version>2.5</version>
+      </dependency>
+      <dependency>
+        <groupId>javax.transaction</groupId>
+        <artifactId>javax.transaction-api</artifactId>
+        <version>1.2</version>
       </dependency>
       <dependency>
         <groupId>javax.ws.rs</groupId>
         <artifactId>javax.ws.rs-api</artifactId>
         <version>2.0.1</version>
+      </dependency>
+      <dependency>
+        <groupId>junit</groupId>
+        <artifactId>junit</artifactId>
+        <version>4.11</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.aries.blueprint</groupId>
+        <artifactId>org.apache.aries.blueprint.annotation.api</artifactId>
+        <version>1.0.1</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.cxf</groupId>
+        <artifactId>cxf-rt-frontend-jaxrs</artifactId>
+        <version>3.1.2</version>
+        <scope>provided</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.cxf</groupId>
+        <artifactId>cxf-rt-rs-client</artifactId>
+        <version>3.1.2</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.cxf.karaf</groupId>
+        <artifactId>apache-cxf</artifactId>
+        <version>3.1.1</version>
+        <classifier>features</classifier>
+        <type>xml</type>
+        <scope>runtime</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.karaf.cellar</groupId>
+        <artifactId>apache-karaf-cellar</artifactId>
+        <version>4.0.0</version>
+        <classifier>features</classifier>
+        <type>xml</type>
+        <scope>runtime</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.karaf.features</groupId>
+        <artifactId>enterprise</artifactId>
+        <version>${karaf.version}</version>
+        <classifier>features</classifier>
+        <type>xml</type>
+        <scope>runtime</scope>
+      </dependency>
+      <dependency>
+        <!-- scope is compile so all features (there is only one) are installed into startup.properties and the feature repo itself is not added in etc/org.apache.karaf.features.cfg file -->
+        <groupId>org.apache.karaf.features</groupId>
+        <artifactId>framework</artifactId>
+        <version>${karaf.version}</version>
+        <type>kar</type>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.karaf.features</groupId>
+        <artifactId>org.apache.karaf.features.core</artifactId>
+        <version>${karaf.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.karaf.features</groupId>
+        <artifactId>spring</artifactId>
+        <version>${karaf.version}</version>
+        <classifier>features</classifier>
+        <type>xml</type>
+        <scope>runtime</scope>
+      </dependency>
+      <dependency>
+        <!-- scope is runtime so the feature repo is listed in etc/org.apache.karaf.features.cfg file, and features will installed into the system directory -->
+        <groupId>org.apache.karaf.features</groupId>
+        <artifactId>standard</artifactId>
+        <version>${karaf.version}</version>
+        <classifier>features</classifier>
+        <type>xml</type>
+        <scope>runtime</scope>
+      </dependency>
+
+      <dependency>
+        <groupId>org.apache.karaf.jaas</groupId>
+        <artifactId>org.apache.karaf.jaas.boot</artifactId>
+        <version>${karaf.version}</version>
+        <scope>provided</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.karaf.jaas</groupId>
+        <artifactId>org.apache.karaf.jaas.modules</artifactId>
+        <version>${karaf.version}</version>
+        <scope>provided</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.karaf.shell</groupId>
+        <artifactId>org.apache.karaf.shell.core</artifactId>
+        <version>${karaf.version}</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.hibernate</groupId>
+        <artifactId>hibernate-annotations</artifactId>
+        <version>3.5.6-Final</version>
+        <scope>provided</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.hibernate.javax.persistence</groupId>
+        <artifactId>hibernate-jpa-2.1-api</artifactId>
+        <version>1.0.0.Final</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.mockito</groupId>
+        <artifactId>mockito-core</artifactId>
+        <version>2.0.31-beta</version>
+        <scope>test</scope>
       </dependency>
       <dependency>
         <groupId>org.ops4j.pax.cdi</groupId>
@@ -59,9 +202,65 @@
         <optional>true</optional>
       </dependency>
       <dependency>
+        <groupId>org.ops4j.pax.exam</groupId>
+        <artifactId>pax-exam</artifactId>
+        <version>${paxexamversion}</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.ops4j.pax.exam</groupId>
+        <artifactId>pax-exam-container-karaf</artifactId>
+        <version>${paxexamversion}</version>
+        <scope>test</scope>
+      </dependency>
+
+      <dependency>
+        <groupId>org.ops4j.pax.exam</groupId>
+        <artifactId>pax-exam-junit4</artifactId>
+        <version>${paxexamversion}</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.ops4j.pax.exam</groupId>
+        <artifactId>pax-exam-link-assembly</artifactId>
+        <version>${paxexamversion}</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.ops4j.pax.exam</groupId>
+        <artifactId>pax-exam-link-mvn</artifactId>
+        <version>${paxexamversion}</version>
+        <scope>test</scope>
+      </dependency>
+
+      <dependency>
+        <groupId>org.ops4j.pax.jdbc</groupId>
+        <artifactId>pax-jdbc-features</artifactId>
+        <version>0.7.0</version>
+        <classifier>features</classifier>
+        <type>xml</type>
+        <scope>runtime</scope>
+      </dependency>
+      <dependency>
         <groupId>org.osgi</groupId>
         <artifactId>org.osgi.core</artifactId>
         <version>6.0.0</version>
+      </dependency>
+      <dependency>
+        <groupId>org.osgi</groupId>
+        <artifactId>org.osgi.enterprise</artifactId>
+        <version>5.0.0</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-api</artifactId>
+        <version>1.7.5</version>
+      </dependency>
+      <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-simple</artifactId>
+        <version>1.7.5</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
@@ -206,11 +405,32 @@
               <headerLocation>${top.dir}/src/main/config/checkstyle/header.txt</headerLocation>
               <failOnViolation>true</failOnViolation>
               <includeTestSourceDirectory>true</includeTestSourceDirectory>
-             <!-- <includes>
+              <!-- <includes>
                 src/main, src/test
               </includes>-->
 
             </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>com.github.ekryd.sortpom</groupId>
+        <artifactId>sortpom-maven-plugin</artifactId>
+        <version>2.4.0</version>
+        <configuration>
+          <predefinedSortOrder>custom_1</predefinedSortOrder>
+          <lineSeparator>\n</lineSeparator>
+          <encoding>${project.build.sourceEncoding}</encoding>
+          <sortProperties>true</sortProperties>
+          <keepBlankLines>true</keepBlankLines>
+          <sortDependencies>groupId,artifactId</sortDependencies>
+        </configuration>
+        <executions>
+          <execution>
+            <goals>
+              <goal>sort</goal>
+            </goals>
+            <phase>verify</phase>
           </execution>
         </executions>
       </plugin>
@@ -237,9 +457,7 @@
         <artifactId>maven-javadoc-plugin</artifactId>
         <version>2.10.3</version>
         <configuration>
-          <includes>
-            src/main, src/test
-          </includes>
+          <includes>src/main, src/test</includes>
         </configuration>
       </plugin>
       <plugin>
@@ -279,6 +497,17 @@
       <organization>Meteorite BI</organization>
     </contributor>
   </contributors>
+  <scm>
+    <developerConnection>scm:git:git@github.com:OSBI/meteorite-core.git</developerConnection>
+  </scm>
+  <issueManagement>
+    <system>Jira</system>
+    <url>http://jira.meteorite.bi</url>
+  </issueManagement>
+  <ciManagement>
+    <system>Bamboo</system>
+    <url>http://build.saikuanalytics.com</url>
+  </ciManagement>
   <repositories>
     <repository>
       <id>java.net.m2repo</id>
@@ -315,17 +544,6 @@
       <url>http://repository.springsource.com/maven/bundles/external</url>
     </repository>
   </repositories>
-  <scm>
-    <developerConnection>scm:git:git@github.com:OSBI/meteorite-core.git</developerConnection>
-  </scm>
-  <issueManagement>
-    <system>Jira</system>
-    <url>http://jira.meteorite.bi</url>
-  </issueManagement>
-  <ciManagement>
-    <system>Bamboo</system>
-    <url>http://build.saikuanalytics.com</url>
-  </ciManagement>
 
   <distributionManagement>
     <repository>
@@ -344,4 +562,16 @@
       <url>file:/var/www/html/site/</url>
     </site>
   </distributionManagement>
+  <profiles>
+    <profile>
+      <id>clover</id>
+      <modules>
+        <module>api</module>
+        <module>security-provider</module>
+        <module>security</module>
+        <module>features</module>
+        <module>karaf</module>
+      </modules>
+    </profile>
+  </profiles>
 </project>
