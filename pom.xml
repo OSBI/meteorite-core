@@ -424,6 +424,7 @@
           <sortProperties>true</sortProperties>
           <keepBlankLines>true</keepBlankLines>
           <sortDependencies>groupId,artifactId</sortDependencies>
+          <createBackupFile>false</createBackupFile>
         </configuration>
         <executions>
           <execution>
