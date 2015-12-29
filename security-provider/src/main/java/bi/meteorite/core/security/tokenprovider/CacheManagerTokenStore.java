@@ -24,6 +24,7 @@ import org.osgi.framework.wiring.BundleWiring;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
@@ -42,6 +43,7 @@ public class CacheManagerTokenStore implements TokenStorageProvider {
 
   private static Logger logger = LoggerFactory.getLogger(CacheManagerTokenStore.class);
 
+  @PostConstruct
   public void init() {
 
     logger.debug("*** Activating CacheManager");
