@@ -18,8 +18,14 @@
   <dependencies>
     <dependency>
       <groupId>bi.meteorite</groupId>
-      <artifactId>api</artifactId>
+      <artifactId>meteorite-core-api</artifactId>
       <version>${version}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>javax.annotation</groupId>
+          <artifactId>jsr250-api</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>com.fasterxml.jackson.jaxrs</groupId>
@@ -72,9 +78,9 @@
         <configuration>
           <instructions>
             <Export-Package>bi.meteorite.core.security</Export-Package>
-            <Import-Package>bi.meteorite.core.security.tokenprovider,javax.xml.bind;version=2.1.0,
+            <Import-Package>!javax.annotation;bi.meteorite.core.security.tokenprovider,javax.xml.bind;version=2.1.0,
                             javax.xml.bind.annotation;version=2.1.0,
-                            com.sun.xml.bind.v2.runtime.reflect;version=0.0.0;resolution:=optional,*</Import-Package>
+                            com.sun.xml.bind.v2.runtime.reflect;version=0.0.0;resolution:=optional,*,javax.annotation;version="1.0"</Import-Package>
           </instructions>
         </configuration>
       </plugin>

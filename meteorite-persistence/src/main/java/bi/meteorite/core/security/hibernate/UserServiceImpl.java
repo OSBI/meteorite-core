@@ -17,7 +17,9 @@
 package bi.meteorite.core.security.hibernate;
 
 import bi.meteorite.core.api.objects.MeteoriteUser;
+import bi.meteorite.core.api.objects.Role;
 import bi.meteorite.core.api.persistence.UserService;
+import bi.meteorite.objects.RoleImpl;
 import bi.meteorite.objects.UserImpl;
 
 import org.ops4j.pax.cdi.api.OsgiServiceProvider;
@@ -77,6 +79,18 @@ public class UserServiceImpl implements UserService {
   @Override
   public void deleteUser(String id) {
     em.remove(getUser(id));
+  }
+
+  @Override
+  public void addRole(Role r) {
+    RoleImpl u = (RoleImpl) r;
+    em.persist(u);
+    em.flush();
+  }
+
+  @Override
+  public void deleteRole(int id) {
+
   }
 
   public void setEntityManager(EntityManager em) {

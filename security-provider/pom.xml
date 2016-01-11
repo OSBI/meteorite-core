@@ -19,13 +19,19 @@
   <dependencies>
     <dependency>
       <groupId>bi.meteorite</groupId>
-      <artifactId>api</artifactId>
+      <artifactId>meteorite-core-api</artifactId>
       <version>${version}</version>
       <scope>provided</scope>
+      <exclusions>
+        <exclusion>
+          <groupId>javax.annotation</groupId>
+          <artifactId>jsr250-api</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>bi.meteorite</groupId>
-      <artifactId>model</artifactId>
+      <artifactId>meteorite-core-model</artifactId>
       <version>${version}</version>
     </dependency>
     <dependency>
@@ -41,6 +47,11 @@
       <groupId>commons-codec</groupId>
       <artifactId>commons-codec</artifactId>
       <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>javax.annotation</groupId>
+      <artifactId>javax.annotation-api</artifactId>
+      <version>1.2</version>
     </dependency>
     <dependency>
       <groupId>javax.inject</groupId>
@@ -130,12 +141,12 @@
       <plugin>
         <groupId>org.apache.felix</groupId>
         <artifactId>maven-bundle-plugin</artifactId>
-        <version>2.3.7</version>
+        <version>3.0.1</version>
         <extensions>true</extensions>
         <configuration>
           <instructions>
             <Export-Package>bi.meteorite.core.security.tokenprovider,bi.meteorite.core.security.jaas</Export-Package>
-            <Import-Package>*</Import-Package>
+            <Import-Package>!javax.annotation,*,javax.annotation;version="1.0"</Import-Package>
           </instructions>
         </configuration>
       </plugin>

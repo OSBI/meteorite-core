@@ -22,6 +22,7 @@ import bi.meteorite.core.api.objects.MeteoriteUser;
 import bi.meteorite.core.api.persistence.EventService;
 import bi.meteorite.core.api.persistence.UserService;
 import bi.meteorite.objects.EventImpl;
+import bi.meteorite.objects.RoleImpl;
 import bi.meteorite.objects.UserImpl;
 
 import com.google.common.collect.Lists;
@@ -29,6 +30,8 @@ import com.google.common.collect.Lists;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
+
+import javax.annotation.PostConstruct;
 
 
 /**
@@ -43,6 +46,7 @@ public class DefaultUsers {
     //  insertUsers();
   }
 
+  @PostConstruct
   public void insertUsers() {
 
     if (eventService.getEventByEventName("Start Adding Users") == null) {
@@ -55,6 +59,13 @@ public class DefaultUsers {
       u.setRoles(s);
       u.setPassword("admin");
       userService.addUser(u);
+
+      u.setId(1);
+      RoleImpl r = new RoleImpl();
+      r.setUserId(u);
+      r.setRole("ROLE_ADMIN");
+      r.setRole("ROLE_USER");
+      userService.addRole(r);
 
       u = new UserImpl();
       u.setUsername("smith");

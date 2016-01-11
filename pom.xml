@@ -10,13 +10,13 @@
     security and persistence layers for Saiku and others.</description>
   <modules>
     <module>api</module>
+    <module>model</module>
     <module>security-provider</module>
     <module>security</module>
     <module>meteorite-persistence</module>
     <module>features</module>
     <module>karaf</module>
     <module>meteorite-core-itests</module>
-    <module>model</module>
   </modules>
   <properties>
     <karaf.version>4.0.2</karaf.version>
@@ -52,11 +52,6 @@
         <artifactId>commons-codec</artifactId>
         <version>1.9</version>
         <scope>provided</scope>
-      </dependency>
-      <dependency>
-        <groupId>javax.annotation</groupId>
-        <artifactId>jsr250-api</artifactId>
-        <version>1.0</version>
       </dependency>
       <dependency>
         <groupId>javax.inject</groupId>

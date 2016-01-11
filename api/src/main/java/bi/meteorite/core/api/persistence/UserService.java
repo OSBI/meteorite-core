@@ -17,6 +17,7 @@
 package bi.meteorite.core.api.persistence;
 
 import bi.meteorite.core.api.objects.MeteoriteUser;
+import bi.meteorite.core.api.objects.Role;
 
 import java.util.Collection;
 
@@ -34,4 +35,8 @@ public interface UserService {
   void updateUser(MeteoriteUser user);
 
   void deleteUser(String id);
+
+  void addRole(Role r);
+
+  void deleteRole(int id);
 }

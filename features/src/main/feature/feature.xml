@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <features xmlns="http://karaf.apache.org/xmlns/features/v1.3.0" name="meteorite-core-features">
     <feature name="meteorite-core-features" description="Meteorite Core Features" version="1.0.0.SNAPSHOT">
-
     </feature>
     <feature name="custom-hibernate" description="Hibernate 4.3.x JPA persistence engine support" version="4.3.6.Final">
         <details>Enable Hibernate 4.3.x as persistence engine.</details>

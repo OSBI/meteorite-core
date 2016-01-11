@@ -24,7 +24,7 @@
     <bean id="authorizationInterceptor" class="bi.meteorite.core.security.authorization.TokenAuthorizingInterceptor">
         <property name="methodRolesMap">
             <map>
-                <entry key="getExistingUsers" value="admin"/>
+                <entry key="getExistingUsers" value="ROLE_ADMIN"/>
             </map>
         </property>
     </bean>

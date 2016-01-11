@@ -20,27 +20,33 @@
   <dependencies>
     <dependency>
       <groupId>bi.meteorite</groupId>
-      <artifactId>api</artifactId>
+      <artifactId>meteorite-core-api</artifactId>
+      <version>${version}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>javax.annotation</groupId>
+          <artifactId>jsr250-api</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>bi.meteorite</groupId>
+      <artifactId>meteorite-core-model</artifactId>
       <version>${version}</version>
     </dependency>
     <dependency>
       <groupId>bi.meteorite</groupId>
-      <artifactId>meteorite-persistence</artifactId>
+      <artifactId>meteorite-core-persistence</artifactId>
       <version>${version}</version>
     </dependency>
     <dependency>
       <groupId>bi.meteorite</groupId>
-      <artifactId>model</artifactId>
+      <artifactId>meteorite-core-security</artifactId>
       <version>${version}</version>
     </dependency>
     <dependency>
       <groupId>bi.meteorite</groupId>
-      <artifactId>security</artifactId>
-      <version>${version}</version>
-    </dependency>
-    <dependency>
-      <groupId>bi.meteorite</groupId>
-      <artifactId>security-provider</artifactId>
+      <artifactId>meteorite-core-security-provider</artifactId>
       <version>${version}</version>
     </dependency>
     <dependency>
