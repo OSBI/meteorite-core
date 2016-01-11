@@ -21,11 +21,14 @@ import bi.meteorite.core.api.objects.Role;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.TableGenerator;
 
 /**
  * Created by bugg on 29/12/15.
@@ -36,10 +39,17 @@ public class RoleImpl implements Role {
 
   @Id
   @Column
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @TableGenerator(name = "EVENT_GEN2",
+      table = "SEQUENCES2",
+      pkColumnName = "SEQ_NAME2",
+      valueColumnName = "SEQ_NUMBER2",
+      pkColumnValue = "SEQUENCE",
+      allocationSize=1)
+  @GeneratedValue(strategy = GenerationType.TABLE, generator = "EVENT_GEN2")
   private int id;
 
-  @ManyToOne
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "USER_ID", nullable = false)
   private UserImpl userid;
 
   @Column
@@ -62,7 +72,7 @@ public class RoleImpl implements Role {
 
   @Override
   public void setUserId(MeteoriteUser id) {
-    this.userid = userid;
+    this.userid = (UserImpl) id;
   }
 
   @Override

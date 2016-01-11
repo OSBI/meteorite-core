@@ -51,13 +51,13 @@ public interface MeteoriteUser {
    * Get an array of roles.
    * @return an array of roles.
    */
-  List<String> getRoles();
+  List<Role> getRoles();
 
   /**
    * Set the roles.
    * @param roles an array of roles.
    */
-  void setRoles(List<String> roles);
+  void setRoles(List<Role> roles);
 
   /**
    * Get the user email address.

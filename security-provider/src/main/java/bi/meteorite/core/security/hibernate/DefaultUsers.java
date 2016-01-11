@@ -19,16 +19,15 @@ package bi.meteorite.core.security.hibernate;
 
 import bi.meteorite.core.api.objects.Event;
 import bi.meteorite.core.api.objects.MeteoriteUser;
+import bi.meteorite.core.api.objects.Role;
 import bi.meteorite.core.api.persistence.EventService;
 import bi.meteorite.core.api.persistence.UserService;
 import bi.meteorite.objects.EventImpl;
 import bi.meteorite.objects.RoleImpl;
 import bi.meteorite.objects.UserImpl;
 
-import com.google.common.collect.Lists;
-
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.UUID;
 
 import javax.annotation.PostConstruct;
@@ -55,12 +54,9 @@ public class DefaultUsers {
           "Adding users to user list", new Date()));
       MeteoriteUser u = new UserImpl();
       u.setUsername("admin");
-      List<String> s = Lists.newArrayList("ROLE_ADMIN", "ROLE_USER");
-      u.setRoles(s);
       u.setPassword("admin");
-      userService.addUser(u);
+      u = userService.addUser(u);
 
-      u.setId(1);
       RoleImpl r = new RoleImpl();
       r.setUserId(u);
       r.setRole("ROLE_ADMIN");
@@ -70,7 +66,9 @@ public class DefaultUsers {
       u = new UserImpl();
       u.setUsername("smith");
       u.setPassword("smith");
-      List<String> s2 = Lists.newArrayList("ROLE_USER");
+      ArrayList<Role> s2 = new ArrayList<>();
+      s2.add(new RoleImpl("ROLE_USER", (UserImpl)u));
+
       u.setRoles(s2);
       userService.addUser(u);
 

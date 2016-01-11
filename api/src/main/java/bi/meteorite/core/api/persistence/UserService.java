@@ -28,7 +28,7 @@ public interface UserService {
 
   MeteoriteUser getUser(String id);
 
-  void addUser(MeteoriteUser user);
+  MeteoriteUser addUser(MeteoriteUser user);
 
   Collection<MeteoriteUser> getUsers();
 

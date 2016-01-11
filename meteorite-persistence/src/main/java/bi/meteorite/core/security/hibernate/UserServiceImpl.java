@@ -57,10 +57,11 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public void addUser(MeteoriteUser user) {
+  public MeteoriteUser addUser(MeteoriteUser user) {
     UserImpl u = (UserImpl) user;
     em.persist(u);
     em.flush();
+    return u;
   }
 
   @Transactional(Transactional.TxType.SUPPORTS)

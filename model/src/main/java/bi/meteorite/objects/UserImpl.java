@@ -24,11 +24,13 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.TableGenerator;
 
 /**
  * A User Object
@@ -39,7 +41,13 @@ public class UserImpl implements MeteoriteUser {
 
   @Id
   @Column
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @TableGenerator(name = "EVENT_GEN",
+      table = "SEQUENCES",
+      pkColumnName = "SEQ_NAME",
+      valueColumnName = "SEQ_NUMBER",
+      pkColumnValue = "SEQUENCE",
+      allocationSize=1)
+  @GeneratedValue(strategy = GenerationType.TABLE, generator = "EVENT_GEN")
   private int id;
 
   @Column(length = 100)
@@ -78,8 +86,9 @@ public class UserImpl implements MeteoriteUser {
     this.password = password;
   }
 
+  @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
   @Override
-  public List<String> getRoles() {
+  public List<Role> getRoles() {
     //return roles;
     List l = new ArrayList();
     for (Role role : roles) {
@@ -89,9 +98,9 @@ public class UserImpl implements MeteoriteUser {
   }
 
   @Override
-  public void setRoles(List<String> roles) {
-    for (String r : roles) {
-      this.roles.add(new RoleImpl(r, this));
+  public void setRoles(List<Role> roles) {
+    for (Role r : roles) {
+      this.roles.add((RoleImpl)r);
     }
   }
 
