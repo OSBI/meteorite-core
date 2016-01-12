@@ -51,13 +51,13 @@ public interface MeteoriteUser {
    * Get an array of roles.
    * @return an array of roles.
    */
-  List<Role> getRoles();
+  List<MeteoriteRole> getRoles();
 
   /**
    * Set the roles.
    * @param roles an array of roles.
    */
-  void setRoles(List<Role> roles);
+  void setRoles(List<MeteoriteRole> roles);
 
   /**
    * Get the user email address.

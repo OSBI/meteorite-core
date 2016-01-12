@@ -20,7 +20,7 @@ package bi.meteorite.core.api.objects;
 /**
  * Created by bugg on 29/12/15.
  */
-public interface Role {
+public interface MeteoriteRole {
 
   int getId();
   void setId(int id);

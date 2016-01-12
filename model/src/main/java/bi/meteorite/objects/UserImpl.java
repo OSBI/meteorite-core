@@ -17,7 +17,7 @@
 package bi.meteorite.objects;
 
 import bi.meteorite.core.api.objects.MeteoriteUser;
-import bi.meteorite.core.api.objects.Role;
+import bi.meteorite.core.api.objects.MeteoriteRole;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -88,18 +88,17 @@ public class UserImpl implements MeteoriteUser {
 
   @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
   @Override
-  public List<Role> getRoles() {
-    //return roles;
+  public List<MeteoriteRole> getRoles() {
     List l = new ArrayList();
-    for (Role role : roles) {
+    for (MeteoriteRole role : roles) {
       l.add(role.getRole());
     }
     return l;
   }
 
   @Override
-  public void setRoles(List<Role> roles) {
-    for (Role r : roles) {
+  public void setRoles(List<MeteoriteRole> roles) {
+    for (MeteoriteRole r : roles) {
       this.roles.add((RoleImpl)r);
     }
   }

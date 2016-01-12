@@ -19,7 +19,7 @@ package bi.meteorite.core.security.hibernate;
 
 import bi.meteorite.core.api.objects.Event;
 import bi.meteorite.core.api.objects.MeteoriteUser;
-import bi.meteorite.core.api.objects.Role;
+import bi.meteorite.core.api.objects.MeteoriteRole;
 import bi.meteorite.core.api.persistence.EventService;
 import bi.meteorite.core.api.persistence.UserService;
 import bi.meteorite.objects.EventImpl;
@@ -66,7 +66,7 @@ public class DefaultUsers {
       u = new UserImpl();
       u.setUsername("smith");
       u.setPassword("smith");
-      ArrayList<Role> s2 = new ArrayList<>();
+      ArrayList<MeteoriteRole> s2 = new ArrayList<>();
       s2.add(new RoleImpl("ROLE_USER", (UserImpl)u));
 
       u.setRoles(s2);

@@ -17,7 +17,7 @@
 package bi.meteorite.core.security.hibernate;
 
 import bi.meteorite.core.api.objects.MeteoriteUser;
-import bi.meteorite.core.api.objects.Role;
+import bi.meteorite.core.api.objects.MeteoriteRole;
 import bi.meteorite.core.api.persistence.UserService;
 import bi.meteorite.objects.RoleImpl;
 import bi.meteorite.objects.UserImpl;
@@ -83,16 +83,25 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public void addRole(Role r) {
+  public MeteoriteRole addRole(MeteoriteRole r) {
     RoleImpl u = (RoleImpl) r;
     em.persist(u);
     em.flush();
+    return u;
   }
 
   @Override
-  public void deleteRole(int id) {
-
+  public void deleteRole(String id) {
+    em.remove(getRole(id));
   }
+
+  @Override
+  public MeteoriteRole getRole(String id) {
+    MeteoriteRole r = em.find(RoleImpl.class, id);
+
+    return r;
+  }
+
 
   public void setEntityManager(EntityManager em) {
     this.em = em;

@@ -17,7 +17,7 @@
 package bi.meteorite.objects;
 
 import bi.meteorite.core.api.objects.MeteoriteUser;
-import bi.meteorite.core.api.objects.Role;
+import bi.meteorite.core.api.objects.MeteoriteRole;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -35,7 +35,7 @@ import javax.persistence.TableGenerator;
  */
 @Entity(name = "ROLES")
 @Table(name = "ROLES")
-public class RoleImpl implements Role {
+public class RoleImpl implements MeteoriteRole {
 
   @Id
   @Column
