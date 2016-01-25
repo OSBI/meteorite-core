@@ -32,6 +32,9 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.transaction.Transactional;
 
+import scala.collection.JavaConversions;
+import scala.collection.JavaConversions$;
+
 /**
  * Created by bugg on 21/12/15.
  */
@@ -87,10 +90,14 @@ public class EventServiceImpl implements EventService {
   }
 
   @Override
-  public List<? extends Event> getEvents() {
+  public scala.collection.immutable.List<Event> getEvents() {
     CriteriaQuery<EventImpl> query = em.getCriteriaBuilder().createQuery(EventImpl.class);
-    return em.createQuery(query.select(query.from(EventImpl.class))).getResultList();
+    List<? extends Event> list = em.createQuery(query.select(query.from(EventImpl.class))).getResultList();
+
+    return (scala.collection.immutable.List<Event>) JavaConversions.asScalaBuffer(list).toList();
+
   }
+
 
   @Override
   public void updateEvent(Event event) {

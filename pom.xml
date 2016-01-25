@@ -10,9 +10,12 @@
     security and persistence layers for Saiku and others.</description>
   <modules>
     <module>api</module>
-    <module>model</module>
-    <module>security-provider</module>
-    <module>security</module>
+    <!--<module>model</module>-->
+    <module>model-scala</module>
+    <!--<module>security-provider</module>-->
+    <module>security-provider-scala</module>
+    <!--<module>security</module>-->
+    <module>security-scala</module>
     <module>meteorite-persistence</module>
     <module>features</module>
     <module>karaf</module>
