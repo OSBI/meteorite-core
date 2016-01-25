@@ -15,19 +15,12 @@ import javax.xml.bind.annotation.XmlRootElement
     this.password = password
   }
 
-  def getUsername: String = {
-    username
-  }
+  def getUsername = username
 
-  def setUsername(username: String) {
-    this.username = username
-  }
+  def setUsername(username: String) = this.username = username
 
-  def getPassword: String = {
-    password
-  }
+  def getPassword = password
 
-  def setPassword(password: String) {
-    this.password = password
-  }
+  def setPassword(password: String) = this.password = password
+
 }

@@ -59,8 +59,7 @@ class TokenJAASAuthenticationFilter extends JAASAuthenticationFilter {
             override def getUserPrincipal: Principal = p
 
             override def isUserInRole(role: String): Boolean = {
-              val roles = finalValid.get(TokenProvider.ROLES)
-              val rolearray = roles.get.split(",")
+              val rolearray = finalValid.get(TokenProvider.ROLES).get.split(",")
               rolearray contains role
             }
 

@@ -23,8 +23,6 @@ import org.ops4j.pax.cdi.api.OsgiServiceProvider
     }
   }
 
-  def setAdminLoginService(adminLoginService: AdminLoginService) = {
-    this.adminLoginService = adminLoginService
-  }
+  def setAdminLoginService(adminLoginService: AdminLoginService) = this.adminLoginService = adminLoginService
 }
 

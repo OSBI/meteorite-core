@@ -8,7 +8,6 @@ import java.util
 import scala.collection.immutable.HashMap
 import scala.collection.mutable.ListBuffer
 
-//remove if not needed
 import scala.collection.JavaConversions._
 import TokenAuthorizingInterceptor._
 
@@ -76,19 +75,13 @@ class TokenAuthorizingInterceptor(uniqueId: Boolean) extends TokenAbstractAutori
     globalRoles.toList
   }
 
-  def setMethodRolesMap(rolesMap: Map[String, String]) {
-    methodRolesMap.putAll(parseRolesMap(rolesMap))
-  }
+  def setMethodRolesMap(rolesMap: Map[String, String]) = methodRolesMap.putAll(parseRolesMap(rolesMap))
 
-  def setUserRolesMap(rolesMap: Map[String, String]) {
-    userRolesMap = parseRolesMap(rolesMap)
-  }
+  def setUserRolesMap(rolesMap: Map[String, String]) = userRolesMap = parseRolesMap(rolesMap)
 
-  def setGlobalRoles(roles: String) {
-    globalRoles = roles.split(" ").to[ListBuffer]
-  }
+  def setGlobalRoles(roles: String) = globalRoles = roles.split(" ").to[ListBuffer]
 
-  def setCheckConfiguredRolesOnly(checkConfiguredRolesOnly: Boolean) {
-    this.checkConfiguredRolesOnly = checkConfiguredRolesOnly
-  }
+  def setCheckConfiguredRolesOnly(checkConfiguredRolesOnly: Boolean) =this.checkConfiguredRolesOnly =
+    checkConfiguredRolesOnly
+
 }

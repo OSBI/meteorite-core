@@ -27,7 +27,5 @@ import org.apache.cxf.jaxrs.utils.JAXRSUtils
 
   }
 
-  def setInterceptor(in: TokenAuthorizingInterceptor) = {
-    interceptor = in
-  }
+  def setInterceptor(in: TokenAuthorizingInterceptor) = interceptor = in
 }
