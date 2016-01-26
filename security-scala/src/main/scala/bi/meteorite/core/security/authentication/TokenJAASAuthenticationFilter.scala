@@ -84,9 +84,9 @@ class TokenJAASAuthenticationFilter extends JAASAuthenticationFilter {
           s += role.getName + ","
         }
         s = s.substring(0, s.length - 1)
-        val userMap = new TreeMap[String, String]()
-        userMap.put(TokenProvider.USERNAME, getUsername(handler))
-        userMap.put(TokenProvider.ROLES, s)
+        var userMap = new TreeMap[String, String]()
+        userMap += (TokenProvider.USERNAME -> getUsername(handler))
+        userMap += (TokenProvider.ROLES -> s)
         try {
           val token = tokenProvider.generateToken(userMap)
           context.setProperty("token", token)

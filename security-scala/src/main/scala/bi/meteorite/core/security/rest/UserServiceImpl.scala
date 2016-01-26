@@ -41,7 +41,9 @@ class UserServiceImpl extends UserService {
     Response.ok().build()
   }
 
-  override def getExistingUsers: Response = Response.ok(iUserManagementProvider.getUsers).build()
+  override def getExistingUsers: Response = {
+    Response.ok(iUserManagementProvider.getUsers).build()
+  }
 
   override def getUser(id: Int): Response = Response.ok(iUserManagementProvider.getUser(id)).build()
 

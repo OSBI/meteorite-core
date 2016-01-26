@@ -45,8 +45,11 @@ class DefaultUsers {
       val r: MeteoriteRole = new RoleImpl
       r.setUserId(u)
       r.setRole("ROLE_ADMIN")
-      r.setRole("ROLE_USER")
       userService.addRole(r)
+      val r2: MeteoriteRole = new RoleImpl
+      r2.setUserId(u)
+      r2.setRole("ROLE_USER")
+      userService.addRole(r2)
       u = new UserImpl
       u.setUsername("smith")
       u.setPassword("smith")
