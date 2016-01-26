@@ -36,7 +36,7 @@
             <ref component-id="authenticationFilter"/>
             <ref component-id="tokenResponseFilter"/>
             <!-- Exception Mappers -->
-            <bean class="org.apache.cxf.jaxrs.cors.CrossOriginResourceSharingFilter" />
+            <bean class="org.apache.cxf.rs.security.cors.CrossOriginResourceSharingFilter" />
         </jaxrs:providers>
         <jaxrs:features>
             <cxf:logging/>
