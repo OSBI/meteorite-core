@@ -22,13 +22,14 @@ import org.osgi.framework.wiring.BundleWiring
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import javax.annotation.PostConstruct
-import javax.inject.Inject
-import javax.inject.Singleton
+import javax.inject.{Named, Inject, Singleton}
 
 /**
   * Token Storage.
   */
-@Singleton object CacheManagerTokenStore {
+@Singleton
+@Named("CManager")
+object CacheManagerTokenStore {
   private var logger: Logger = LoggerFactory.getLogger(classOf[CacheManagerTokenStore])
 }
 

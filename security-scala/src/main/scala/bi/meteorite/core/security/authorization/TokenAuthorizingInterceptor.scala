@@ -5,11 +5,12 @@ import org.apache.cxf.security.SecurityContext
 
 import java.util
 
-import scala.collection.immutable.HashMap
+import scala.collection.mutable.HashMap
 import scala.collection.mutable.ListBuffer
 
 import scala.collection.JavaConversions._
 import TokenAuthorizingInterceptor._
+import scala.collection.JavaConverters._
 
 object TokenAuthorizingInterceptor {
 
@@ -75,13 +76,14 @@ class TokenAuthorizingInterceptor(uniqueId: Boolean) extends TokenAbstractAutori
     globalRoles.toList
   }
 
-  def setMethodRolesMap(rolesMap: Map[String, String]) = methodRolesMap.putAll(parseRolesMap(rolesMap))
+  def setMethodRolesMap(rolesMap: java.util.Map[String, String]) =
+    methodRolesMap.putAll(parseRolesMap(rolesMap.asScala.toMap))
 
-  def setUserRolesMap(rolesMap: Map[String, String]) = userRolesMap = parseRolesMap(rolesMap)
+  def setUserRolesMap(rolesMap: java.util.Map[String, String]) = userRolesMap = parseRolesMap(rolesMap.asScala.toMap)
 
   def setGlobalRoles(roles: String) = globalRoles = roles.split(" ").to[ListBuffer]
 
-  def setCheckConfiguredRolesOnly(checkConfiguredRolesOnly: Boolean) =this.checkConfiguredRolesOnly =
+  def setCheckConfiguredRolesOnly(checkConfiguredRolesOnly: Boolean) = this.checkConfiguredRolesOnly =
     checkConfiguredRolesOnly
 
 }

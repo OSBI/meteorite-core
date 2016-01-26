@@ -5,13 +5,14 @@ import javax.ws.rs.core.Response
 
 import bi.meteorite.core.api.security.AdminLoginService
 import bi.meteorite.core.api.security.rest.{UserAuthentication, UserService}
-import org.ops4j.pax.cdi.api.OsgiServiceProvider
+import org.ops4j.pax.cdi.api.{OsgiService, OsgiServiceProvider}
 
-@OsgiServiceProvider(classes = Array(classOf[UserService]))
+@OsgiServiceProvider(classes = Array(classOf[UserAuthentication]))
 @Singleton class UserAuthenticationImpl extends UserAuthentication {
 
   @Inject
   @volatile
+  @OsgiService
   private var adminLoginService: AdminLoginService = null
 
   override def logout(username: String) : Response = {

@@ -37,14 +37,14 @@ trait MeteoriteUser {
     *
     * @return an array of roles.
     */
-  def getRoles: List[MeteoriteRole]
+  def getRoles: java.util.List[MeteoriteRole]
 
   /**
     * Set the roles.
     *
     * @param roles an array of roles.
     */
-  def setRoles(roles: List[MeteoriteRole])
+  def setRoles(roles: java.util.List[MeteoriteRole])
 
   /**
     * Get the user email address.

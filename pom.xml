@@ -19,7 +19,7 @@
     <module>meteorite-persistence</module>
     <module>features</module>
     <module>karaf</module>
-    <module>meteorite-core-itests</module>
+    <!--<module>meteorite-core-itests</module>-->
   </modules>
   <properties>
     <karaf.version>4.0.2</karaf.version>

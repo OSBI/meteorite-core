@@ -26,7 +26,7 @@ import bi.meteorite.objects.UserImpl
 import java.util.Date
 import java.util.UUID
 import javax.annotation.PostConstruct
-
+import scala.collection.JavaConverters._
 /**
   * Created by bugg on 21/12/15.
   */
@@ -51,7 +51,7 @@ class DefaultUsers {
       u.setUsername("smith")
       u.setPassword("smith")
       val s2 = List[MeteoriteRole](new RoleImpl("ROLE_USER", u.asInstanceOf[UserImpl]))
-      u.setRoles(s2)
+      u.setRoles(s2.asJava)
       userService.addUser(u)
       e.setEndDate(new Date)
       e.setDuration(e.getEndDate.getTime - e.getStartDate.getTime)

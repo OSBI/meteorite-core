@@ -11,7 +11,8 @@ import org.apache.cxf.jaxrs.utils.JAXRSUtils
 
 @Priority(Priorities.AUTHORIZATION)
 @Singleton
-@Named("authorizationFilter") class TokenAuthorizingFilter extends ContainerRequestFilter {
+@Named("authorizationFilter")
+class TokenAuthorizingFilter extends ContainerRequestFilter {
 
   @Inject
   @Named("authorizationInterceptor")

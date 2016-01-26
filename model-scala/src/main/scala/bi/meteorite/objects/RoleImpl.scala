@@ -36,10 +36,13 @@ import javax.persistence.TableGenerator
   @Id
   @Column
   @TableGenerator(name = "EVENT_GEN2", table = "SEQUENCES2", pkColumnName = "SEQ_NAME2", valueColumnName = "SEQ_NUMBER2", pkColumnValue = "SEQUENCE", allocationSize = 1)
-  @GeneratedValue(strategy = GenerationType.TABLE, generator = "EVENT_GEN2") private var id: Int = 0
+  @GeneratedValue(strategy = GenerationType.TABLE, generator = "EVENT_GEN2")
+  private var id: Int = 0
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "USER_ID", nullable = false) private var userid: UserImpl = null
-  @Column private var rolename: String = null
+  @JoinColumn(name = "USER_ID", nullable = false)
+  private var userid: UserImpl = null
+  @Column
+  private var rolename: String = null
 
   def getId: Int = {
     id

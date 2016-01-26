@@ -19,8 +19,6 @@ import javax.persistence.{Column, Entity, FetchType, GeneratedValue, GenerationT
 
 import bi.meteorite.core.api.objects.{MeteoriteRole, MeteoriteUser}
 
-import scala.collection.mutable.ListBuffer
-
 /**
   * A User Object
   */
@@ -28,13 +26,20 @@ import scala.collection.mutable.ListBuffer
 @Table(name = "USERS") class UserImpl extends MeteoriteUser {
   @Id
   @Column
-  @TableGenerator(name = "EVENT_GEN", table = "SEQUENCES", pkColumnName = "SEQ_NAME", valueColumnName = "SEQ_NUMBER", pkColumnValue = "SEQUENCE", allocationSize = 1)
-  @GeneratedValue(strategy = GenerationType.TABLE, generator = "EVENT_GEN") private var id: Int = 0
-  @Column(length = 100) private var username: String = null
-  @Column(length = 100) private var password: String = null
-  @OneToMany(mappedBy = "userid") private[objects] var roles = new ListBuffer[RoleImpl]
-  @Column private[objects] var orgId: Int = 0
-  @Column private[objects] var email: String = null
+  @TableGenerator(name = "EVENT_GEN", table = "SEQUENCES", pkColumnName = "SEQ_NAME", valueColumnName = "SEQ_NUMBER",
+    pkColumnValue = "SEQUENCE", allocationSize = 1)
+  @GeneratedValue(strategy = GenerationType.TABLE, generator = "EVENT_GEN")
+  private var id: Int = 0
+  @Column(length = 100)
+  private var username: String = null
+  @Column(length = 100)
+  private var password: String = null
+  @OneToMany(mappedBy = "userid")
+  private val roles: java.util.List[RoleImpl]  = new java.util.ArrayList[RoleImpl]()
+  @Column
+  private var orgId: Int = 0
+  @Column
+  private var email: String = null
 
   def getUsername: String = {
     username
@@ -53,16 +58,16 @@ import scala.collection.mutable.ListBuffer
   }
 
   @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
-  def getRoles: List[MeteoriteRole] = {
-    val l = new ListBuffer[MeteoriteRole]
+  def getRoles: java.util.List[MeteoriteRole] = {
+    val l = new java.util.ArrayList[MeteoriteRole]()
     import scala.collection.JavaConversions._
     for (role <- roles) {
       l.add(role)
     }
-    l.toList
+    l
   }
 
-  def setRoles(roles: List[MeteoriteRole]) {
+  def setRoles(roles: java.util.List[MeteoriteRole]) {
     import scala.collection.JavaConversions._
     for (r <- roles) {
       this.roles.add(r.asInstanceOf[RoleImpl])

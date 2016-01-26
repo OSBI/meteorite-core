@@ -30,7 +30,7 @@
     </dependency>
     <dependency>
       <groupId>bi.meteorite</groupId>
-      <artifactId>meteorite-core-model</artifactId>
+      <artifactId>meteorite-core-model-scala</artifactId>
       <version>1.0-SNAPSHOT</version>
     </dependency>
 

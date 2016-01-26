@@ -6,9 +6,9 @@ import java.util.Date
   * Created by bugg on 21/12/15.
   */
 trait Event {
-  def getId: Int
+  def getId: Long
 
-  def setId(id: Int)
+  def setId(id: Long)
 
   def getUuid: String
 

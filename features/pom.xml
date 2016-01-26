@@ -31,7 +31,7 @@
     </dependency>
     <dependency>
       <groupId>bi.meteorite</groupId>
-      <artifactId>meteorite-core-model</artifactId>
+      <artifactId>meteorite-core-model-scala</artifactId>
       <version>${version}</version>
     </dependency>
     <dependency>
@@ -41,12 +41,12 @@
     </dependency>
     <dependency>
       <groupId>bi.meteorite</groupId>
-      <artifactId>meteorite-core-security</artifactId>
+      <artifactId>meteorite-core-security-provider-scala</artifactId>
       <version>${version}</version>
     </dependency>
     <dependency>
       <groupId>bi.meteorite</groupId>
-      <artifactId>meteorite-core-security-provider</artifactId>
+      <artifactId>meteorite-core-security-scala</artifactId>
       <version>${version}</version>
     </dependency>
     <dependency>

@@ -1,16 +1,24 @@
 package bi.meteorite.core.security
 
+import javax.inject.{Inject, Named, Singleton}
 import javax.servlet.http.{HttpServletRequest, HttpServletResponse}
 import javax.servlet.{Filter, FilterChain, FilterConfig, ServletRequest, ServletResponse}
 
 import bi.meteorite.core.api.security.AdminLoginService
 import bi.meteorite.core.api.security.exceptions.TokenProviderException
 import bi.meteorite.core.api.security.tokenprovider.TokenProvider
+import org.ops4j.pax.cdi.api.OsgiService
 
+@Singleton
+@Named("securityFilter")
 class SecurityFilter extends Filter {
 
+  @Inject
+  @OsgiService
   private var tokenProvider: TokenProvider = _
 
+  @Inject
+  @OsgiService
   private var adminLoginService: AdminLoginService = _
 
   override def doFilter(request: ServletRequest, response: ServletResponse, chain: FilterChain) {
@@ -54,11 +62,7 @@ class SecurityFilter extends Filter {
   override def destroy() {
   }
 
-  def setTokenProvider(tokenProvider: TokenProvider) {
-    this.tokenProvider = tokenProvider
-  }
+  def setTokenProvider(tokenProvider: TokenProvider) = this.tokenProvider = tokenProvider
 
-  def setAdminLoginService(adminLoginService: AdminLoginService) {
-    this.adminLoginService = adminLoginService
-  }
+  def setAdminLoginService(adminLoginService: AdminLoginService) = this.adminLoginService = adminLoginService
 }

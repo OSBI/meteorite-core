@@ -34,23 +34,23 @@ class EventImpl extends Event {
   @Id
   @Column(nullable = false)
   @GeneratedValue(strategy = GenerationType.AUTO)
-  private[objects] var id: Int = 0
+  var id: Long = _
   @Column
-  private[objects] var uuid: String = null
+  var uuid: String = _
   @Column(length = 100)
-  private[objects] var className: String = null
+  var className: String = _
   @Column(length = 100)
-  private[objects] var eventName: String = null
+  var eventName: String = _
   @Column
   @Lob
-  private[objects] var comment: String = null
+  var comment: String = _
   @Column(name = "starttime")
   @org.hibernate.annotations.Type(`type` = "timestamp")
-  private var startDate: Date = null
+  var startDate: Date = _
   @Column(name = "endtime")
   @org.hibernate.annotations.Type(`type` = "timestamp")
-  private var endDate: Date = null
-  @Column private[objects]
+  var endDate: Date = _
+  @Column
   var duration: Long = 0L
 
 
@@ -63,11 +63,11 @@ class EventImpl extends Event {
     this.startDate = startDate
   }
 
-  def getId: Int = {
+  def getId: Long = {
     id
   }
 
-  def setId(id: Int) {
+  def setId(id: Long) {
     this.id = id
   }
 
