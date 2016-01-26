@@ -1,0 +1,73 @@
+<blueprint default-activation="eager"
+           xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+           xmlns:jpa="http://aries.apache.org/xmlns/jpa/v2.0.0"
+           xmlns:tx="http://aries.apache.org/xmlns/transactions/v1.2.0"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 https://osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd"
+           xmlns:jaas="http://karaf.apache.org/xmlns/jaas/v1.0.0"
+           xmlns:ext="http://aries.apache.org/blueprint/xmlns/blueprint-ext/v1.0.0"
+>
+
+    <bean id="cacheManagerTokenStore" class="bi.meteorite.core.security.tokenprovider.CacheManagerTokenStore" ext:field-injection="true" init-method="init">
+        <property name="bcontext" ref="blueprintBundleContext"/>
+        <property name="cacheManager" ref="hazelcastInstance-"/>
+    </bean>
+    <bean id="jaasUserManager" class="bi.meteorite.core.security.jaas.JaasUserManager" ext:field-injection="true">
+        <property name="backingEngineService" ref="engineService"/>
+        <property name="realm" ref="jaasRealm-"/>
+        <property name="userService" ref="userService-"/>
+    </bean>
+    <bean id="tokenProviderImpl" class="bi.meteorite.core.security.tokenprovider.TokenProviderImpl" ext:field-injection="true">
+        <property name="mtokenStore" ref="cacheManagerTokenStore"/>
+    </bean>
+    <reference id="hazelcastInstance-" interface="com.hazelcast.core.HazelcastInstance"/>
+    <reference id="jaasRealm-" interface="org.apache.karaf.jaas.config.JaasRealm"/>
+    <reference id="userService-" interface="bi.meteorite.core.api.persistence.UserService"/>
+    <service ref="jaasUserManager" interface="bi.meteorite.core.api.security.IUserManagementProvider"/>
+    <service ref="tokenProviderImpl" interface="bi.meteorite.core.api.security.tokenprovider.TokenProvider"/>
+
+    <reference interface="bi.meteorite.core.api.persistence.EventService" id="eventS"/>
+    <reference interface="bi.meteorite.core.api.persistence.UserService" id="userS"/>
+    <bean class="bi.meteorite.core.security.hibernate.DefaultUsers" id="default" init-method="insertUsers">
+        <property name="eventService" ref="eventS"/>
+        <property name="userService" ref="userS"/>
+    </bean>
+
+
+    <!-- Allow usage of System properties, especially the karaf.base property -->
+    <ext:property-placeholder placeholder-prefix="$[" placeholder-suffix="]"/>
+
+    <jaas:config name="karaf" rank="2">
+        <jaas:module className="org.apache.karaf.jaas.modules.jdbc.JDBCLoginModule"
+                     flags="required">
+            datasource = osgi:javax.sql.DataSource/(osgi.jndi.service.name=systemdb)
+            query.password = SELECT PASSWORD FROM USERS WHERE USERNAME=?
+            query.role = select ROLENAME from ROLES, USERS where USERS.ID = ROLES.USER_ID and USERNAME = ?
+            insert.user = INSERT INTO USERS VALUES(?,?)
+            insert.role = INSERT INTO ROLES VALUES(?,?)
+            delete.user = DELETE FROM USERS WHERE USERNAME=?
+            delete.role = DELETE FROM ROLES WHERE USERNAME=? AND ROLE=?
+            delete.roles = DELETE FROM ROLES WHERE USERNAME=?
+        </jaas:module>
+    </jaas:config>
+
+    <!-- The Backing Engine Factory Service for the JDBCLoginModule -->
+    <service interface="org.apache.karaf.jaas.modules.BackingEngineFactory">
+        <bean class="org.apache.karaf.jaas.modules.jdbc.JDBCBackingEngineFactory"/>
+    </service>
+    <!-- Backing Engine Service -->
+    <bean id="engineService" class="org.apache.karaf.jaas.modules.BackingEngineService">
+        <property name="engineFactories" ref="engineFactories"/>
+    </bean>
+
+    <!-- Backing Engine Factories -->
+    <reference-list id="engineFactories" interface="org.apache.karaf.jaas.modules.BackingEngineFactory"
+                    availability="optional"/>
+
+
+    <bean id="loginService" class="bi.meteorite.core.security.jaas.JaasLoginManager">
+        <property name="realm" value="karaf"/>
+    </bean>
+
+    <service ref="loginService" interface="bi.meteorite.core.api.security.AdminLoginService"/>
+</blueprint>
