@@ -104,6 +104,11 @@
         <scope>test</scope>
       </dependency>
       <dependency>
+        <groupId>org.apache.cxf</groupId>
+        <artifactId>cxf-rt-rs-security-cors</artifactId>
+        <version>3.1.2</version>
+      </dependency>
+      <dependency>
         <groupId>org.apache.cxf.karaf</groupId>
         <artifactId>apache-cxf</artifactId>
         <version>3.1.1</version>

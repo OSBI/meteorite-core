@@ -2,6 +2,8 @@ package bi.meteorite.core.api.security.rest
 
 import bi.meteorite.core.api.objects.MeteoriteUser
 import bi.meteorite.core.api.security.exceptions.MeteoriteSecurityException
+import org.apache.cxf.rs.security.cors.CrossOriginResourceSharing
+
 //import com.qmino.miredot.annotations.ReturnType
 import javax.annotation.security.RolesAllowed
 import javax.ws.rs.Consumes
@@ -17,6 +19,7 @@ import javax.ws.rs.core.Response
 /**
   * User creation and manipulation for administrators of Meteorite core.
   */
+@CrossOriginResourceSharing(allowAllOrigins = true)
 @Path("/") trait UserService {
   /**
     * Add a user to Meteorite core.

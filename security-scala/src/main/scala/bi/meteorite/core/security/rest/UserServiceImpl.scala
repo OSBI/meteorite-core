@@ -2,6 +2,7 @@ package bi.meteorite.core.security.rest
 
 import javax.inject.{Inject, Named, Singleton}
 import javax.ws.rs.core.Response
+import scala.collection.JavaConverters._
 
 import bi.meteorite.core.api.objects.MeteoriteUser
 import bi.meteorite.core.api.security.IUserManagementProvider
@@ -41,16 +42,11 @@ class UserServiceImpl extends UserService {
     Response.ok().build()
   }
 
-  override def getExistingUsers: Response = {
-    Response.ok(iUserManagementProvider.getUsers).build()
-  }
+  override def getExistingUsers: Response = Response.ok(iUserManagementProvider.getUsers.asJava).build()
 
   override def getUser(id: Int): Response = Response.ok(iUserManagementProvider.getUser(id)).build()
 
-  override def whoami: Response = {
-    Response.ok("{\"login\":{\"password\":\"pass\",\"username\":\"test3\"}}")
-      .build()
-  }
+  override def whoami: Response = Response.ok("{\"login\":{\"password\":\"pass\",\"username\":\"test3\"}}").build()
 
   def setiUserManagementProvider(iUserManagementProvider: IUserManagementProvider) = this.iUserManagementProvider =
     iUserManagementProvider

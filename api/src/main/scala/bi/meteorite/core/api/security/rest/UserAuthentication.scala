@@ -5,9 +5,12 @@ import javax.ws.rs.POST
 import javax.ws.rs.Path
 import javax.ws.rs.core.Response
 
+import org.apache.cxf.rs.security.cors.CrossOriginResourceSharing
+
 /**
   * RESTful interface for authentication.
   */
+@CrossOriginResourceSharing(allowAllOrigins = true)
 @Path("/auth/login") trait UserAuthentication {
   /**
     * Logout from the Meteorite core.
