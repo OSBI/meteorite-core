@@ -43,8 +43,8 @@ Or
      bundle:update bi.meteorite.core-persistence
      bundle:update bi.meteorite.core-security-provider-scala
      bundle:update bi.meteorite.core-security-scala
-     bundle:update bi.meteorite.core-security-scala
      bundle:update bi.meteorite.ui-shared
+     bundle:update bi.meteorite.ui
      
 ## To run a specific integration test:
 
