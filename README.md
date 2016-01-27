@@ -2,33 +2,56 @@
 Core for Saiku and other stuff, provides interfaces for JCR and Security
 
 
-To build
+## To build
 
 Check out and run
 
-mvn clean install
+    mvn clean install
 
 to skip tests run
 
-mvn clean install -DskipTests
+    mvn clean install -DskipTests
 
 
-To deploy:
+## To deploy:
 
-extract the meteorite-engine zip file from karaf/target
+extract the meteorite-engine zip file from karaf/target and run
 
-run ./bin/karaf
+    ./bin/karaf
 
-or ./bin/karaf debug
+or 
+
+    ./bin/karaf debug
 
 once started run
 
-feature:install meteorite-core-features
+    feature:install meteorite-core-features
 
 
-To update modules over the wire:
+## To update modules over the wire:
 
+    bundle:update id
+    
+For example:
 
-To run a specific integration test:
+    bundle:update 294
+    
+Or 
 
+     bundle:update bi.meteorite.core-api
+     bundle:update bi.meteorite.core-model-scala
+     bundle:update bi.meteorite.core-persistence
+     bundle:update bi.meteorite.core-security-provider-scala
+     bundle:update bi.meteorite.core-security-scala
+     bundle:update bi.meteorite.core-security-scala
+     bundle:update bi.meteorite.ui-shared
+     
+## To run a specific integration test:
 
+To run a specific test class run 
+
+    mvn clean install -Dtest=TestSecurity
+    
+To run a specific test class method run
+
+    mvn clean install -Dtest=TestSecurity#testNonAdminLockDown
