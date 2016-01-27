@@ -98,7 +98,9 @@ class TokenJAASAuthenticationFilter extends JAASAuthenticationFilter {
         for (role <- principals if role.isInstanceOf[RolePrincipal]) {
           s += role.getName + ","
         }
-        s = s.substring(0, s.length - 1)
+        if(s.length>0) {
+          s = s.substring(0, s.length - 1)
+        }
         var userMap = new TreeMap[String, String]()
         userMap += (TokenProvider.USERNAME -> getUsername(handler))
         userMap += (TokenProvider.ROLES -> s)

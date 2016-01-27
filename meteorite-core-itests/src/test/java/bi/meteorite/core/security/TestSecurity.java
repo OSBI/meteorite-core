@@ -142,12 +142,12 @@ public class TestSecurity extends ITestBootstrap {
         context, DataSource.class, null);
     tracker.open();
     DataSource dataSource = (DataSource) tracker.waitForService(10000);
-    Response response = get("http://localhost:8181/cxf/rest/core/user/whoami", "nonadmin", "nonadmin", MediaType
+    Response response = get("http://localhost:8181/cxf/rest/core/user/whoami", "smith", "smith", MediaType
         .APPLICATION_JSON);
 
     assertThat(response.getStatusInfo().getFamily(), is(Response.Status.Family.SUCCESSFUL));
 
-    response = get("http://localhost:8181/cxf/rest/core/user", "nonadmin", "nonadmin", MediaType
+    response = get("http://localhost:8181/cxf/rest/core/user", "smith", "smith", MediaType
         .APPLICATION_JSON);
 
     assertThat(response.getStatusInfo().getFamily(), is(Response.Status.Family.CLIENT_ERROR));
