@@ -33,7 +33,6 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.transaction.Transactional;
 
 import scala.collection.JavaConversions;
-import scala.collection.JavaConversions$;
 
 /**
  * Created by bugg on 21/12/15.

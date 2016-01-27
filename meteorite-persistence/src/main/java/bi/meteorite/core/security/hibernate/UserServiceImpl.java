@@ -16,8 +16,8 @@
 
 package bi.meteorite.core.security.hibernate;
 
-import bi.meteorite.core.api.objects.MeteoriteUser;
 import bi.meteorite.core.api.objects.MeteoriteRole;
+import bi.meteorite.core.api.objects.MeteoriteUser;
 import bi.meteorite.core.api.persistence.UserService;
 import bi.meteorite.objects.RoleImpl;
 import bi.meteorite.objects.UserImpl;

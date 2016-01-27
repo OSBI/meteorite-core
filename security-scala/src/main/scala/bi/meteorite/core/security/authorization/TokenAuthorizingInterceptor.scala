@@ -68,15 +68,20 @@ class TokenAuthorizingInterceptor(uniqueId: Boolean) extends TokenAbstractAutori
   }
 
   protected override def getExpectedRoles(method: Method): util.List[String] = {
-    val s = createMethodSig(method)
+
     var roles = methodRolesMap.get(createMethodSig(method))
-    if (roles == null) {
+
+    if(roles.isEmpty) {
       roles = methodRolesMap.get(method.getName)
     }
-    if (roles != null) {
-      return roles.get
+
+    if(roles.isEmpty){
+      globalRoles.toList
     }
-    globalRoles.toList
+    else{
+      roles.get
+    }
+
   }
 
   def setMethodRolesMap(rolesMap: java.util.Map[String, String]) =

@@ -92,10 +92,10 @@ public class TestSecurity extends ITestBootstrap {
 
     Response response = get("http://localhost:8181/cxf/rest/core/user", MediaType.APPLICATION_JSON);
 
-    assertThat(response.getStatusInfo().getFamily(), is(Response.Status.Family.SERVER_ERROR));
-    assertThat(response.readEntity(String.class), containsString("Username can not be null"));
+    assertThat(response.getStatusInfo().getFamily(), is(Response.Status.Family.CLIENT_ERROR));
+    //assertThat(response.readEntity(String.class), containsString("Username can not be null"));
 
-    response = get("http://localhost:8181/cxf/rest/core/user", "karaf", "karaf", MediaType.APPLICATION_JSON);
+    response = get("http://localhost:8181/cxf/rest/core/user", "admin", "admin", MediaType.APPLICATION_JSON);
 
     assertThat(response.getStatusInfo().getFamily(), is(Response.Status.Family.SUCCESSFUL));
 
@@ -115,14 +115,14 @@ public class TestSecurity extends ITestBootstrap {
         context, DataSource.class, null);
     tracker.open();
     DataSource dataSource = (DataSource) tracker.waitForService(10000);
-    Response response = get("http://localhost:8181/cxf/rest/core/user/whoami", "karaf", "karaf", MediaType
+    Response response = get("http://localhost:8181/cxf/rest/core/user/whoami", "admin", "admin", MediaType
         .APPLICATION_JSON);
 
     assertThat(response.getStatusInfo().getFamily(), is(Response.Status.Family.SUCCESSFUL));
 
     assertThat(response.readEntity(String.class), containsString("test3"));
 
-    response = get("http://localhost:8181/cxf/rest/core/user", "karaf", "karaf", MediaType.APPLICATION_JSON);
+    response = get("http://localhost:8181/cxf/rest/core/user", "admin", "admin", MediaType.APPLICATION_JSON);
 
     assertThat(response.getStatusInfo().getFamily(), is(Response.Status.Family.SUCCESSFUL));
 

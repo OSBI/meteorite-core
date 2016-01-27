@@ -110,10 +110,12 @@ public class ITestBootstrap {
 
 
         CoreOptions.mavenBundle("bi.meteorite", "meteorite-core-api", "1.0-SNAPSHOT"),
-        CoreOptions.mavenBundle("bi.meteorite", "meteorite-core-security-provider", "1.0-SNAPSHOT"),
-        CoreOptions.mavenBundle("bi.meteorite", "meteorite-core-security", "1.0-SNAPSHOT"),
+        CoreOptions.mavenBundle("bi.meteorite", "meteorite-core-security-provider-scala", "1.0-SNAPSHOT"),
+        CoreOptions.mavenBundle("bi.meteorite", "meteorite-core-security-scala", "1.0-SNAPSHOT"),
         CoreOptions.mavenBundle("bi.meteorite", "meteorite-core-persistence", "1.0-SNAPSHOT"),
-        CoreOptions.mavenBundle("bi.meteorite", "meteorite-core-model", "1.0-SNAPSHOT"),
+        CoreOptions.mavenBundle("bi.meteorite", "meteorite-core-model-scala", "1.0-SNAPSHOT"),
+        CoreOptions.mavenBundle("org.apache.cxf", "cxf-rt-rs-security-cors", "3.1.2"),
+        CoreOptions.mavenBundle("org.scala-lang", "scala-library", "2.11.7"),
         CoreOptions.mavenBundle("com.fasterxml.jackson.jaxrs", "jackson-jaxrs-json-provider", "2.6.2"),
         CoreOptions.mavenBundle("com.fasterxml.jackson.jaxrs", "jackson-jaxrs-base", "2.6.2"),
         CoreOptions.mavenBundle("com.fasterxml.jackson.core", "jackson-core", "2.6.2"),

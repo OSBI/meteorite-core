@@ -8,11 +8,11 @@
   </parent>
 
   <artifactId>meteorite-core-itests</artifactId>
+  <version>1.0-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <name>Meteorite Core Itests</name>
   <description>Meteorite Core Integration Tests</description>
-
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <top.dir>../</top.dir>
@@ -20,12 +20,12 @@
   <dependencies>
     <dependency>
       <groupId>bi.meteorite</groupId>
-      <artifactId>api</artifactId>
+      <artifactId>meteorite-core-api</artifactId>
       <version>${version}</version>
     </dependency>
     <dependency>
       <groupId>bi.meteorite</groupId>
-      <artifactId>security-provider</artifactId>
+      <artifactId>meteorite-core-security-provider-scala</artifactId>
       <version>${version}</version>
     </dependency>
     <dependency>
