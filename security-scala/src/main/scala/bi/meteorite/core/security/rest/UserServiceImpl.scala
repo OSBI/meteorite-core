@@ -2,6 +2,7 @@ package bi.meteorite.core.security.rest
 
 import javax.inject.{Inject, Named, Singleton}
 import javax.ws.rs.core.Response
+
 import scala.collection.JavaConverters._
 
 import bi.meteorite.core.api.objects.MeteoriteUser

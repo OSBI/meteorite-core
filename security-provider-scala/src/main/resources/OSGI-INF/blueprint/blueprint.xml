@@ -17,6 +17,8 @@
         <property name="realm" ref="jaasRealm-"/>
         <property name="userService" ref="userService-"/>
     </bean>
+
+
     <bean id="tokenProviderImpl" class="bi.meteorite.core.security.tokenprovider.TokenProviderImpl" ext:field-injection="true">
         <property name="mtokenStore" ref="cacheManagerTokenStore"/>
     </bean>

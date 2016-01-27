@@ -38,6 +38,7 @@ import scala.collection.JavaConversions$;
 /**
  * Created by bugg on 21/12/15.
  */
+
 @OsgiServiceProvider(classes = { EventService.class })
 @Properties({
     @Property(name = "service.exported.interfaces", value = "*")

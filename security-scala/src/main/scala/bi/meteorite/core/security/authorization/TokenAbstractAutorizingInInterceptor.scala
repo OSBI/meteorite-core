@@ -3,7 +3,6 @@ package bi.meteorite.core.security.authorization
 import java.lang.reflect.Method
 import java.util
 import java.util.logging.Level
-import org.apache.cxf.security.SecurityContext
 
 import org.apache.cxf.common.logging.LogUtils
 import org.apache.cxf.interceptor.security.{AbstractAuthorizingInInterceptor, AccessDeniedException}
@@ -26,7 +25,7 @@ abstract class TokenAbstractAutorizingInInterceptor(uniqueId: Boolean) extends A
 
   override def handleMessage(message: Message) {
     val method = getTargetMethod(message)
-    val sc = message.get(classOf[SecurityContext])
+    val sc = message.get(classOf[javax.ws.rs.core.SecurityContext])
     if (sc == null) {
       val sc2 = message.get(classOf[org.apache.cxf.security.SecurityContext])
       if (authorize(sc2, method)) {
@@ -42,7 +41,7 @@ abstract class TokenAbstractAutorizingInInterceptor(uniqueId: Boolean) extends A
     throw new AccessDeniedException("Unauthorized")
   }
 
-  protected override def authorize(sc: SecurityContext, method: Method): Boolean = {
+  protected def authorize(sc: javax.ws.rs.core.SecurityContext, method: Method): Boolean = {
     val expectedRoles = getExpectedRoles(method)
     if (expectedRoles.isEmpty) {
       val denyRoles = getDenyRoles(method)
@@ -58,7 +57,7 @@ abstract class TokenAbstractAutorizingInInterceptor(uniqueId: Boolean) extends A
   }
 
 
-  protected override def isUserInRole(sc: SecurityContext, roles: util.List[String], deny: Boolean): Boolean = {
+  protected def isUserInRole(sc: javax.ws.rs.core.SecurityContext, roles: util.List[String], deny: Boolean): Boolean = {
     if (roles.size == 1 && TokenAbstractAutorizingInInterceptor.ALL_ROLES == roles.get(0)) {
       return !deny
     }

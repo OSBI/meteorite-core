@@ -19,7 +19,7 @@ import javax.ws.rs.core.Response
 /**
   * User creation and manipulation for administrators of Meteorite core.
   */
-@CrossOriginResourceSharing(allowAllOrigins = true)
+@CrossOriginResourceSharing(allowAllOrigins = true,allowCredentials = true)
 @Path("/") trait UserService {
   /**
     * Add a user to Meteorite core.

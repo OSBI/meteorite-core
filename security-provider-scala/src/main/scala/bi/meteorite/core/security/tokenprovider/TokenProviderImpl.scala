@@ -34,8 +34,7 @@ import scala.collection.immutable.TreeMap
 /**
   * Token Provider.
   */
-@Singleton
-@OsgiServiceProvider(classes = Array(classOf[TokenProvider])) object TokenProviderImpl {
+object TokenProviderImpl {
   val AUTHORIZATION_HEADER_AMDATU: String = TokenUtil.AUTHORIZATION_HEADER_AMDATU
   private val ENCRYPTION_METHOD: String = "AES"
   private val ENCRYPTION_METHOD_BYTES: Int = 128 / 8
@@ -45,7 +44,8 @@ import scala.collection.immutable.TreeMap
 }
 
 @Singleton
-@OsgiServiceProvider(classes = Array(classOf[TokenProvider])) class TokenProviderImpl extends TokenProvider {
+@OsgiServiceProvider(classes = Array(classOf[TokenProvider]))
+class TokenProviderImpl extends TokenProvider {
   @Inject
   @volatile
   private var mtokenStore: TokenStorageProvider = null
@@ -57,6 +57,8 @@ import scala.collection.immutable.TreeMap
   private var mencryptCipher: Cipher = null
   @volatile
   private var mdecryptCipher: Cipher = null
+
+  initKey()
 
   @SuppressWarnings(Array("rawtypes"))
   @throws(classOf[Exception])
@@ -197,7 +199,7 @@ import scala.collection.immutable.TreeMap
   @throws(classOf[TokenProviderException])
   def generateToken(attributes: TreeMap[String, String]): String = {
     var a = attributes
-    initKey()
+    //initKey()
     try {
       if (attributes.contains(TokenProvider.NONCE)) {
         throw new TokenProviderException("Invalid token attributes provided. Parameter '" + TokenProvider.NONCE + "' is a preserved name")
@@ -229,7 +231,7 @@ import scala.collection.immutable.TreeMap
 
   @throws(classOf[TokenProviderException])
   def verifyToken(encryptedToken: String): TreeMap[String, String] = {
-    initKey()
+    //initKey()
     try {
       if (!mtokenStore.hasToken(encryptedToken)) {
         throw new TokenProviderException("Token is invalid, token unkown")

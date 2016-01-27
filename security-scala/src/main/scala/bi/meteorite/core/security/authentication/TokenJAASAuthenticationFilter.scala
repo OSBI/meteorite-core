@@ -30,6 +30,7 @@ class TokenJAASAuthenticationFilter extends JAASAuthenticationFilter {
     override protected def getCallbackHandler(name: String, password: String): CallbackHandler = {
       TokenJAASAuthenticationFilter.this.getCallbackHandler(name, password)
     }
+
   }
 
   private var tokenProvider: TokenProvider = _
@@ -41,6 +42,10 @@ class TokenJAASAuthenticationFilter extends JAASAuthenticationFilter {
   interceptor.setUseDoAs(false)
 
   interceptor.setContextName("karaf")
+
+  interceptor.setRoleClassifierType(JAASLoginInterceptor.ROLE_CLASSIFIER_CLASS_NAME)
+  interceptor.setRoleClassifier("org.apache.karaf.jaas.boot.principal.RolePrincipal")
+  interceptor.setReportFault(true)
 
   override def filter(context: ContainerRequestContext) {
     val m = JAXRSUtils.getCurrentMessage
@@ -69,6 +74,7 @@ class TokenJAASAuthenticationFilter extends JAASAuthenticationFilter {
           }
           oldcontext = context.getSecurityContext
           context.setSecurityContext(c)
+          m.put(classOf[SecurityContext], c);
         } catch {
           case e: TokenProviderException => context.setSecurityContext(oldcontext)
         }
@@ -76,8 +82,17 @@ class TokenJAASAuthenticationFilter extends JAASAuthenticationFilter {
       if (valid == null || valid.isEmpty) {
         val handler = getFirstCallbackHandler(m)
         interceptor.handleMessage(m)
+        val o = m.get(classOf[org.apache.cxf.security.SecurityContext])
+        var obj = o match {
+          case o2: org.apache.cxf.interceptor.security.RolePrefixSecurityContextImpl => o2
+          case _ => throw new ClassCastException
+        }
+
+
+
+
         val acc = AccessController.getContext
-        val subject = Subject.getSubject(acc)
+        val subject = obj.getSubject
         val principals = subject.getPrincipals
         var s = ""
         for (role <- principals if role.isInstanceOf[RolePrincipal]) {

@@ -24,6 +24,11 @@
     </bean>
 
     <jaxrs:server id="taskService" address="/rest/core">
+        <jaxrs:inInterceptors>
+            <bean class="bi.meteorite.core.security.authentication.CustomHttpAuthenticationFaultHandler">
+                <property name="realm" value="karaf"/>
+            </bean>
+        </jaxrs:inInterceptors>
         <jaxrs:serviceBeans>
             <ref component-id="userRestServiceBean"/>
             <ref component-id="userAuthenticationImpl"/>
@@ -37,13 +42,14 @@
             <ref component-id="tokenResponseFilter"/>
             <!-- Exception Mappers -->
             <bean class="org.apache.cxf.rs.security.cors.CrossOriginResourceSharingFilter" />
+
         </jaxrs:providers>
         <jaxrs:features>
             <cxf:logging/>
-            <bean class="org.apache.cxf.interceptor.security.JAASAuthenticationFeature">
+            <!--<bean class="org.apache.cxf.interceptor.security.TokenAuthenticationFeature">
                 <property name="contextName" value="karaf"/>
                 <property name="reportFault" value="true"/>
-            </bean>
+            </bean>-->
         </jaxrs:features>
         <!--<jaxrs:extensionMappings>
              <entry key="json" value="application/json" />
