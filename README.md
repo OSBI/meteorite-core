@@ -1,6 +1,7 @@
 # meteorite-core
 Core for Saiku and other stuff, provides interfaces for JCR and Security
 
+[a API Examples](API_Examples.md)
 
 ## To build
 
@@ -55,3 +56,4 @@ To run a specific test class run
 To run a specific test class method run
 
     mvn clean install -Dtest=TestSecurity#testNonAdminLockDown
+
