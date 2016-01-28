@@ -1,7 +1,7 @@
 # meteorite-core
 Core for Saiku and other stuff, provides interfaces for JCR and Security
 
-[a API Examples](API_Examples.md)
+[API Examples](API_Examples.md)
 
 ## To build
 
