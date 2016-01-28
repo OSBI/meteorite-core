@@ -1,8 +1,11 @@
 package bi.meteorite.core.api.objects
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo
+
 /**
   * A user object for Meteorite core.
   */
+@JsonTypeInfo(use=JsonTypeInfo.Id.CLASS, include=JsonTypeInfo.As.PROPERTY, property="@class")
 trait MeteoriteUser {
   /**
     * Get the username.
@@ -65,14 +68,14 @@ trait MeteoriteUser {
     *
     * @return the id
     */
-  def getId: Int
+  def getId: Long
 
   /**
     * Set the users id.
     *
     * @param id the id.
     */
-  def setId(id: Int)
+  def setId(id: Long)
 
   /**
     * Get the organization id.

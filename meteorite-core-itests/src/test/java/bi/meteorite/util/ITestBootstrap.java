@@ -17,8 +17,13 @@
 
 package bi.meteorite.util;
 
+import org.apache.cxf.jaxrs.client.WebClient;
 import org.apache.felix.service.command.CommandProcessor;
 import org.apache.felix.service.command.CommandSession;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider;
+import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
 
 import org.ops4j.pax.exam.Configuration;
 import org.ops4j.pax.exam.ConfigurationManager;
@@ -36,10 +41,18 @@ import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.util.tracker.ServiceTracker;
 
 import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
 import java.io.File;
+import java.io.IOException;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
+import java.net.URL;
+import java.util.ArrayList;
 import java.util.Dictionary;
+import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -47,9 +60,12 @@ import java.util.concurrent.FutureTask;
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
+import javax.net.ssl.HttpsURLConnection;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.xml.bind.DatatypeConverter;
 
@@ -62,7 +78,7 @@ import static org.ops4j.pax.exam.karaf.options.KarafDistributionOption.editConfi
  */
 public class ITestBootstrap {
 
-  private final Client client = ClientBuilder.newClient();
+  private final Client client = ClientBuilder.newClient();//.register(JacksonJsonProvider.class);
   static final Long SERVICE_TIMEOUT = 30000L;
   @Inject
   protected BundleContext bundleContext;
@@ -166,6 +182,81 @@ public class ITestBootstrap {
   protected Response get(String url, String token, String type) {
     WebTarget target = client.target(url);
     return target.request(type).cookie("saiku_token", token).get();
+  }
+
+  protected Object post(String url, String user, String pass, String type, Object data, Class c) {
+
+
+    String url2 = "https://selfsolve.apple.com/wcResults.do";
+    URL obj = null;
+    try {
+      obj = new URL(url);
+    } catch (MalformedURLException e) {
+      e.printStackTrace();
+    }
+    HttpURLConnection con = null;
+    try {
+      con = (HttpURLConnection) obj.openConnection();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+
+    //add reuqest header
+    try {
+      con.setRequestMethod("POST");
+      con.setRequestProperty("Content-Type", "application/json");
+      con.setRequestProperty("Accept", "application/json");
+      con.setRequestProperty("Authorization", getBasicAuthentication(user, pass));
+    } catch (ProtocolException e) {
+      e.printStackTrace();
+    }
+    //con.setRequestProperty("User-Agent", USER_AGENT);
+    con.setRequestProperty("Accept-Language", "en-US,en;q=0.5");
+
+    //String urlParameters = "sn=C02G8416DRJM&cn=&locale=&caller=&num=12345";
+
+    // Send post request
+    con.setDoOutput(true);
+    DataOutputStream wr = null;
+    try {
+      wr = new DataOutputStream(con.getOutputStream());
+      wr.writeBytes((String)"[\"bi.meteorite.objects.UserImpl\",{\"id\":0,\"username\":\"test\",\"password\":null,\"orgId\":0,\"email\":\"test@test.com\",\"roles\":[\"java.util.ArrayList\",[]]}]");
+      wr.flush();
+      wr.close();
+
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    int responseCode = 0;
+    try {
+      responseCode = con.getResponseCode();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    System.out.println("\nSending 'POST' request to URL : " + url);
+    System.out.println("Post parameters : " + ((String)data));
+    System.out.println("Response Code : " + responseCode);
+
+
+
+    /*JacksonJaxbJsonProvider prov = new JacksonJaxbJsonProvider();
+    ObjectMapper obj = new ObjectMapper();
+    obj.enableDefaultTyping();
+    prov.setMapper(obj);
+    List<Object> providers = new ArrayList<Object>();
+    providers.add( prov );
+    WebClient wc = WebClient.create(url, providers);
+
+    Object resp = wc.header("Authorization", getBasicAuthentication(user, pass)).header("Accept",
+        "application/json").type(MediaType.APPLICATION_JSON).post(data, c);
+
+
+
+    WebTarget target = client.target(url);
+    return target.request(type).header("Authorization", getBasicAuthentication(user, pass)).header("Accept", "application/json")
+                 .post(Entity.entity(data, MediaType.APPLICATION_JSON),
+                     c);*/
+    return null;
   }
 
 

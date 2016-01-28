@@ -13,7 +13,14 @@
 
     <bean id="cxfServlet" class="org.apache.cxf.transport.servlet.CXFServlet"/>
 
-    <bean id="jsonProvider" class="com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider"/>
+    <bean id="jacksonMapper" class="bi.meteorite.core.security.authentication.CustomObjectMapper">
+
+    </bean>
+
+
+    <bean id="jsonProvider" class="com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider">
+    <argument ref="jacksonMapper"/>
+    </bean>
 
     <bean id="authorizationInterceptor" class="bi.meteorite.core.security.authorization.TokenAuthorizingInterceptor">
         <property name="methodRolesMap">
@@ -26,7 +33,7 @@
     <jaxrs:server id="taskService" address="/rest/core">
         <jaxrs:inInterceptors>
             <bean class="bi.meteorite.core.security.authentication.CustomHttpAuthenticationFaultHandler">
-                <property name="realm" value="karaf"/>
+                <property name="realm" value="meteorite-realm"/>
             </bean>
         </jaxrs:inInterceptors>
         <jaxrs:serviceBeans>
@@ -82,7 +89,7 @@
 
     <bean id="authenticationFilter" class="bi.meteorite.core.security.authentication.TokenJAASAuthenticationFilter">
         <!-- Name of the JAAS Context -->
-        <property name="contextName" value="karaf"/>
+        <property name="contextName" value="meteorite-realm"/>
         <property name="tokenProvider" ref="tokenProvider-"/>
     </bean>
 

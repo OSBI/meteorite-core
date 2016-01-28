@@ -3,6 +3,9 @@ package bi.meteorite.core.security.rest
 import javax.inject.{Inject, Named, Singleton}
 import javax.ws.rs.core.Response
 
+import bi.meteorite.core.security.rest.objects.UserObj
+import bi.meteorite.objects.UserImpl
+
 import scala.collection.JavaConverters._
 
 import bi.meteorite.core.api.objects.MeteoriteUser
@@ -20,7 +23,9 @@ class UserServiceImpl extends UserService {
   private var iUserManagementProvider: IUserManagementProvider = _
 
   override def addUser(u: MeteoriteUser): Response = {
-    iUserManagementProvider.addUser(u.getUsername, u.getPassword)
+    var u2 = u.asInstanceOf[UserObj]
+    //var u3 = u2.asInstanceOf[UserImpl]
+    iUserManagementProvider.addUser(u2.toUserImpl())
     Response.ok().build()
   }
 
@@ -45,7 +50,9 @@ class UserServiceImpl extends UserService {
 
   override def getExistingUsers: Response = Response.ok(iUserManagementProvider.getUsers.asJava).build()
 
-  override def getUser(id: Int): Response = Response.ok(iUserManagementProvider.getUser(id)).build()
+  override def getUser(id: Int): Response ={
+    Response.ok(iUserManagementProvider.getUser(id)).build()
+  }
 
   override def whoami: Response = Response.ok("{\"login\":{\"password\":\"pass\",\"username\":\"test3\"}}").build()
 

@@ -41,7 +41,7 @@ class TokenJAASAuthenticationFilter extends JAASAuthenticationFilter {
 
   interceptor.setUseDoAs(false)
 
-  interceptor.setContextName("karaf")
+  interceptor.setContextName("meteorite-realm")
 
   interceptor.setRoleClassifierType(JAASLoginInterceptor.ROLE_CLASSIFIER_CLASS_NAME)
   interceptor.setRoleClassifier("org.apache.karaf.jaas.boot.principal.RolePrincipal")

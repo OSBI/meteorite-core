@@ -1,5 +1,7 @@
 package bi.meteorite.core.api.security
 
+import javax.xml.bind.annotation.{XmlRootElement, XmlType}
+
 import bi.meteorite.core.api.objects.MeteoriteUser
 import bi.meteorite.core.api.security.exceptions.MeteoriteSecurityException
 import org.apache.karaf.jaas.config.JaasRealm
@@ -18,7 +20,7 @@ trait IUserManagementProvider {
     * @throws MeteoriteSecurityException
     */
   @throws(classOf[MeteoriteSecurityException])
-  def addUser(u: String, p: String)
+  def addUser(u: MeteoriteUser)
 
   /**
     * Delete a user from the platform.

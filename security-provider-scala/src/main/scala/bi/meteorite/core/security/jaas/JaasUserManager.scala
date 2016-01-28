@@ -15,8 +15,10 @@
  */
 package bi.meteorite.core.security.jaas
 
+import java.security.PrivilegedAction
 import java.util.Collections
 import javax.inject.{Inject, Named, Singleton}
+import javax.security.auth.login.{Configuration, AppConfigurationEntry}
 
 import bi.meteorite.core.api.objects.MeteoriteUser
 import bi.meteorite.core.api.persistence.UserService
@@ -25,9 +27,10 @@ import bi.meteorite.core.api.security.exceptions.MeteoriteSecurityException
 import bi.meteorite.objects.UserImpl
 import org.apache.karaf.jaas.boot.ProxyLoginModule
 import org.apache.karaf.jaas.config.JaasRealm
+import org.apache.karaf.jaas.modules.jdbc.JDBCBackingEngineFactory
 import org.apache.karaf.jaas.modules.{BackingEngine, BackingEngineFactory, BackingEngineService}
 import org.ops4j.pax.cdi.api.{OsgiService, OsgiServiceProvider}
-
+import scala.collection.JavaConverters._
 import scala.collection.mutable.ListBuffer
 
 /**
@@ -44,23 +47,33 @@ class JaasUserManager extends IUserManagementProvider {
   @OsgiService private var userService: UserService = null
 
   private def getEngine: BackingEngine = {
-    for (entry <- realm.getEntries) {
+    var config : Configuration = null
+    if (config == null) {
+      config = java.security.AccessController.doPrivileged(new PrivilegedAction[Configuration]() {
+        def run: Configuration = {
+          return Configuration.getConfiguration
+        }
+      })
+    }
+    var entries2: Array[AppConfigurationEntry] = config.getAppConfigurationEntry("meteorite-realm")
+    for (entry <- entries2) {
       val moduleClass: String = entry.getOptions.get(ProxyLoginModule.PROPERTY_MODULE).asInstanceOf[String]
       if (moduleClass != null) {
-        val factories: BackingEngineFactory = backingEngineService.getEngineFactories.get(1)
+        val factories: BackingEngineFactory = null
         val options = entry.getOptions
-        return factories.build(options)
+        return backingEngineService.get(entry)
       }
     }
     null
   }
 
   @throws(classOf[MeteoriteSecurityException])
-  def addUser(u: String, p: String) {
+  def addUser(u: MeteoriteUser) {
     if (getUsers.contains(u)) {
       throw new MeteoriteSecurityException("User already exists")
     }
-    getEngine.addUser(u, p)
+    //getEngine.addUser(u, p)
+    userService.addUser(u)
   }
 
   @throws(classOf[MeteoriteSecurityException])
@@ -162,15 +175,18 @@ class JaasUserManager extends IUserManagementProvider {
   @throws(classOf[MeteoriteSecurityException])
   def getUser(id: Int): MeteoriteUser = {
     import scala.collection.JavaConversions._
-    for (user <- getEngine.listUsers) {
+    /*for (user <- getEngine.listUsers) {
       if (user.getName == id) {
         val u: MeteoriteUser = new UserImpl
         u.setId(id)
         u.setUsername(u.getUsername)
         return u
       }
-    }
-    null
+    }*/
+    var u = new UserImpl()
+    u.setUsername("test")
+    u.setEmail("test@test.com")
+    return u
   }
 
   def setBackingEngineService(jassservice: BackingEngineService) {

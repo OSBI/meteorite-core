@@ -8,11 +8,18 @@
            xmlns:ext="http://aries.apache.org/blueprint/xmlns/blueprint-ext/v1.0.0"
 >
 
+
+    <!-- The Backing Engine Factory Service for the JDBCLoginModule -->
+    <service id="bef" interface="org.apache.karaf.jaas.modules.BackingEngineFactory">
+        <bean class="org.apache.karaf.jaas.modules.jdbc.JDBCBackingEngineFactory"/>
+    </service>
+
     <bean id="cacheManagerTokenStore" class="bi.meteorite.core.security.tokenprovider.CacheManagerTokenStore" ext:field-injection="true" init-method="init">
         <property name="bcontext" ref="blueprintBundleContext"/>
         <property name="cacheManager" ref="hazelcastInstance-"/>
     </bean>
-    <bean id="jaasUserManager" class="bi.meteorite.core.security.jaas.JaasUserManager" ext:field-injection="true">
+    <bean id="jaasUserManager" class="bi.meteorite.core.security.jaas.JaasUserManager"
+          ext:field-injection="true">
         <property name="backingEngineService" ref="engineService"/>
         <property name="realm" ref="jaasRealm-"/>
         <property name="userService" ref="userService-"/>
@@ -39,13 +46,13 @@
     <!-- Allow usage of System properties, especially the karaf.base property -->
     <ext:property-placeholder placeholder-prefix="$[" placeholder-suffix="]"/>
 
-    <jaas:config name="karaf" rank="2">
+    <jaas:config name="meteorite-realm" rank="2">
         <jaas:module className="org.apache.karaf.jaas.modules.jdbc.JDBCLoginModule"
                      flags="required">
             datasource = osgi:javax.sql.DataSource/(osgi.jndi.service.name=systemdb)
             query.password = SELECT PASSWORD FROM USERS WHERE USERNAME=?
             query.role = select ROLENAME from ROLES, USERS where USERS.ID = ROLES.USER_ID and USERNAME = ?
-            insert.user = INSERT INTO USERS VALUES(?,?)
+            insert.user = INSERT INTO USERS(USERNAME, PASSWORD) VALUES(?,?)
             insert.role = INSERT INTO ROLES VALUES(?,?)
             delete.user = DELETE FROM USERS WHERE USERNAME=?
             delete.role = DELETE FROM ROLES WHERE USERNAME=? AND ROLE=?
@@ -53,22 +60,18 @@
         </jaas:module>
     </jaas:config>
 
-    <!-- The Backing Engine Factory Service for the JDBCLoginModule -->
-    <service interface="org.apache.karaf.jaas.modules.BackingEngineFactory">
-        <bean class="org.apache.karaf.jaas.modules.jdbc.JDBCBackingEngineFactory"/>
-    </service>
+
     <!-- Backing Engine Service -->
     <bean id="engineService" class="org.apache.karaf.jaas.modules.BackingEngineService">
         <property name="engineFactories" ref="engineFactories"/>
     </bean>
 
     <!-- Backing Engine Factories -->
-    <reference-list id="engineFactories" interface="org.apache.karaf.jaas.modules.BackingEngineFactory"
-                    availability="optional"/>
+    <reference-list id="engineFactories" interface="org.apache.karaf.jaas.modules.BackingEngineFactory"/>
 
 
     <bean id="loginService" class="bi.meteorite.core.security.jaas.JaasLoginManager">
-        <property name="realm" value="karaf"/>
+        <property name="realm" value="meteorite-realm"/>
     </bean>
 
     <service ref="loginService" interface="bi.meteorite.core.api.security.AdminLoginService"/>

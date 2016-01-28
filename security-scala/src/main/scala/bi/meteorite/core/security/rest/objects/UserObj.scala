@@ -13,33 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bi.meteorite.objects
-
-import javax.persistence.{Column, Entity, FetchType, GeneratedValue, GenerationType, Id, OneToMany, Table, TableGenerator}
+package bi.meteorite.core.security.rest.objects
 
 import bi.meteorite.core.api.objects.{MeteoriteRole, MeteoriteUser}
+import bi.meteorite.objects.UserImpl
+
+//import bi.meteorite.objects.RoleImpl
 
 /**
   * A User Object
   */
-@Entity(name = "USERS")
-@Table(name = "USERS") class UserImpl extends MeteoriteUser {
-  @Id
-  @Column
-  @TableGenerator(name = "EVENT_GEN", table = "SEQUENCES", pkColumnName = "SEQ_NAME", valueColumnName = "SEQ_NUMBER",
-    pkColumnValue = "SEQUENCE", allocationSize = 1)
-  @GeneratedValue(strategy = GenerationType.TABLE, generator = "EVENT_GEN")
-  private var id: Long = _
-  @Column(length = 100)
-  private var username: String = _
-  @Column(length = 100)
-  private var password: String = _
-  @OneToMany(mappedBy = "userid")
-  private val roles: java.util.List[RoleImpl]  = new java.util.ArrayList[RoleImpl]()
-  @Column
-  private var orgId: Int = _
-  @Column
-  private var email: String = _
+class UserObj extends MeteoriteUser {
+  private var id: Long = 0
+  private var username: String = null
+  private var password: String = null
+  //private val roles: java.util.List[RoleImpl]  = new java.util.ArrayList[RoleImpl]()
+  private var orgId: Int = 0
+  private var email: String = null
 
   def getUsername: String = {
     username
@@ -57,23 +47,11 @@ import bi.meteorite.core.api.objects.{MeteoriteRole, MeteoriteUser}
     this.password = password
   }
 
-  @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
   def getRoles: java.util.List[MeteoriteRole] = {
-    val l = new java.util.ArrayList[MeteoriteRole]()
-    import scala.collection.JavaConversions._
-    for (role <- roles) {
-      l.add(role)
-    }
-    l
+    null
   }
 
   def setRoles(roles: java.util.List[MeteoriteRole]) {
-    import scala.collection.JavaConversions._
-    if(roles != null) {
-      for (r <- roles) {
-        this.roles.add(r.asInstanceOf[RoleImpl])
-      }
-    }
   }
 
   def getEmail: String = {
@@ -98,5 +76,18 @@ import bi.meteorite.core.api.objects.{MeteoriteRole, MeteoriteUser}
 
   def setOrgId(orgId: Int) {
     this.orgId = orgId
+  }
+
+
+  def toUserImpl(): UserImpl ={
+    var u = new UserImpl
+    u.setId(this.getId)
+    u.setEmail(this.getEmail)
+    u.setOrgId(this.getOrgId)
+    u.setPassword(this.getPassword)
+    u.setRoles(this.getRoles)
+    u.setUsername(this.getUsername)
+
+    u
   }
 }

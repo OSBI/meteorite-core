@@ -28,6 +28,16 @@
       </exclusions>
     </dependency>
     <dependency>
+      <groupId>bi.meteorite</groupId>
+      <artifactId>meteorite-core-model-scala</artifactId>
+      <version>1.0-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-annotations</artifactId>
+      <version>2.6.2</version>
+    </dependency>
+    <dependency>
       <groupId>com.fasterxml.jackson.jaxrs</groupId>
       <artifactId>jackson-jaxrs-json-provider</artifactId>
     </dependency>
@@ -108,7 +118,7 @@
             <Export-Package>bi.meteorite.core.security</Export-Package>
             <Import-Package>!javax.annotation;bi.meteorite.core.security.tokenprovider,javax.xml.bind;version=2.1.0,
                             javax.xml.bind.annotation;version=2.1.0,
-                            com.sun.xml.bind.v2.runtime.reflect;version=0.0.0;resolution:=optional,*,javax.annotation;version="1.0"</Import-Package>
+                            com.sun.xml.bind.v2.runtime.reflect;version=0.0.0;resolution:=optional,*,javax.annotation;version="1.0",com.fasterxml.jackson.annotation,javax.persistence</Import-Package>
           </instructions>
         </configuration>
       </plugin>

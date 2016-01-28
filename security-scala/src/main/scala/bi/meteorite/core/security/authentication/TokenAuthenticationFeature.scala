@@ -31,7 +31,7 @@ object TokenAuthenticationFeature {
 }
 
 class TokenAuthenticationFeature extends AbstractFeature {
-  private var contextName: String = "karaf"
+  private var contextName: String = "meteorite-realm"
   private var reportFault: Boolean = false
 
   override def getID: String = {
