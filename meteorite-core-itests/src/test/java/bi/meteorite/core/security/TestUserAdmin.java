@@ -19,13 +19,9 @@ import bi.meteorite.core.api.objects.MeteoriteUser;
 import bi.meteorite.core.api.persistence.UserService;
 import bi.meteorite.core.api.security.rest.UserAuthentication;
 import bi.meteorite.core.security.rest.objects.UserObj;
-import bi.meteorite.objects.UserImpl;
 import bi.meteorite.util.ITestBootstrap;
 
 import org.apache.karaf.features.FeaturesService;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.junit.Ignore;
 import org.junit.Test;
@@ -42,7 +38,6 @@ import javax.inject.Inject;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 /**
