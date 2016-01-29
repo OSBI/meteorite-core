@@ -40,6 +40,10 @@ import org.osgi.service.jdbc.DataSourceFactory;
 
 import javax.inject.Inject;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 /**
  * Created by bugg on 27/01/16.
@@ -77,9 +81,11 @@ public class TestUserAdmin extends ITestBootstrap {
     u.setPassword("testpassword");
 
 
-    Object response = post("http://localhost:8181/cxf/rest/core/user", "admin", "admin", MediaType
-        .APPLICATION_JSON, u, UserObj.class);
+    Response response = post("http://localhost:8181/cxf/rest/core/user", "admin", "admin", MediaType
+        .APPLICATION_JSON, u, MeteoriteUser.class);
 
+
+    assertNotNull(response.readEntity(String.class));
 
     System.out.println("here");
 

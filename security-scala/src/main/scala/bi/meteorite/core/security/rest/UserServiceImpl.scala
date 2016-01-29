@@ -24,7 +24,7 @@ class UserServiceImpl extends UserService {
 
   override def addUser(u: MeteoriteUser): Response = {
     iUserManagementProvider.addUser(u.asInstanceOf[UserObj].toUserImpl())
-    Response.ok().build()
+    Response.ok(u).build()
   }
 
   override def modifyUser(u: MeteoriteUser): Response = Response.ok(iUserManagementProvider.updateUser(u)).build()

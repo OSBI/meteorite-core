@@ -21,6 +21,7 @@ import org.apache.cxf.jaxrs.client.WebClient;
 import org.apache.felix.service.command.CommandProcessor;
 import org.apache.felix.service.command.CommandSession;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider;
 import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
@@ -29,6 +30,8 @@ import org.ops4j.pax.exam.Configuration;
 import org.ops4j.pax.exam.ConfigurationManager;
 import org.ops4j.pax.exam.CoreOptions;
 import org.ops4j.pax.exam.Option;
+import org.ops4j.pax.exam.ProbeBuilder;
+import org.ops4j.pax.exam.TestProbeBuilder;
 import org.ops4j.pax.exam.karaf.options.KarafDistributionOption;
 import org.ops4j.pax.exam.karaf.options.LogLevelOption;
 import org.ops4j.pax.exam.options.MavenArtifactUrlReference;
@@ -78,12 +81,13 @@ import static org.ops4j.pax.exam.karaf.options.KarafDistributionOption.editConfi
  */
 public class ITestBootstrap {
 
-  private final Client client = ClientBuilder.newClient();//.register(JacksonJsonProvider.class);
+  private final Client client = ClientBuilder.newClient().register(JacksonJsonProvider.class);
   static final Long SERVICE_TIMEOUT = 30000L;
   @Inject
   protected BundleContext bundleContext;
 
   ExecutorService executor = Executors.newCachedThreadPool();
+
 
   @Configuration
   public Option[] config() {
@@ -157,6 +161,17 @@ public class ITestBootstrap {
     );
   }
 
+
+  @ProbeBuilder
+  public TestProbeBuilder probeConfiguration(TestProbeBuilder probe) {
+    System.out.println("TestProbeBuilder gets called");
+
+    probe.setHeader(Constants.DYNAMICIMPORT_PACKAGE, "*,org.apache.felix.service.*;status=provisional");
+    probe.setHeader(Constants.IMPORT_PACKAGE, "*,bi.meteorite.core.security.rest.objects");
+    return probe;
+  }
+
+
   private static String karafVersion() {
     ConfigurationManager cm = new ConfigurationManager();
     return cm.getProperty("pax.exam.karaf.version", "4.0.1");
@@ -188,11 +203,25 @@ public class ITestBootstrap {
     return target.request(type).cookie("saiku_token", token).get();
   }
 
-  protected Object post(String url, String user, String pass, String type, Object data, Class c) {
-    WebTarget target = client.target(url);
-    return target.request(type).header("Authorization", getBasicAuthentication(user, pass)).header("Accept", "application/json")
-                 .post(Entity.entity(data, MediaType.APPLICATION_JSON),
-                     c);
+  protected Response post(String url, String user, String pass, String type, Object data, Class c) {
+    List<Object> providers = new ArrayList<Object>();
+    providers.add(new JacksonJsonProvider());
+
+    WebClient client = WebClient.create(url, providers);
+
+    ObjectMapper objectMapper = new ObjectMapper();
+    String s = null;
+    try {
+      s = objectMapper.writeValueAsString(data);
+    } catch (JsonProcessingException e) {
+      e.printStackTrace();
+    }
+
+    Response repo = client.type(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON).header("Authorization",
+        getBasicAuthentication(user, pass))
+                          //.post(Entity.entity(data, MediaType.APPLICATION_JSON), c);
+                          .post(data);
+    return repo;
   }
 
 
