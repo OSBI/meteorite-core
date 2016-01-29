@@ -88,3 +88,7 @@ id is the user id.
     
 ## Delete a User
 
+Send a DELETE to 
+http://localhost:8181/cxf/rest/core/user/{id}
+
+and it will remove the user and associated roles.
