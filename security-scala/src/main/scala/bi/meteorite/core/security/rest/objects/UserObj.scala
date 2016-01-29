@@ -18,8 +18,6 @@ package bi.meteorite.core.security.rest.objects
 import bi.meteorite.core.api.objects.{MeteoriteRole, MeteoriteUser}
 import bi.meteorite.objects.UserImpl
 
-//import bi.meteorite.objects.RoleImpl
-
 /**
   * A User Object
   */

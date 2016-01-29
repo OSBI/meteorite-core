@@ -124,7 +124,6 @@ public class ITestBootstrap {
 
         configureConsole().ignoreLocalConsole(),
 
-
         CoreOptions.mavenBundle("bi.meteorite", "meteorite-core-api", "1.0-SNAPSHOT"),
         CoreOptions.mavenBundle("bi.meteorite", "meteorite-core-security-provider-scala", "1.0-SNAPSHOT"),
         CoreOptions.mavenBundle("bi.meteorite", "meteorite-core-security-scala", "1.0-SNAPSHOT"),
@@ -138,6 +137,11 @@ public class ITestBootstrap {
         CoreOptions.mavenBundle("com.fasterxml.jackson.core", "jackson-databind", "2.6.2"),
         CoreOptions.mavenBundle("com.fasterxml.jackson.core", "jackson-annotations", "2.6.0"),
         CoreOptions.mavenBundle("com.fasterxml.jackson.module", "jackson-module-jaxb-annotations", "2.6.2"),
+        CoreOptions.mavenBundle("com.fasterxml.jackson.datatype", "jackson-datatype-hibernate4", "2.6.2"),
+        CoreOptions.mavenBundle("com.fasterxml.jackson.module", "jackson-module-scala_2.10", "2.6.2"),
+        CoreOptions.mavenBundle("com.fasterxml.jackson.module", "jackson-module-paranamer", "2.6.2"),
+        CoreOptions.mavenBundle("com.thoughtworks.paranamer", "paranamer", "2.7"),
+
         CoreOptions.mavenBundle("com.google.guava", "guava", "18.0"),
         CoreOptions.mavenBundle("javax.transaction", "javax.transaction-api", "1.2"),
         CoreOptions.mavenBundle("org.hibernate.javax.persistence", "hibernate-jpa-2.1-api", "1.0.0.Final"),
@@ -185,78 +189,10 @@ public class ITestBootstrap {
   }
 
   protected Object post(String url, String user, String pass, String type, Object data, Class c) {
-
-
-    String url2 = "https://selfsolve.apple.com/wcResults.do";
-    URL obj = null;
-    try {
-      obj = new URL(url);
-    } catch (MalformedURLException e) {
-      e.printStackTrace();
-    }
-    HttpURLConnection con = null;
-    try {
-      con = (HttpURLConnection) obj.openConnection();
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-
-    //add reuqest header
-    try {
-      con.setRequestMethod("POST");
-      con.setRequestProperty("Content-Type", "application/json");
-      con.setRequestProperty("Accept", "application/json");
-      con.setRequestProperty("Authorization", getBasicAuthentication(user, pass));
-    } catch (ProtocolException e) {
-      e.printStackTrace();
-    }
-    //con.setRequestProperty("User-Agent", USER_AGENT);
-    con.setRequestProperty("Accept-Language", "en-US,en;q=0.5");
-
-    //String urlParameters = "sn=C02G8416DRJM&cn=&locale=&caller=&num=12345";
-
-    // Send post request
-    con.setDoOutput(true);
-    DataOutputStream wr = null;
-    try {
-      wr = new DataOutputStream(con.getOutputStream());
-      wr.writeBytes((String)"[\"bi.meteorite.objects.UserImpl\",{\"id\":0,\"username\":\"test\",\"password\":null,\"orgId\":0,\"email\":\"test@test.com\",\"roles\":[\"java.util.ArrayList\",[]]}]");
-      wr.flush();
-      wr.close();
-
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-    int responseCode = 0;
-    try {
-      responseCode = con.getResponseCode();
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-    System.out.println("\nSending 'POST' request to URL : " + url);
-    System.out.println("Post parameters : " + ((String)data));
-    System.out.println("Response Code : " + responseCode);
-
-
-
-    /*JacksonJaxbJsonProvider prov = new JacksonJaxbJsonProvider();
-    ObjectMapper obj = new ObjectMapper();
-    obj.enableDefaultTyping();
-    prov.setMapper(obj);
-    List<Object> providers = new ArrayList<Object>();
-    providers.add( prov );
-    WebClient wc = WebClient.create(url, providers);
-
-    Object resp = wc.header("Authorization", getBasicAuthentication(user, pass)).header("Accept",
-        "application/json").type(MediaType.APPLICATION_JSON).post(data, c);
-
-
-
     WebTarget target = client.target(url);
     return target.request(type).header("Authorization", getBasicAuthentication(user, pass)).header("Accept", "application/json")
                  .post(Entity.entity(data, MediaType.APPLICATION_JSON),
-                     c);*/
-    return null;
+                     c);
   }
 
 

@@ -15,8 +15,10 @@
  */
 package bi.meteorite.core.security;
 
+import bi.meteorite.core.api.objects.MeteoriteUser;
 import bi.meteorite.core.api.persistence.UserService;
 import bi.meteorite.core.api.security.rest.UserAuthentication;
+import bi.meteorite.core.security.rest.objects.UserObj;
 import bi.meteorite.objects.UserImpl;
 import bi.meteorite.util.ITestBootstrap;
 
@@ -69,21 +71,14 @@ public class TestUserAdmin extends ITestBootstrap {
 
   @Test
   public void testAddUser() {
-    UserImpl u = new UserImpl();
+    MeteoriteUser u = new UserObj();
     u.setUsername("testuser");
     u.setEmail("testemail@test.com");
     u.setPassword("testpassword");
 
-    ObjectMapper mapper = new ObjectMapper();
-    String jsonInString = null;
-    try {
-      jsonInString = mapper.writeValueAsString(u);
-    } catch (JsonProcessingException e) {
-      e.printStackTrace();
-    }
 
     Object response = post("http://localhost:8181/cxf/rest/core/user", "admin", "admin", MediaType
-        .APPLICATION_JSON, jsonInString, UserImpl.class);
+        .APPLICATION_JSON, u, UserObj.class);
 
 
     System.out.println("here");
