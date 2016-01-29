@@ -52,10 +52,19 @@ public class UserServiceImpl implements UserService {
   EntityManager em;
 
   @Override
+  public MeteoriteUser mergeUser(MeteoriteUser u) {
+    return em.merge(u);
+  }
+
+  @Override
   @Transactional(Transactional.TxType.SUPPORTS)
   public MeteoriteUser getUser(String id) {
-    MeteoriteUser user = em.find(UserImpl.class, id);
-    return user;
+    return em.find(UserImpl.class, id);
+  }
+
+  @Override
+  public MeteoriteUser getUser(long id) {
+    return em.find(UserImpl.class, id);
   }
 
   @Override
@@ -80,7 +89,12 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public void deleteUser(String id) {
+  public void deleteUser(MeteoriteUser id) {
+    em.remove(getUser(id.getId()));
+  }
+
+  @Override
+  public void deleteUser(long id) {
     em.remove(getUser(id));
   }
 

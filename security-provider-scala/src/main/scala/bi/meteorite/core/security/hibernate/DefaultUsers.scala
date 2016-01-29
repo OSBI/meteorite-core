@@ -27,6 +27,8 @@ import java.util.Date
 import java.util.UUID
 import javax.annotation.PostConstruct
 import scala.collection.JavaConverters._
+import scala.collection.mutable.ListBuffer
+
 /**
   * Created by bugg on 21/12/15.
   */
@@ -41,15 +43,16 @@ class DefaultUsers {
       var u: MeteoriteUser = new UserImpl
       u.setUsername("admin")
       u.setPassword("admin")
-      u = userService.addUser(u)
       val r: MeteoriteRole = new RoleImpl
       r.setUserId(u)
       r.setRole("ROLE_ADMIN")
-      userService.addRole(r)
       val r2: MeteoriteRole = new RoleImpl
       r2.setUserId(u)
       r2.setRole("ROLE_USER")
-      userService.addRole(r2)
+      val l = ListBuffer[MeteoriteRole](r, r2)
+      u.setRoles(l.asJava)
+      u = userService.addUser(u)
+
       u = new UserImpl
       u.setUsername("smith")
       u.setPassword("smith")

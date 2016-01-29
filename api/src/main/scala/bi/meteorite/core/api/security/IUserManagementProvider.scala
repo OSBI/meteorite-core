@@ -1,8 +1,6 @@
 package bi.meteorite.core.api.security
 
-import javax.xml.bind.annotation.{XmlRootElement, XmlType}
-
-import bi.meteorite.core.api.objects.MeteoriteUser
+import bi.meteorite.core.api.objects.{UserList, MeteoriteUser}
 import bi.meteorite.core.api.security.exceptions.MeteoriteSecurityException
 import org.apache.karaf.jaas.config.JaasRealm
 import org.apache.karaf.jaas.modules.BackingEngineService
@@ -29,7 +27,16 @@ trait IUserManagementProvider {
     * @throws MeteoriteSecurityException
     */
   @throws(classOf[MeteoriteSecurityException])
-  def deleteUser(u: String)
+  def deleteUser(u: MeteoriteUser)
+
+  /**
+    * Delete a user from the platform.
+    *
+    * @param u username
+    * @throws MeteoriteSecurityException
+    */
+  @throws(classOf[MeteoriteSecurityException])
+  def deleteUser(u: Long)
 
   /**
     * Get a list of users on the platform.
@@ -38,7 +45,15 @@ trait IUserManagementProvider {
     * @throws MeteoriteSecurityException
     */
   @throws(classOf[MeteoriteSecurityException])
-  def getUsers: List[String]
+  def getUsers: List[UserList]
+
+  /**
+    * Get a list of user ids
+    * @throws bi.meteorite.core.api.security.exceptions.MeteoriteSecurityException
+    * @return
+    */
+  @throws(classOf[MeteoriteSecurityException])
+  def getUsersId: List[Long]
 
   /**
     * Get a list of roles applied to a user.
@@ -106,7 +121,7 @@ trait IUserManagementProvider {
     * @throws MeteoriteSecurityException
     */
   @throws(classOf[MeteoriteSecurityException])
-  def getUser(id: Int): MeteoriteUser
+  def getUser(id: Long): MeteoriteUser
 
   /**
     * Set the backing service engine that drives the security.

@@ -11,7 +11,11 @@ import bi.meteorite.core.api.objects.MeteoriteRole
   * Interface for persisting users.
   */
 trait UserService {
+  def mergeUser(u: MeteoriteUser) : MeteoriteUser
+
   def getUser(id: String): MeteoriteUser
+
+  def getUser(id: Long): MeteoriteUser
 
   def addUser(user: MeteoriteUser): MeteoriteUser
 
@@ -19,7 +23,9 @@ trait UserService {
 
   def updateUser(user: MeteoriteUser)
 
-  def deleteUser(id: String)
+  def deleteUser(id: MeteoriteUser)
+
+  def deleteUser(id: Long)
 
   def addRole(r: MeteoriteRole): MeteoriteRole
 

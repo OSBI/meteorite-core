@@ -67,18 +67,19 @@ import javax.ws.rs.core.Response
   def deleteUser(u: MeteoriteUser): Response
 
   /**
-    * Remove a user from Meteorite core by user id.
+    * Remove a user from Meteorite core.
     *
-    * @param id The user id.
-    * @return an HTTP response code.
+    * @param id The User ID.
+    * @return An HTTP response code.
     * @throws MeteoriteSecurityException
     */
   @DELETE
   @Produces(Array("application/json"))
-  @Path("/user/lookup/{userid}")
+  @Consumes(Array("application/json"))
+  @Path("/user/{id}")
   //@ReturnType("bi.meteorite.core.api.objects.MeteoriteUser")
   @throws(classOf[MeteoriteSecurityException])
-  def deleteUser(@PathParam("userid") id: String): Response
+  def deleteUser(@PathParam("id") id: Int): Response
 
   /**
     * Add user to a group.

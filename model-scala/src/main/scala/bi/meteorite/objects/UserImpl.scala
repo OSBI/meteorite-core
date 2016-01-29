@@ -15,9 +15,10 @@
  */
 package bi.meteorite.objects
 
-import javax.persistence.{Column, Entity, FetchType, GeneratedValue, GenerationType, Id, OneToMany, Table, TableGenerator}
+import javax.persistence._
 
 import bi.meteorite.core.api.objects.{MeteoriteRole, MeteoriteUser}
+import com.fasterxml.jackson.annotation.{JsonInclude, JsonManagedReference}
 
 /**
   * A User Object
@@ -34,7 +35,9 @@ import bi.meteorite.core.api.objects.{MeteoriteRole, MeteoriteUser}
   private var username: String = _
   @Column(length = 100)
   private var password: String = _
-  @OneToMany(mappedBy = "userid")
+  @JsonInclude(JsonInclude.Include.NON_EMPTY)
+  @OneToMany(mappedBy = "userid", fetch = FetchType.LAZY, cascade = Array(CascadeType.ALL))
+  @JsonManagedReference
   private val roles: java.util.List[RoleImpl]  = new java.util.ArrayList[RoleImpl]()
   @Column
   private var orgId: Int = _
@@ -57,7 +60,7 @@ import bi.meteorite.core.api.objects.{MeteoriteRole, MeteoriteUser}
     this.password = password
   }
 
-  @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+  //@OneToMany(fetch = FetchType.EAGER, mappedBy = "user")
   def getRoles: java.util.List[MeteoriteRole] = {
     val l = new java.util.ArrayList[MeteoriteRole]()
     import scala.collection.JavaConversions._

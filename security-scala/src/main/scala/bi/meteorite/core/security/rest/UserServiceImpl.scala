@@ -23,20 +23,18 @@ class UserServiceImpl extends UserService {
   private var iUserManagementProvider: IUserManagementProvider = _
 
   override def addUser(u: MeteoriteUser): Response = {
-    var u2 = u.asInstanceOf[UserObj]
-    //var u3 = u2.asInstanceOf[UserImpl]
-    iUserManagementProvider.addUser(u2.toUserImpl())
+    iUserManagementProvider.addUser(u.asInstanceOf[UserObj].toUserImpl())
     Response.ok().build()
   }
 
   override def modifyUser(u: MeteoriteUser): Response = Response.ok(iUserManagementProvider.updateUser(u)).build()
 
   override def deleteUser(u: MeteoriteUser): Response = {
-    iUserManagementProvider.deleteUser(u.getUsername)
+    iUserManagementProvider.deleteUser(u)
     Response.ok().build()
   }
 
-  override def deleteUser(id: String): Response = {
+  override def deleteUser(id: Int): Response = {
     iUserManagementProvider.deleteUser(id)
     Response.ok().build()
   }
@@ -50,9 +48,8 @@ class UserServiceImpl extends UserService {
 
   override def getExistingUsers: Response = Response.ok(iUserManagementProvider.getUsers.asJava).build()
 
-  override def getUser(id: Int): Response ={
-    Response.ok(iUserManagementProvider.getUser(id)).build()
-  }
+  override def getUser(id: Int): Response = Response.ok(iUserManagementProvider.getUser(id)).build()
+
 
   override def whoami: Response = Response.ok("{\"login\":{\"password\":\"pass\",\"username\":\"test3\"}}").build()
 

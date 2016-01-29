@@ -20,18 +20,16 @@ import java.util.Collections
 import javax.inject.{Inject, Named, Singleton}
 import javax.security.auth.login.{Configuration, AppConfigurationEntry}
 
-import bi.meteorite.core.api.objects.MeteoriteUser
+import bi.meteorite.core.api.objects.{UserList, MeteoriteUser}
 import bi.meteorite.core.api.persistence.UserService
 import bi.meteorite.core.api.security.IUserManagementProvider
 import bi.meteorite.core.api.security.exceptions.MeteoriteSecurityException
-import bi.meteorite.objects.UserImpl
 import org.apache.karaf.jaas.boot.ProxyLoginModule
 import org.apache.karaf.jaas.config.JaasRealm
-import org.apache.karaf.jaas.modules.jdbc.JDBCBackingEngineFactory
 import org.apache.karaf.jaas.modules.{BackingEngine, BackingEngineFactory, BackingEngineService}
 import org.ops4j.pax.cdi.api.{OsgiService, OsgiServiceProvider}
-import scala.collection.JavaConverters._
 import scala.collection.mutable.ListBuffer
+import scala.collection.JavaConversions._
 
 /**
   * Default JaaS User Manager to control users in Karaf.
@@ -51,7 +49,7 @@ class JaasUserManager extends IUserManagementProvider {
     if (config == null) {
       config = java.security.AccessController.doPrivileged(new PrivilegedAction[Configuration]() {
         def run: Configuration = {
-          return Configuration.getConfiguration
+          Configuration.getConfiguration
         }
       })
     }
@@ -68,40 +66,37 @@ class JaasUserManager extends IUserManagementProvider {
   }
 
   @throws(classOf[MeteoriteSecurityException])
-  def addUser(u: MeteoriteUser) {
-    if (getUsers.contains(u)) {
-      throw new MeteoriteSecurityException("User already exists")
-    }
-    //getEngine.addUser(u, p)
-    userService.addUser(u)
+  def addUser(u: MeteoriteUser) = getUsersId.contains(u.getId) match {
+      case true => userService.mergeUser(u)
+      case false => userService.addUser(u)
   }
 
   @throws(classOf[MeteoriteSecurityException])
-  def deleteUser(u: String) {
-    if (getUsers.contains(u)) {
-      getEngine.deleteUser(u)
-    }
-    else {
-      throw new MeteoriteSecurityException("User Doesn't Exist")
-    }
+  def deleteUser(u: MeteoriteUser) = getUsersId.contains(u.getId) match {
+    case true => userService.deleteUser(u)
+    case false => throw new MeteoriteSecurityException("User Doesn't Exist")
   }
 
   @throws(classOf[MeteoriteSecurityException])
-  def getUsers: List[String] = {
-    val users = new ListBuffer[String]
-    import scala.collection.JavaConversions._
-    for (user <- getEngine.listUsers) {
-      users.add(user.getName)
-    }
-    users.toList
+  def deleteUser(u: Long) = getUsersId.contains(u) match {
+    case true => userService.deleteUser(u)
+    case false => throw new MeteoriteSecurityException("User Doesn't Exist")
   }
+
+
+  @throws(classOf[MeteoriteSecurityException])
+  def getUsers: List[UserList] = (for (user <- userService.getUsers) yield
+    UserList(user.getId, user.getUsername)).toList
+
+  @throws(classOf[MeteoriteSecurityException])
+  def getUsersId: List[Long] = (for(user <- userService.getUsers) yield user.getId).toList
+
 
   @throws(classOf[MeteoriteSecurityException])
   def getRoles(u: String): List[String] = {
     val s = new ListBuffer[String]
     val u2 = getUsers
     if (u2.contains(u)) {
-      import scala.collection.JavaConversions._
       for (p <- getEngine.listUsers) {
         if (p.getName == u) {
           for (r <- getEngine.listRoles(p)) {
@@ -118,7 +113,6 @@ class JaasUserManager extends IUserManagementProvider {
 
   @throws(classOf[MeteoriteSecurityException])
   def addRole(u: String, r: String) {
-    import scala.collection.JavaConversions._
     for (p <- getEngine.listUsers) {
       if (p.getName == u) {
         val roles = getEngine.listRoles(p)
@@ -137,23 +131,16 @@ class JaasUserManager extends IUserManagementProvider {
   }
 
   @throws(classOf[MeteoriteSecurityException])
-  def removeRole(u: String, r: String) {
-    if (getRoles(u).contains(r)) {
-      getEngine.deleteRole(u, r)
-    }
-    else {
-      throw new MeteoriteSecurityException("Role does not exist for user")
-    }
+  def removeRole(u: String, r: String) = getRoles(u).contains(r) match {
+    case true => getEngine.deleteRole(u, r)
+    case false => throw new MeteoriteSecurityException("Role does not exist for user")
   }
 
   @throws(classOf[MeteoriteSecurityException])
-  def updateUser(u: MeteoriteUser): MeteoriteUser = {
-    null
-  }
+  def updateUser(u: MeteoriteUser): MeteoriteUser = userService.mergeUser(u)
 
   @throws(classOf[MeteoriteSecurityException])
   def isAdmin(u: String): Boolean = {
-    import scala.collection.JavaConversions._
     for (p <- getEngine.listUsers) {
       if (p.getName == u) {
         val roles = getEngine.listRoles(p)
@@ -173,32 +160,12 @@ class JaasUserManager extends IUserManagementProvider {
   }
 
   @throws(classOf[MeteoriteSecurityException])
-  def getUser(id: Int): MeteoriteUser = {
-    import scala.collection.JavaConversions._
-    /*for (user <- getEngine.listUsers) {
-      if (user.getName == id) {
-        val u: MeteoriteUser = new UserImpl
-        u.setId(id)
-        u.setUsername(u.getUsername)
-        return u
-      }
-    }*/
-    var u = new UserImpl()
-    u.setUsername("test")
-    u.setEmail("test@test.com")
-    return u
-  }
+  def getUser(id: Long): MeteoriteUser = userService.getUser(id)
 
-  def setBackingEngineService(jassservice: BackingEngineService) {
-    this.backingEngineService = jassservice
-  }
+  def setBackingEngineService(jassservice: BackingEngineService)= this.backingEngineService = jassservice
 
-  def setRealm(realm: JaasRealm) {
-    this.realm = realm
-  }
+  def setRealm(realm: JaasRealm) = this.realm = realm
 
-  def setUserService(userService: UserService) {
-    this.userService = userService
-  }
+  def setUserService(userService: UserService) = this.userService = userService
 }
 

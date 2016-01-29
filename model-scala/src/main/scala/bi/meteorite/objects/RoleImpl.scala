@@ -17,16 +17,9 @@ package bi.meteorite.objects
 
 import bi.meteorite.core.api.objects.MeteoriteUser
 import bi.meteorite.core.api.objects.MeteoriteRole
-import javax.persistence.Column
-import javax.persistence.Entity
-import javax.persistence.FetchType
-import javax.persistence.GeneratedValue
-import javax.persistence.GenerationType
-import javax.persistence.Id
-import javax.persistence.JoinColumn
-import javax.persistence.ManyToOne
-import javax.persistence.Table
-import javax.persistence.TableGenerator
+import javax.persistence._
+
+import com.fasterxml.jackson.annotation.JsonBackReference
 
 /**
   * Created by bugg on 29/12/15.
@@ -38,8 +31,9 @@ import javax.persistence.TableGenerator
   @TableGenerator(name = "EVENT_GEN2", table = "SEQUENCES2", pkColumnName = "SEQ_NAME2", valueColumnName = "SEQ_NUMBER2", pkColumnValue = "SEQUENCE", allocationSize = 1)
   @GeneratedValue(strategy = GenerationType.TABLE, generator = "EVENT_GEN2")
   private var id: Int = 0
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne(fetch = FetchType.LAZY, cascade = Array(CascadeType.ALL))
   @JoinColumn(name = "USER_ID", nullable = false)
+  @JsonBackReference
   private var userid: UserImpl = null
   @Column
   private var rolename: String = null
