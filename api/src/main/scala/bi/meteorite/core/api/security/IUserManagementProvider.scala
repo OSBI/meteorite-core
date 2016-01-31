@@ -1,3 +1,19 @@
+/*
+ * Copyright 2016 OSBI Ltd
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package bi.meteorite.core.api.security
 
 import bi.meteorite.core.api.objects.{UserList, MeteoriteUser}
@@ -13,9 +29,8 @@ trait IUserManagementProvider {
   /**
     * Add a new user to the platform.
     *
-    * @param u username
-    * @param p password
-    * @throws MeteoriteSecurityException
+    * @param u MeteoriteUser
+    * @throws MeteoriteSecurityException Throws Meteorite Security Exception on error
     */
   @throws(classOf[MeteoriteSecurityException])
   def addUser(u: MeteoriteUser)
@@ -23,8 +38,8 @@ trait IUserManagementProvider {
   /**
     * Delete a user from the platform.
     *
-    * @param u username
-    * @throws MeteoriteSecurityException
+    * @param u MeteoriteUser
+    * @throws MeteoriteSecurityException Throws Meteorite Security Exception on error
     */
   @throws(classOf[MeteoriteSecurityException])
   def deleteUser(u: MeteoriteUser)
@@ -32,8 +47,8 @@ trait IUserManagementProvider {
   /**
     * Delete a user from the platform.
     *
-    * @param u username
-    * @throws MeteoriteSecurityException
+    * @param u Id
+    * @throws MeteoriteSecurityException Throws Meteorite Security Exception on error
     */
   @throws(classOf[MeteoriteSecurityException])
   def deleteUser(u: Long)
@@ -42,15 +57,15 @@ trait IUserManagementProvider {
     * Get a list of users on the platform.
     *
     * @return a list of usernames.
-    * @throws MeteoriteSecurityException
+    * @throws MeteoriteSecurityException Throws Meteorite Security Exception on error
     */
   @throws(classOf[MeteoriteSecurityException])
   def getUsers: List[UserList]
 
   /**
     * Get a list of user ids
-    * @throws bi.meteorite.core.api.security.exceptions.MeteoriteSecurityException
-    * @return
+    * @throws MeteoriteSecurityException Throws Meteorite Security Exception on error
+    * @return a list of user ids
     */
   @throws(classOf[MeteoriteSecurityException])
   def getUsersId: List[Long]
@@ -60,7 +75,7 @@ trait IUserManagementProvider {
     *
     * @param u username
     * @return a list of roles.
-    * @throws MeteoriteSecurityException
+    * @throws MeteoriteSecurityException Throws Meteorite Security Exception on error
     */
   @throws(classOf[MeteoriteSecurityException])
   def getRoles(u: String): List[String]
@@ -70,7 +85,7 @@ trait IUserManagementProvider {
     *
     * @param u username
     * @param r role name
-    * @throws MeteoriteSecurityException
+    * @throws MeteoriteSecurityException Throws Meteorite Security Exception on error
     */
   @throws(classOf[MeteoriteSecurityException])
   def addRole(u: String, r: String)
@@ -80,7 +95,7 @@ trait IUserManagementProvider {
     *
     * @param u username
     * @param r role
-    * @throws MeteoriteSecurityException
+    * @throws MeteoriteSecurityException Throws Meteorite Security Exception on error
     */
   @throws(classOf[MeteoriteSecurityException])
   def removeRole(u: String, r: String)
@@ -90,7 +105,7 @@ trait IUserManagementProvider {
     *
     * @param u user object
     * @return a updated user object
-    * @throws MeteoriteSecurityException
+    * @throws MeteoriteSecurityException Throws Meteorite Security Exception on error
     */
   @throws(classOf[MeteoriteSecurityException])
   def updateUser(u: MeteoriteUser): MeteoriteUser
@@ -100,7 +115,7 @@ trait IUserManagementProvider {
     *
     * @param u username
     * @return true if the user is admin.
-    * @throws MeteoriteSecurityException
+    * @throws MeteoriteSecurityException Throws Meteorite Security Exception on error
     */
   @throws(classOf[MeteoriteSecurityException])
   def isAdmin(u: String): Boolean
@@ -109,7 +124,7 @@ trait IUserManagementProvider {
     * Get a list of roles that define an administrator.
     *
     * @return a list of administrative roles
-    * @throws MeteoriteSecurityException
+    * @throws MeteoriteSecurityException Throws Meteorite Security Exception on error
     */
   @throws(classOf[MeteoriteSecurityException])
   def getAdminRoles: List[String]
@@ -118,7 +133,7 @@ trait IUserManagementProvider {
     * Get a single user.
     *
     * @return a Meteorite User.
-    * @throws MeteoriteSecurityException
+    * @throws MeteoriteSecurityException Throws Meteorite Security Exception on error
     */
   @throws(classOf[MeteoriteSecurityException])
   def getUser(id: Long): MeteoriteUser
