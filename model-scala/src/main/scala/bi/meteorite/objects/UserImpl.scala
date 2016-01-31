@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 OSBI Ltd
+ * Copyright 2016 OSBI Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@ import bi.meteorite.core.api.objects.{MeteoriteRole, MeteoriteUser}
 import com.fasterxml.jackson.annotation.{JsonInclude, JsonManagedReference}
 
 /**
-  * A User Object
+  * A User Object annotated for persistence
   */
 @Entity(name = "USERS")
 @Table(name = "USERS") class UserImpl extends MeteoriteUser {

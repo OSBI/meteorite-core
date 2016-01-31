@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 OSBI Ltd
+ * Copyright 2016 OSBI Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,7 @@ import javax.persistence._
 import com.fasterxml.jackson.annotation.JsonBackReference
 
 /**
-  * Created by bugg on 29/12/15.
+  * Role Object annotated for persistence.
   */
 @Entity(name = "ROLES")
 @Table(name = "ROLES") class RoleImpl extends MeteoriteRole {

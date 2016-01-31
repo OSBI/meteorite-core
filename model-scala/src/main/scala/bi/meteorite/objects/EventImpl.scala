@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 OSBI Ltd
+ * Copyright 2016 OSBI Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,7 +26,7 @@ import javax.persistence.Lob
 import javax.persistence.Table
 
 /**
-  * Created by bugg on 21/12/15.
+  * Event Object annotated for persistence.
   */
 @Entity(name = "EVENTS")
 @Table(name = "EVENTS")
