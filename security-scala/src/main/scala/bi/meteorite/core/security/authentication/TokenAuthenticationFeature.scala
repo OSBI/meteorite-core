@@ -45,5 +45,5 @@ class TokenAuthenticationFeature extends AbstractFeature {
 
   def setContextName(contextName: String) = this.contextName = contextName
 
-  def setReportFault(reportFault: Boolean) this.reportFault = reportFault
+  def setReportFault(reportFault: Boolean) = this.reportFault = reportFault
 }

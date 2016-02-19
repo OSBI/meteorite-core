@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 OSBI Ltd
+ * Copyright 2015 OSBI Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -70,12 +70,13 @@ public class EventServiceImpl implements EventService {
   }
 
   @Override
-  public Event getEventByEventName(String name) {
+  public scala.collection.immutable.List<Event> getEventByEventName(String name) {
     List<EventImpl> result =
         (List<EventImpl>) em.createQuery("select e from " + EventImpl.class.getName() + " e where eventName = :ename")
                             .setParameter("ename", name).getResultList();
     if (result.size() > 0) {
-      return result.get(0);
+      //Event e = result.get(0);
+      //return result;
     }
     return null;
 
