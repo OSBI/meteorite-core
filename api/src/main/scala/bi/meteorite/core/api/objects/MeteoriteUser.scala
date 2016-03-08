@@ -91,20 +91,4 @@ trait MeteoriteUser {
     * @param id the id.
     */
   def setId(id: Long)
-
-  /**
-    * Get the organization id.
-    *
-    * @return the org id.
-    */
-  def getOrgId: Int
-
-  /**
-    * Set the organization id.
-    *
-    * @param orgId the organization id.
-    */
-  def setOrgId(orgId: Int)
 }
-
-

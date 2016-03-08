@@ -37,5 +37,5 @@ import org.apache.cxf.rs.security.cors.CrossOriginResourceSharing
     */
   @POST
   @throws(classOf[TokenProviderException])
-  def logout(username: String): Response
+  def logout(companyId: Long, username: String): Response
 }
