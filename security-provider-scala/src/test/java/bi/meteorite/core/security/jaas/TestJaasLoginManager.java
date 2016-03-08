@@ -107,7 +107,7 @@ public class TestJaasLoginManager {
   @Test
   public void testLogin() throws MeteoriteSecurityException {
 
-    boolean ans = jaasLoginManager.login("test", "password");
+    boolean ans = jaasLoginManager.login("company", "test", "password");
 
     assertEquals(ans, true);
   }
@@ -117,7 +117,7 @@ public class TestJaasLoginManager {
 
     failedLogin();
 
-    boolean ans = jaasLoginManager.login("t1est", "password");
+    boolean ans = jaasLoginManager.login("company", "t1est", "password");
 
     assertEquals(ans, false);
   }
@@ -127,18 +127,18 @@ public class TestJaasLoginManager {
 
     failedLogin();
 
-    boolean ans = jaasLoginManager.login("test", "password1");
+    boolean ans = jaasLoginManager.login("company", "test", "password1");
 
     assertEquals(ans, false);
   }
 
   @Test
   public void testLogout() {
-    boolean ans = jaasLoginManager.login("test", "password");
+    boolean ans = jaasLoginManager.login("company", "test", "password");
 
     assertEquals(ans, true);
 
-    ans = jaasLoginManager.logout("test");
+    ans = jaasLoginManager.logout("company", "test");
 
     assertEquals(ans, true);
 
@@ -147,7 +147,7 @@ public class TestJaasLoginManager {
   @Test
   public void testLogoutWithoutLogin() {
 
-    boolean ans = jaasLoginManager.logout("test");
+    boolean ans = jaasLoginManager.logout("company", "test");
 
     assertEquals(ans, true);
 

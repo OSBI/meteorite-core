@@ -48,11 +48,13 @@ class JaasLoginManager extends AdminLoginService {
     * Login Callback Handler
     */
   private class LoginCallbackHandler extends CallbackHandler {
+    private final var company: String = null
     private final var username: String = null
     private final var password: String = null
 
-    def this(username: String, password: String) {
+    def this(company: String, username: String, password: String) {
       this()
+      this.company = company
       this.username = username
       this.password = password
     }
@@ -73,9 +75,9 @@ class JaasLoginManager extends AdminLoginService {
     }
   }
 
-  def login(username: String, password: String): Boolean = {
+  def login(company: String, username: String, password: String): Boolean = {
     var authenticated: Boolean = false
-    val handler: LoginCallbackHandler = new LoginCallbackHandler(username, password)
+    val handler: LoginCallbackHandler = new LoginCallbackHandler(company, username, password)
     try {
       if (ctx == null) {
         ctx = new LoginContext(realm, handler)
@@ -97,8 +99,8 @@ class JaasLoginManager extends AdminLoginService {
     authenticated
   }
 
-  def logout(username: String): Boolean = {
-    val handler: LoginCallbackHandler = new LoginCallbackHandler(username, null)
+  def logout(company: String, username: String): Boolean = {
+    val handler: LoginCallbackHandler = new LoginCallbackHandler(company, username, null)
     try {
       if (ctx == null) {
         ctx = new LoginContext(realm, handler)

@@ -22,9 +22,24 @@ import javax.security.auth.login.LoginContext
   * Admin Api Interface for user management.
   */
 trait AdminLoginService {
-  def login(username: String, password: String): Boolean
+  /**
+    * Method that performs user authentication in a multi tenant environment.
+    * @param company The company where user is registered.
+    * @param username The user name (it should be unique for each company).
+    * @param password The password that matches to the company + username pair.
+    * @return true if user is authorized, false otherwise.
+    */
+  def login(company: String, username: String, password: String): Boolean
 
-  def logout(username: String): Boolean
+  /**
+    * Method that unregisters user session (perform logout).
+    * @param company The company where user is registered.
+    * @param username The user name (it should be unique for each company).
+    * @return true if user is logged out successfully, false otherwise.
+    */
+  def logout(company: String, username: String): Boolean
+
+  def getCompany: String
 
   def getUsername: String
 
