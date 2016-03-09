@@ -17,12 +17,15 @@ package bi.meteorite.core.security.hibernate
 
 import bi.meteorite.core.api.objects.Event
 import bi.meteorite.core.api.objects.MeteoriteUser
+import bi.meteorite.core.api.objects.MeteoriteCompany
 import bi.meteorite.core.api.objects.MeteoriteRole
 import bi.meteorite.core.api.persistence.EventService
 import bi.meteorite.core.api.persistence.UserService
+import bi.meteorite.core.api.persistence.CompanyService
 import bi.meteorite.objects.EventImpl
 import bi.meteorite.objects.RoleImpl
 import bi.meteorite.objects.UserImpl
+import bi.meteorite.objects.CompanyImpl
 import java.util.Date
 import java.util.UUID
 import javax.annotation.PostConstruct
@@ -34,18 +37,27 @@ import scala.collection.mutable.ListBuffer
   */
 class DefaultUsers {
   private var userService: UserService = null
+  private var companyService: CompanyService = null
   private var eventService: EventService = null
 
   @PostConstruct def insertUsers() {
     if (eventService.getEventByEventName("Start Adding Users") == null) {
       val uuid: String = UUID.randomUUID.toString
       val e: Event = eventService.addEvent(new EventImpl(uuid, this.getClass.getName, "Start Adding users", "Adding users to user list", new Date))
+
+      var c: MeteoriteCompany = new CompanyImpl
+      c.setName("company")
+      c = companyService.addCompany(c)
+
       var u: MeteoriteUser = new UserImpl
+      u.setCompany(c)
       u.setUsername("admin")
       u.setPassword("admin")
+
       val r: MeteoriteRole = new RoleImpl
       r.setUserId(u)
       r.setRole("ROLE_ADMIN")
+
       val r2: MeteoriteRole = new RoleImpl
       r2.setUserId(u)
       r2.setRole("ROLE_USER")
@@ -54,6 +66,7 @@ class DefaultUsers {
       u = userService.addUser(u)
 
       u = new UserImpl
+      u.setCompany(c)
       u.setUsername("smith")
       u.setPassword("smith")
       val s2 = List[MeteoriteRole](new RoleImpl("ROLE_USER", u.asInstanceOf[UserImpl]))

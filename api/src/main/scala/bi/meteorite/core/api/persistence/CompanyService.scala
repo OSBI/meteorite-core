@@ -16,7 +16,7 @@
 package bi.meteorite.core.api.persistence
 
 import bi.meteorite.core.api.objects.MeteoriteUser
-import bi.meteorite.core.api.objects.MeteoriteRole
+import bi.meteorite.core.api.objects.MeteoriteCompany
 
 /**
   * Interface for persisting companies.

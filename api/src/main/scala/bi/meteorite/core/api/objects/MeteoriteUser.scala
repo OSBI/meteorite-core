@@ -23,6 +23,20 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo
 @JsonTypeInfo(use=JsonTypeInfo.Id.CLASS, include=JsonTypeInfo.As.PROPERTY, property="@class")
 trait MeteoriteUser {
   /**
+    * Get the user company.
+    *
+    * @return the company.
+    */
+  def getCompany: MeteoriteCompany
+
+  /**
+    * Set the user company.
+    *
+    * @param company the company.
+    */
+  def setCompany(company: MeteoriteCompany)
+
+  /**
     * Get the username.
     *
     * @return the username

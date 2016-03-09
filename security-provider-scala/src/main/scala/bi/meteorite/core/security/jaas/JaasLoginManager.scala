@@ -48,13 +48,13 @@ class JaasLoginManager extends AdminLoginService {
     * Login Callback Handler
     */
   private class LoginCallbackHandler extends CallbackHandler {
-    private final var company: String = null
+    private final var companyId: Long = _
     private final var username: String = null
     private final var password: String = null
 
-    def this(company: String, username: String, password: String) {
+    def this(companyId: Long, username: String, password: String) {
       this()
-      this.company = company
+      this.companyId = companyId
       this.username = username
       this.password = password
     }
@@ -75,9 +75,9 @@ class JaasLoginManager extends AdminLoginService {
     }
   }
 
-  def login(company: String, username: String, password: String): Boolean = {
+  def login(companyId: Long, username: String, password: String): Boolean = {
     var authenticated: Boolean = false
-    val handler: LoginCallbackHandler = new LoginCallbackHandler(company, username, password)
+    val handler: LoginCallbackHandler = new LoginCallbackHandler(companyId, username, password)
     try {
       if (ctx == null) {
         ctx = new LoginContext(realm, handler)
@@ -99,8 +99,8 @@ class JaasLoginManager extends AdminLoginService {
     authenticated
   }
 
-  def logout(company: String, username: String): Boolean = {
-    val handler: LoginCallbackHandler = new LoginCallbackHandler(company, username, null)
+  def logout(companyId: Long, username: String): Boolean = {
+    val handler: LoginCallbackHandler = new LoginCallbackHandler(companyId, username, null)
     try {
       if (ctx == null) {
         ctx = new LoginContext(realm, handler)
@@ -113,6 +113,10 @@ class JaasLoginManager extends AdminLoginService {
         e.printStackTrace()
     }
     false
+  }
+
+  def getCompanyId: Long = {
+    return 0L
   }
 
   def getUsername: String = {

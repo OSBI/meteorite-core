@@ -33,8 +33,8 @@ import org.ops4j.pax.cdi.api.{OsgiService, OsgiServiceProvider}
   @OsgiService
   private var adminLoginService: AdminLoginService = null
 
-  override def logout(username: String) : Response = {
-    if(adminLoginService.logout(username)){
+  override def logout(companyId: Long, username: String) : Response = {
+    if(adminLoginService.logout(companyId, username)){
       Response.ok().build()
     }
     else{

@@ -17,8 +17,8 @@ package bi.meteorite.objects
 
 import javax.persistence._
 
-import bi.meteorite.core.api.objects.{MeteoriteRole, MeteoriteUser}
-import com.fasterxml.jackson.annotation.{JsonInclude, JsonManagedReference}
+import bi.meteorite.core.api.objects.{MeteoriteRole, MeteoriteUser, MeteoriteCompany}
+import com.fasterxml.jackson.annotation.{JsonBackReference, JsonInclude, JsonManagedReference}
 
 /**
   * A User Object annotated for persistence
@@ -31,6 +31,10 @@ import com.fasterxml.jackson.annotation.{JsonInclude, JsonManagedReference}
     pkColumnValue = "SEQUENCE", allocationSize = 1)
   @GeneratedValue(strategy = GenerationType.TABLE, generator = "EVENT_GEN")
   private var id: Long = _
+  @ManyToOne(fetch = FetchType.LAZY, cascade = Array(CascadeType.ALL))
+  @JoinColumn(name = "COMPANY_ID", nullable = false)
+  @JsonBackReference
+  private var company: CompanyImpl = null
   @Column(length = 100)
   private var username: String = _
   @Column(length = 100)
@@ -39,8 +43,6 @@ import com.fasterxml.jackson.annotation.{JsonInclude, JsonManagedReference}
   @OneToMany(mappedBy = "userid", fetch = FetchType.LAZY, cascade = Array(CascadeType.ALL))
   @JsonManagedReference
   private val roles: java.util.List[RoleImpl]  = new java.util.ArrayList[RoleImpl]()
-  @Column
-  private var orgId: Int = _
   @Column
   private var email: String = _
 
@@ -79,6 +81,14 @@ import com.fasterxml.jackson.annotation.{JsonInclude, JsonManagedReference}
     }
   }
 
+  def getCompany: MeteoriteCompany = {
+    company
+  }
+
+  def setCompany(company: MeteoriteCompany) {
+    this.company = company.asInstanceOf[CompanyImpl]
+  }
+
   def getEmail: String = {
     email
   }
@@ -93,13 +103,5 @@ import com.fasterxml.jackson.annotation.{JsonInclude, JsonManagedReference}
 
   def setId(id: Long) {
     this.id = id
-  }
-
-  def getOrgId: Int = {
-    orgId
-  }
-
-  def setOrgId(orgId: Int) {
-    this.orgId = orgId
   }
 }

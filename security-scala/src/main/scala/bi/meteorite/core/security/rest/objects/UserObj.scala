@@ -15,7 +15,7 @@
  */
 package bi.meteorite.core.security.rest.objects
 
-import bi.meteorite.core.api.objects.{MeteoriteRole, MeteoriteUser}
+import bi.meteorite.core.api.objects.{MeteoriteRole, MeteoriteUser, MeteoriteCompany}
 import bi.meteorite.objects.UserImpl
 
 /**
@@ -23,11 +23,19 @@ import bi.meteorite.objects.UserImpl
   */
 class UserObj extends MeteoriteUser {
   private var id: Long = 0
+  private var company: MeteoriteCompany = null
   private var username: String = null
   private var password: String = null
   //private val roles: java.util.List[RoleImpl]  = new java.util.ArrayList[RoleImpl]()
-  private var orgId: Int = 0
   private var email: String = null
+
+  def getCompany: MeteoriteCompany = {
+    company
+  }
+
+  def setCompany(company: MeteoriteCompany) {
+    this.company = company
+  }
 
   def getUsername: String = {
     username
@@ -68,20 +76,10 @@ class UserObj extends MeteoriteUser {
     this.id = id
   }
 
-  def getOrgId: Int = {
-    orgId
-  }
-
-  def setOrgId(orgId: Int) {
-    this.orgId = orgId
-  }
-
-
   def toUserImpl(): UserImpl ={
     var u = new UserImpl
     u.setId(this.getId)
     u.setEmail(this.getEmail)
-    u.setOrgId(this.getOrgId)
     u.setPassword(this.getPassword)
     u.setRoles(this.getRoles)
     u.setUsername(this.getUsername)
