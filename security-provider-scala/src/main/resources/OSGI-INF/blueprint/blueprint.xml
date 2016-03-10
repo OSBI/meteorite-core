@@ -47,11 +47,11 @@
     <ext:property-placeholder placeholder-prefix="$[" placeholder-suffix="]"/>
 
     <jaas:config name="meteorite-realm" rank="2">
-        <jaas:module className="org.apache.karaf.jaas.modules.jdbc.JDBCLoginModule"
+        <jaas:module className="bi.meteorite.core.security.jaas.MeteoriteJDBCLoginModule"
                      flags="required">
             datasource = osgi:javax.sql.DataSource/(osgi.jndi.service.name=systemdb)
-            query.password = SELECT PASSWORD FROM USERS WHERE USERNAME=?
-            query.role = select ROLENAME from ROLES, USERS where USERS.ID = ROLES.USER_ID and USERNAME = ?
+            query.password = SELECT PASSWORD FROM USERS WHERE USERNAME=? AND COMPANY_ID=?
+            query.role = select ROLENAME from ROLES, USERS where USERS.ID = ROLES.USER_ID AND USERNAME = ? AND COMPANY_ID=?
             insert.user = INSERT INTO USERS(USERNAME, PASSWORD) VALUES(?,?)
             insert.role = INSERT INTO ROLES VALUES(?,?)
             delete.user = DELETE FROM USERS WHERE USERNAME=?
