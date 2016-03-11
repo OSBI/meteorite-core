@@ -90,7 +90,7 @@ class MeteoriteJDBCLoginModule extends AbstractKarafLoginModule {
       try {
         callbackHandler.handle(callbacks)
       } catch {
-        case e: IOException => throw new LoginException(e.getMessage())
+        case e: IOException => throw new LoginException("IOException: " + e.getMessage())
         case e: UnsupportedCallbackException => new LoginException(e.getMessage() + " not available to obtain information from user")
       }
 
@@ -103,7 +103,11 @@ class MeteoriteJDBCLoginModule extends AbstractKarafLoginModule {
       loadPrincipals(connection, companyId, user)
     } catch {
       case e: LoginException => throw e
-      case e: Exception => throw new LoginException(e.getMessage)
+      case e: Exception => {
+        e.printStackTrace()
+        LOGGER.error("Exception: " + e.getMessage(), e)
+        throw new LoginException("Exception: " + e.getMessage)
+      }
     } finally {
       closeConnection(connection)
     }
@@ -165,7 +169,13 @@ class MeteoriteJDBCLoginModule extends AbstractKarafLoginModule {
     val companyCallback = callbacks(0).asInstanceOf[ChoiceCallback]
 
     if (companyCallback.getSelectedIndexes() == null || companyCallback.getSelectedIndexes().isEmpty) {
-      throw new LoginException("A company must be supplied")
+      // Little workaround to handle HTTP basic auth scenario
+      // throw new LoginException("A company must be supplied")
+      val nameCallback = callbacks(1).asInstanceOf[NameCallback]
+      val companyNamePair = nameCallback.getName().split("/")
+
+      nameCallback.setName(companyNamePair(1))
+      return companyNamePair(0)
     }
 
     return companies(companyCallback.getSelectedIndexes()(0))
@@ -214,7 +224,7 @@ class MeteoriteJDBCLoginModule extends AbstractKarafLoginModule {
       try {
         connection.close()
       } catch {
-        case e: Exception => throw new LoginException(e.getMessage)
+        case e: Exception => throw new LoginException("Exception when closing connection: " + e.getMessage)
       }
     }
   }
