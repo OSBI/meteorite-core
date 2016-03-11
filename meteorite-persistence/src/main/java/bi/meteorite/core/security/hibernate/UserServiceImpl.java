@@ -16,9 +16,11 @@
 
 package bi.meteorite.core.security.hibernate;
 
+import bi.meteorite.core.api.objects.MeteoriteCompany;
 import bi.meteorite.core.api.objects.MeteoriteRole;
 import bi.meteorite.core.api.objects.MeteoriteUser;
 import bi.meteorite.core.api.persistence.UserService;
+import bi.meteorite.objects.CompanyImpl;
 import bi.meteorite.objects.RoleImpl;
 import bi.meteorite.objects.UserImpl;
 
@@ -70,8 +72,15 @@ public class UserServiceImpl implements UserService {
   @Override
   public MeteoriteUser addUser(MeteoriteUser user) {
     UserImpl u = (UserImpl) user;
+
+    if (u.getCompany() != null) {
+      CompanyImpl c = em.find(CompanyImpl.class, ((MeteoriteCompany) u.getCompany()).getId());
+      u.setCompany(c);
+    }
+
     em.persist(u);
     em.flush();
+
     return u;
   }
 

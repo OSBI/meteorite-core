@@ -85,4 +85,8 @@ class DefaultUsers {
   def setEventService(eventService: EventService) {
     this.eventService = eventService
   }
+
+  def setCompanyService(companyService: CompanyService) {
+    this.companyService = companyService
+  }
 }

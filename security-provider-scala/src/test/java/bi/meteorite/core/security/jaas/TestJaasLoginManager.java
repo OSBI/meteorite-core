@@ -106,48 +106,53 @@ public class TestJaasLoginManager {
 
   @Test
   public void testLogin() throws MeteoriteSecurityException {
+    long companyId = jaasUserManager.getgetCompaniesId().get(0);
 
-    boolean ans = jaasLoginManager.login("company", "test", "password");
+    boolean ans = jaasLoginManager.login(companyId, "test", "password");
 
     assertEquals(ans, true);
   }
 
   @Test
   public void testLoginWrongUsername() throws LoginException {
+    long companyId = jaasUserManager.getgetCompaniesId().get(0);
 
     failedLogin();
 
-    boolean ans = jaasLoginManager.login("company", "t1est", "password");
+    boolean ans = jaasLoginManager.login(companyId, "t1est", "password");
 
     assertEquals(ans, false);
   }
 
   @Test
   public void testLoginWrongPassword() throws LoginException {
+    long companyId = jaasUserManager.getgetCompaniesId().get(0);
 
     failedLogin();
 
-    boolean ans = jaasLoginManager.login("company", "test", "password1");
+    boolean ans = jaasLoginManager.login(companyId, "test", "password1");
 
     assertEquals(ans, false);
   }
 
   @Test
   public void testLogout() {
-    boolean ans = jaasLoginManager.login("company", "test", "password");
+    long companyId = jaasUserManager.getgetCompaniesId().get(0);
+
+    boolean ans = jaasLoginManager.login(companyId, "test", "password");
 
     assertEquals(ans, true);
 
-    ans = jaasLoginManager.logout("company", "test");
+    ans = jaasLoginManager.logout(companyId, "test");
 
     assertEquals(ans, true);
-
   }
 
   @Test
   public void testLogoutWithoutLogin() {
+    long companyId = jaasUserManager.getgetCompaniesId().get(0);
 
-    boolean ans = jaasLoginManager.logout("company", "test");
+    boolean ans = jaasLoginManager.logout(companyId, "test");
 
     assertEquals(ans, true);
 

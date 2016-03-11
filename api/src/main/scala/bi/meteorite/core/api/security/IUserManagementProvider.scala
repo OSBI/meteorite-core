@@ -71,6 +71,14 @@ trait IUserManagementProvider {
   def getUsersId: List[Long]
 
   /**
+    * Get a list of company ids
+    * @throws MeteoriteSecurityException Throws Meteorite Security Exception on error
+    * @return a list of company ids
+    */
+  @throws(classOf[MeteoriteSecurityException])
+  def getCompaniesId: List[Long]
+
+  /**
     * Get a list of roles applied to a user.
     *
     * @param u username

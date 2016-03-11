@@ -22,6 +22,7 @@ import javax.security.auth.login.{Configuration, AppConfigurationEntry}
 
 import bi.meteorite.core.api.objects.{UserList, MeteoriteUser}
 import bi.meteorite.core.api.persistence.UserService
+import bi.meteorite.core.api.persistence.CompanyService
 import bi.meteorite.core.api.security.IUserManagementProvider
 import bi.meteorite.core.api.security.exceptions.MeteoriteSecurityException
 import org.apache.karaf.jaas.boot.ProxyLoginModule
@@ -43,6 +44,8 @@ class JaasUserManager extends IUserManagementProvider {
   @OsgiService private var realm: JaasRealm = null
   @Inject
   @OsgiService private var userService: UserService = null
+  @Inject
+  @OsgiService private var companyService: CompanyService = null
 
   private def getEngine: BackingEngine = {
     var config : Configuration = null
@@ -83,7 +86,6 @@ class JaasUserManager extends IUserManagementProvider {
     case false => throw new MeteoriteSecurityException("User Doesn't Exist")
   }
 
-
   @throws(classOf[MeteoriteSecurityException])
   def getUsers: List[UserList] = (for (user <- userService.getUsers) yield
     UserList(user.getId, user.getUsername)).toList
@@ -91,6 +93,8 @@ class JaasUserManager extends IUserManagementProvider {
   @throws(classOf[MeteoriteSecurityException])
   def getUsersId: List[Long] = (for(user <- userService.getUsers) yield user.getId).toList
 
+  @throws(classOf[MeteoriteSecurityException])
+  def getCompaniesId: List[Long] = (for(company <- companyService.getCompanies) yield company.getId).toList
 
   @throws(classOf[MeteoriteSecurityException])
   def getRoles(u: String): List[String] = {

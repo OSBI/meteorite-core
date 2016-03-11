@@ -17,7 +17,7 @@ package bi.meteorite.core.security.jaas
 
 import java.io.IOException
 import javax.security.auth.Subject
-import javax.security.auth.callback.{Callback, CallbackHandler, NameCallback, PasswordCallback, UnsupportedCallbackException}
+import javax.security.auth.callback._
 import javax.security.auth.login.{LoginContext, LoginException}
 
 import bi.meteorite.core.api.security.AdminLoginService
@@ -26,6 +26,7 @@ import org.ops4j.pax.cdi.api.OsgiServiceProvider
 import org.slf4j.{Logger, LoggerFactory}
 
 import scala.collection.mutable.ListBuffer
+import scala.util.control.Breaks._
 
 /**
   * Jaas Login Manager
@@ -64,6 +65,13 @@ class JaasLoginManager extends AdminLoginService {
     def handle(callbacks: Array[Callback]) {
       for (callback <- callbacks) {
         callback match {
+          case compCallback: ChoiceCallback =>
+            for ((choice, index) <- compCallback.getChoices.view.zipWithIndex) {
+              if (companyId == choice.toLong) {
+                compCallback.setSelectedIndex(index)
+                break
+              }
+            }
           case callback1: NameCallback =>
             callback1.setName(username)
           case pwCallback: PasswordCallback =>

@@ -47,7 +47,7 @@ class MeteoriteJDBCLoginModule extends AbstractKarafLoginModule {
   var DELETE_USER_STATEMENT = "delete.user"
 
   private var datasourceURL : String = null
-  private var companiesQuery = "SELECT ID, NAME FROM COMPANIES ORDER BY NAME"
+  private var companiesQuery = "SELECT ID FROM COMPANIES ORDER BY NAME"
   private var passwordQuery = "SELECT PASSWORD FROM USERS WHERE USERNAME=? AND COMPANY_ID=?"
   private var roleQuery = "SELECT ROLE FROM ROLES WHERE USERNAME=? AND COMPANY_ID=?"
 
@@ -79,19 +79,13 @@ class MeteoriteJDBCLoginModule extends AbstractKarafLoginModule {
   }
 
   override def login(): Boolean = {
+    var connection: Connection = null
+
     try {
-      val datasource = JDBCUtils.createDatasource(bundleContext, datasourceURL)
-      val connection = datasource.getConnection()
-      val companies = selectCompanies(connection)
+      connection = JDBCUtils.createDatasource(bundleContext, datasourceURL).getConnection()
 
-      val companiesNames = new Array[String](companies.length)
-      for ((company, i) <- companies.view.zipWithIndex) companiesNames(i) = company.getName()
-
-      val callbacks = new Array[Callback](3)
-
-      callbacks(0) = new ChoiceCallback("Company: ", companiesNames, 0, false)
-      callbacks(1) = new NameCallback("Username: ")
-      callbacks(2) = new PasswordCallback("Password: ", false)
+      val companiesId = rawSelect(connection, companiesQuery).toArray
+      val callbacks = createCallbackArray(companiesId)
 
       try {
         callbackHandler.handle(callbacks)
@@ -100,47 +94,18 @@ class MeteoriteJDBCLoginModule extends AbstractKarafLoginModule {
         case e: UnsupportedCallbackException => new LoginException(e.getMessage() + " not available to obtain information from user")
       }
 
-      val company = companies(callbacks(0).asInstanceOf[ChoiceCallback].getSelectedIndexes()(0))
+      val companyId = getCompanyId(callbacks, companiesId)
       user = callbacks(1).asInstanceOf[NameCallback].getName()
-      var tmpPassword = callbacks(2).asInstanceOf[PasswordCallback].getPassword()
+      val password = getPassword(callbacks)
+      principals = new util.HashSet[Principal]()
 
-      if (tmpPassword == null) {
-        tmpPassword = Array[Char]()
-      }
-
-      val password = tmpPassword.mkString
-      var principals = mutable.Set[Principal]()
-
-      try {
-        val passwords = rawSelect(connection, passwordQuery, user, company.getId().toString)
-
-        if (passwords.isEmpty) {
-          throw new LoginException("User " + user + " does not exist")
-        }
-
-        if (!checkPassword(password, passwords(0))) {
-          throw new LoginException("Password for " + user + " does not match");
-        }
-
-        principals += new UserPrincipal(user)
-
-        val roles = rawSelect(connection, roleQuery, user, company.getId().toString)
-        for (role <- roles) {
-          if (role.startsWith(BackingEngine.GROUP_PREFIX)) {
-            principals += new GroupPrincipal(role.substring(BackingEngine.GROUP_PREFIX.length()))
-            for (r <- rawSelect(connection, roleQuery, role)) {
-              principals += new RolePrincipal(r)
-            }
-          } else {
-            principals += new RolePrincipal(role)
-          }
-        }
-
-      } finally {
-        connection.close()
-      }
+      validatePassword(connection, companyId, user, password)
+      loadPrincipals(connection, companyId, user)
     } catch {
-      case e: Exception => throw new LoginException("Error has occurred while retrieving credentials from database:" + e.getMessage())
+      case e: LoginException => throw e
+      case e: Exception => throw new LoginException(e.getMessage)
+    } finally {
+      closeConnection(connection)
     }
 
     return true
@@ -159,33 +124,15 @@ class MeteoriteJDBCLoginModule extends AbstractKarafLoginModule {
     return true
   }
 
-  private def selectCompanies(connection: Connection) : Seq[CompanyData] = {
-    val result = mutable.MutableList[CompanyData]()
-    val statement = connection.prepareStatement(companiesQuery)
-
-    try {
-      val resultSet = statement.executeQuery()
-      try {
-        while (resultSet.next()) {
-          result += new CompanyData(resultSet.getLong("ID"), resultSet.getString("NAME"))
-        }
-      } finally {
-        resultSet.close()
-      }
-    } finally {
-      statement.close()
-    }
-
-    return result
-  }
-
   private def rawSelect(connection: Connection, query: String, params: String*) : Seq[String] = {
     val result = mutable.MutableList[String]()
     val statement = connection.prepareStatement(query)
 
     try {
-      for((param, index) <- params.view.zipWithIndex) {
-        statement.setString(index + 1, param)
+      if (params != null) {
+        for((param, index) <- params.view.zipWithIndex) {
+          statement.setString(index + 1, param)
+        }
       }
 
       val resultSet = statement.executeQuery()
@@ -204,8 +151,71 @@ class MeteoriteJDBCLoginModule extends AbstractKarafLoginModule {
     return result
   }
 
-  class CompanyData(id : Long, name : String) {
-    def getId() = id
-    def getName() = name
+  private def createCallbackArray(companiesId: Array[String]): Array[Callback] = {
+    val callbacks = new Array[Callback](3)
+
+    callbacks(0) = new ChoiceCallback("Company: ", companiesId, 0, false)
+    callbacks(1) = new NameCallback("Username: ")
+    callbacks(2) = new PasswordCallback("Password: ", false)
+
+    return callbacks
+  }
+
+  private def getCompanyId(callbacks: Array[Callback], companies: Seq[String]): String = {
+    val companyCallback = callbacks(0).asInstanceOf[ChoiceCallback]
+
+    if (companyCallback.getSelectedIndexes() == null || companyCallback.getSelectedIndexes().isEmpty) {
+      throw new LoginException("A company must be supplied")
+    }
+
+    return companies(companyCallback.getSelectedIndexes()(0))
+  }
+
+  private def getPassword(callbacks: Array[Callback]) : String = {
+    var tmpPassword = callbacks(2).asInstanceOf[PasswordCallback].getPassword()
+
+    if (tmpPassword == null) {
+      tmpPassword = Array[Char]()
+    }
+
+    return tmpPassword.mkString
+  }
+
+  private def validatePassword(connection: Connection, companyId: String, user: String, password: String) : Unit = {
+    val passwords = rawSelect(connection, passwordQuery, user, companyId)
+
+    if (passwords.isEmpty) {
+      throw new LoginException("User " + user + " does not exist")
+    }
+
+    if (!checkPassword(password, passwords(0))) {
+      throw new LoginException("Password for " + user + " does not match");
+    }
+  }
+
+  private def loadPrincipals(connection: Connection, companyId: String, user: String) : Unit = {
+    principals.add(new UserPrincipal(user))
+
+    val roles = rawSelect(connection, roleQuery, user, companyId)
+    for (role <- roles) {
+      if (role.startsWith(BackingEngine.GROUP_PREFIX)) {
+        principals.add(new GroupPrincipal(role.substring(BackingEngine.GROUP_PREFIX.length())))
+        for (r <- rawSelect(connection, roleQuery, role)) {
+          principals.add(new RolePrincipal(r))
+        }
+      } else {
+        principals.add(new RolePrincipal(role))
+      }
+    }
+  }
+
+  private def closeConnection(connection: Connection) : Unit = {
+    if (connection != null) {
+      try {
+        connection.close()
+      } catch {
+        case e: Exception => throw new LoginException(e.getMessage)
+      }
+    }
   }
 }

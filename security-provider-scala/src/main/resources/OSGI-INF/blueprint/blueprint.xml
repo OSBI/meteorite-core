@@ -23,6 +23,7 @@
         <property name="backingEngineService" ref="engineService"/>
         <property name="realm" ref="jaasRealm-"/>
         <property name="userService" ref="userService-"/>
+        <property name="companyService" ref="companyService-"/>
     </bean>
 
 
@@ -32,14 +33,17 @@
     <reference id="hazelcastInstance-" interface="com.hazelcast.core.HazelcastInstance"/>
     <reference id="jaasRealm-" interface="org.apache.karaf.jaas.config.JaasRealm"/>
     <reference id="userService-" interface="bi.meteorite.core.api.persistence.UserService"/>
+    <reference id="companyService-" interface="bi.meteorite.core.api.persistence.CompanyService"/>
     <service ref="jaasUserManager" interface="bi.meteorite.core.api.security.IUserManagementProvider"/>
     <service ref="tokenProviderImpl" interface="bi.meteorite.core.api.security.tokenprovider.TokenProvider"/>
 
     <reference interface="bi.meteorite.core.api.persistence.EventService" id="eventS"/>
     <reference interface="bi.meteorite.core.api.persistence.UserService" id="userS"/>
+    <reference interface="bi.meteorite.core.api.persistence.CompanyService" id="companieS"/>
     <bean class="bi.meteorite.core.security.hibernate.DefaultUsers" id="default" init-method="insertUsers">
         <property name="eventService" ref="eventS"/>
         <property name="userService" ref="userS"/>
+        <property name="companyService" ref="companieS"/>
     </bean>
 
 
