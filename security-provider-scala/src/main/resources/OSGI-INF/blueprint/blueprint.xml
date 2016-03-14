@@ -54,8 +54,8 @@
         <jaas:module className="bi.meteorite.core.security.jaas.MeteoriteJDBCLoginModule"
                      flags="required">
             datasource = osgi:javax.sql.DataSource/(osgi.jndi.service.name=systemdb)
-            query.password = SELECT PASSWORD FROM USERS WHERE USERNAME=? AND COMPANY_ID=?
-            query.role = select ROLENAME from ROLES, USERS where USERS.ID = ROLES.USER_ID AND USERNAME = ? AND COMPANY_ID=?
+            query.password = SELECT PASSWORD FROM USERS U, COMPANIES C WHERE U.USERNAME=? AND C.NAME=? AND U.COMPANY_ID = C.ID
+            query.role = SELECT ROLENAME FROM ROLES R, USERS U, COMPANIES C WHERE U.USERNAME=? AND C.NAME=? AND R.USER_ID = U.ID AND U.COMPANY_ID = C.ID
             insert.user = INSERT INTO USERS(USERNAME, PASSWORD) VALUES(?,?)
             insert.role = INSERT INTO ROLES VALUES(?,?)
             delete.user = DELETE FROM USERS WHERE USERNAME=?

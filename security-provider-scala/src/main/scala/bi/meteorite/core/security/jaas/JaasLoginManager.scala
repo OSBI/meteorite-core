@@ -65,15 +65,8 @@ class JaasLoginManager extends AdminLoginService {
     def handle(callbacks: Array[Callback]) {
       for (callback <- callbacks) {
         callback match {
-          case compCallback: ChoiceCallback =>
-            for ((choice, index) <- compCallback.getChoices.view.zipWithIndex) {
-              if (companyId == choice.toLong) {
-                compCallback.setSelectedIndex(index)
-                break
-              }
-            }
           case callback1: NameCallback =>
-            callback1.setName(username)
+            callback1.setName(companyId + "\\" + username)
           case pwCallback: PasswordCallback =>
             pwCallback.setPassword(password.toCharArray)
           case _ =>

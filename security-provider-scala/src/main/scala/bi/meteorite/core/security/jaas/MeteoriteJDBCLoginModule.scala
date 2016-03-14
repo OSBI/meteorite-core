@@ -36,7 +36,6 @@ import scala.collection.mutable
 class MeteoriteJDBCLoginModule extends AbstractKarafLoginModule {
   var LOGGER = LoggerFactory.getLogger(classOf[MeteoriteJDBCLoginModule])
 
-  var COMPANIES_QUERY = "query.companies"
   var PASSWORD_QUERY = "query.password"
   var USER_QUERY = "query.user"
   var ROLE_QUERY = "query.role"
@@ -47,9 +46,8 @@ class MeteoriteJDBCLoginModule extends AbstractKarafLoginModule {
   var DELETE_USER_STATEMENT = "delete.user"
 
   private var datasourceURL : String = null
-  private var companiesQuery = "SELECT ID FROM COMPANIES ORDER BY NAME"
-  private var passwordQuery = "SELECT PASSWORD FROM USERS WHERE USERNAME=? AND COMPANY_ID=?"
-  private var roleQuery = "SELECT ROLE FROM ROLES WHERE USERNAME=? AND COMPANY_ID=?"
+  private var passwordQuery = "SELECT PASSWORD FROM USERS U, COMPANIES C WHERE U.USERNAME=? AND C.NAME=? AND U.COMPANY_ID = C.ID"
+  private var roleQuery = "SELECT ROLENAME FROM ROLES R, USERS U, COMPANIES C WHERE U.USERNAME=? AND C.NAME=? AND R.USER_ID = U.ID AND U.COMPANY_ID = C.ID"
 
   override def initialize(subject: Subject,
                           callbackHandler: CallbackHandler,
@@ -69,10 +67,6 @@ class MeteoriteJDBCLoginModule extends AbstractKarafLoginModule {
       passwordQuery = options.get(PASSWORD_QUERY).asInstanceOf[String]
     }
 
-    if (options.containsKey(COMPANIES_QUERY)) {
-      companiesQuery = options.get(COMPANIES_QUERY).asInstanceOf[String]
-    }
-
     if (options.containsKey(ROLE_QUERY)) {
       roleQuery = options.get(ROLE_QUERY).asInstanceOf[String]
     }
@@ -84,8 +78,7 @@ class MeteoriteJDBCLoginModule extends AbstractKarafLoginModule {
     try {
       connection = JDBCUtils.createDatasource(bundleContext, datasourceURL).getConnection()
 
-      val companiesId = rawSelect(connection, companiesQuery).toArray
-      val callbacks = createCallbackArray(companiesId)
+      val callbacks = createCallbackArray()
 
       try {
         callbackHandler.handle(callbacks)
@@ -94,20 +87,13 @@ class MeteoriteJDBCLoginModule extends AbstractKarafLoginModule {
         case e: UnsupportedCallbackException => new LoginException(e.getMessage() + " not available to obtain information from user")
       }
 
-      val companyId = getCompanyId(callbacks, companiesId)
-      user = callbacks(1).asInstanceOf[NameCallback].getName()
+      val company = getCompany(callbacks)
+      user = callbacks(0).asInstanceOf[NameCallback].getName()
       val password = getPassword(callbacks)
       principals = new util.HashSet[Principal]()
 
-      validatePassword(connection, companyId, user, password)
-      loadPrincipals(connection, companyId, user)
-    } catch {
-      case e: LoginException => throw e
-      case e: Exception => {
-        e.printStackTrace()
-        LOGGER.error("Exception: " + e.getMessage(), e)
-        throw new LoginException("Exception: " + e.getMessage)
-      }
+      validatePassword(connection, company, user, password)
+      loadPrincipals(connection, company, user)
     } finally {
       closeConnection(connection)
     }
@@ -155,34 +141,25 @@ class MeteoriteJDBCLoginModule extends AbstractKarafLoginModule {
     return result
   }
 
-  private def createCallbackArray(companiesId: Array[String]): Array[Callback] = {
-    val callbacks = new Array[Callback](3)
+  private def createCallbackArray(): Array[Callback] = {
+    val callbacks = new Array[Callback](2)
 
-    callbacks(0) = new ChoiceCallback("Company: ", companiesId, 0, false)
-    callbacks(1) = new NameCallback("Username: ")
-    callbacks(2) = new PasswordCallback("Password: ", false)
+    callbacks(0) = new NameCallback("Username: ")
+    callbacks(1) = new PasswordCallback("Password: ", false)
 
     return callbacks
   }
 
-  private def getCompanyId(callbacks: Array[Callback], companies: Seq[String]): String = {
-    val companyCallback = callbacks(0).asInstanceOf[ChoiceCallback]
-
-    if (companyCallback.getSelectedIndexes() == null || companyCallback.getSelectedIndexes().isEmpty) {
-      // Little workaround to handle HTTP basic auth scenario
-      // throw new LoginException("A company must be supplied")
-      val nameCallback = callbacks(1).asInstanceOf[NameCallback]
-      val companyNamePair = nameCallback.getName().split("/")
+  private def getCompany(callbacks: Array[Callback]): String = {
+      val nameCallback = callbacks(0).asInstanceOf[NameCallback]
+      val companyNamePair = nameCallback.getName().split('\\')
 
       nameCallback.setName(companyNamePair(1))
       return companyNamePair(0)
-    }
-
-    return companies(companyCallback.getSelectedIndexes()(0))
   }
 
   private def getPassword(callbacks: Array[Callback]) : String = {
-    var tmpPassword = callbacks(2).asInstanceOf[PasswordCallback].getPassword()
+    var tmpPassword = callbacks(1).asInstanceOf[PasswordCallback].getPassword()
 
     if (tmpPassword == null) {
       tmpPassword = Array[Char]()
@@ -191,8 +168,8 @@ class MeteoriteJDBCLoginModule extends AbstractKarafLoginModule {
     return tmpPassword.mkString
   }
 
-  private def validatePassword(connection: Connection, companyId: String, user: String, password: String) : Unit = {
-    val passwords = rawSelect(connection, passwordQuery, user, companyId)
+  private def validatePassword(connection: Connection, company: String, user: String, password: String) : Unit = {
+    val passwords = rawSelect(connection, passwordQuery, user, company)
 
     if (passwords.isEmpty) {
       throw new LoginException("User " + user + " does not exist")
@@ -203,10 +180,10 @@ class MeteoriteJDBCLoginModule extends AbstractKarafLoginModule {
     }
   }
 
-  private def loadPrincipals(connection: Connection, companyId: String, user: String) : Unit = {
+  private def loadPrincipals(connection: Connection, company: String, user: String) : Unit = {
     principals.add(new UserPrincipal(user))
 
-    val roles = rawSelect(connection, roleQuery, user, companyId)
+    val roles = rawSelect(connection, roleQuery, user, company)
     for (role <- roles) {
       if (role.startsWith(BackingEngine.GROUP_PREFIX)) {
         principals.add(new GroupPrincipal(role.substring(BackingEngine.GROUP_PREFIX.length())))
