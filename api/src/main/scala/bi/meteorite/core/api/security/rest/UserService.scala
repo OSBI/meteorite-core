@@ -36,7 +36,7 @@ import javax.ws.rs.core.Response
   * User creation and manipulation for administrators of Meteorite core.
   */
 @CrossOriginResourceSharing(allowAllOrigins = true,allowCredentials = true)
-@Path("/") trait UserService {
+@Path("/user") trait UserService {
   /**
     * Add a user to Meteorite core.
     *
@@ -48,7 +48,7 @@ import javax.ws.rs.core.Response
   @Produces(Array("application/json"))
   @Consumes(Array("application/json"))
  // @ReturnType("bi.meteorite.core.api.objects.MeteoriteUser")
-  @Path("/user")
+  @Path("/")
   @throws(classOf[MeteoriteSecurityException])
   def addUser(u: MeteoriteUser): Response
 
@@ -62,7 +62,7 @@ import javax.ws.rs.core.Response
   @PUT
   @Produces(Array("application/json"))
   @Consumes(Array("application/json"))
-  @Path("/user")
+  @Path("/")
   //@ReturnType("bi.meteorite.core.api.objects.MeteoriteUser")
   @throws(classOf[MeteoriteSecurityException])
   def modifyUser(u: MeteoriteUser): Response
@@ -77,7 +77,7 @@ import javax.ws.rs.core.Response
   @DELETE
   @Produces(Array("application/json"))
   @Consumes(Array("application/json"))
-  @Path("/user")
+  @Path("/")
   //@ReturnType("bi.meteorite.core.api.objects.MeteoriteUser")
   @throws(classOf[MeteoriteSecurityException])
   def deleteUser(u: MeteoriteUser): Response
@@ -92,7 +92,7 @@ import javax.ws.rs.core.Response
   @DELETE
   @Produces(Array("application/json"))
   @Consumes(Array("application/json"))
-  @Path("/user/{id}")
+  @Path("/{id}")
   //@ReturnType("bi.meteorite.core.api.objects.MeteoriteUser")
   @throws(classOf[MeteoriteSecurityException])
   def deleteUser(@PathParam("id") id: Int): Response
@@ -107,7 +107,7 @@ import javax.ws.rs.core.Response
   @POST
   @Produces(Array("application/json"))
   @Consumes(Array("application/json"))
-  @Path("/user/lookup/{id}/group/{gid}")
+  @Path("/lookup/{id}/group/{gid}")
   @throws(classOf[MeteoriteSecurityException])
   def addRole(@PathParam("id") id: String, @PathParam("gid") group: Int): Response
 
@@ -121,7 +121,7 @@ import javax.ws.rs.core.Response
   @POST
   @Produces(Array("application/json"))
   @Consumes(Array("application/json"))
-  @Path("/user/lookup/{id}/group/{group}")
+  @Path("/lookup/{id}/group/{group}")
   @throws(classOf[MeteoriteSecurityException])
   def addRole(@PathParam("id") id: String, @PathParam("group") group: String): Response
 
@@ -133,7 +133,7 @@ import javax.ws.rs.core.Response
     */
   @GET
   @Produces(Array("application/json"))
-  @Path("/user")
+  @Path("/")
   //@ReturnType("java.util.List<SaikuUser>")
   @RolesAllowed(Array("admin"))
   @throws(classOf[MeteoriteSecurityException])
@@ -148,7 +148,7 @@ import javax.ws.rs.core.Response
     */
   @GET
   @Produces(Array("application/json"))
-  @Path("/user/lookup/{id}")
+  @Path("/lookup/{id}")
   //@ReturnType("bi.meteorite.core.api.objects.MeteoriteUser")
   @throws(classOf[MeteoriteSecurityException])
   def getUser(@PathParam("id") id: Int): Response
@@ -161,7 +161,7 @@ import javax.ws.rs.core.Response
     */
   @GET
   @Produces(Array("application/json"))
-  @Path("/user/whoami")
+  @Path("/whoami")
   //@ReturnType("bi.meteorite.core.api.objects.MeteoriteUser")
   @throws(classOf[MeteoriteSecurityException])
   def whoami: Response
