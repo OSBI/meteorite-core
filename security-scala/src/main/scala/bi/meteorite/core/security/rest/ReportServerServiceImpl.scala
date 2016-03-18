@@ -16,13 +16,10 @@
 
 package bi.meteorite.core.security.rest
 
-import javax.inject.Singleton
-import javax.ws.rs.PathParam
-import javax.ws.rs.core.Response
+import javax.inject.{Inject, Singleton}
 
 import bi.meteorite.core.api.report.rest.ReportServerService
-import bi.meteorite.core.api.security.exceptions.MeteoriteSecurityException
-import org.ops4j.pax.cdi.api.OsgiServiceProvider
+import org.ops4j.pax.cdi.api.{OsgiService, OsgiServiceProvider}
 
 
 /**
@@ -32,10 +29,15 @@ import org.ops4j.pax.cdi.api.OsgiServiceProvider
 @OsgiServiceProvider(classes = Array(classOf[ReportServerService]))
 @Singleton
 class ReportServerServiceImpl extends ReportServerService {
+  @Inject
+  @volatile
+  @OsgiService
+  private var reportEngine : ReportEngine = _
 
-  @throws(classOf[MeteoriteSecurityException])
-  override def getReport(@PathParam("filename") filename: String): Response = {
-    Response.ok("Hello World").build()
+  override def getReport(filename: String): String = {
+    return reportEngine.getReport(filename)
   }
 
+  def getReportEngine() : ReportEngine = reportEngine
+  def setReportEngine(reportEngine : ReportEngine) = this.reportEngine = reportEngine
 }

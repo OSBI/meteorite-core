@@ -18,7 +18,6 @@ package bi.meteorite.core.api.report.rest
 
 import javax.ws.rs.core.Response
 
-import bi.meteorite.core.api.security.exceptions.MeteoriteSecurityException
 import javax.ws.rs.{PathParam, Produces, GET, Path}
 
 import org.apache.cxf.rs.security.cors.CrossOriginResourceSharing
@@ -27,8 +26,7 @@ import org.apache.cxf.rs.security.cors.CrossOriginResourceSharing
 @Path("/report")
 trait ReportServerService {
   @GET
-  @Produces(Array("application/json"))
   @Path("/{filename}")
-  @throws(classOf[MeteoriteSecurityException])
-  def getReport(@PathParam("filename") filename: String): Response
+  @Produces(Array("application/json"))
+  def getReport(@PathParam("filename") filename: String): String
 }
